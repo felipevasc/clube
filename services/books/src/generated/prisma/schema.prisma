@@ -1,0 +1,21 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Book {
+  id        String   @id @default(cuid())
+  title     String
+  author    String
+  coverUrl  String   @default("")
+  createdAt DateTime @default(now())
+
+  @@unique([title, author])
+  @@index([title])
+  @@index([author])
+}

@@ -1,0 +1,31 @@
+{
+  "name": "@clube/groups",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch --import tsx src/index.ts",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate deploy",
+    "db:setup": "pnpm db:generate && pnpm db:migrate && pnpm db:seed",
+    "db:seed": "node --import tsx src/seed.ts",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@clube/shared": "workspace:*",
+    "@prisma/client": "^6.3.1",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.10.7",
+    "prisma": "^6.3.1",
+    "supertest": "^7.0.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
+  }
+}

@@ -1,0 +1,14 @@
+node_modules
+**/node_modules
+.pnpm-store
+**/.pnpm-store
+**/dev.db
+**/dev.db-journal
+**/prisma/dev.db
+**/.env.local
+dist
+.DS_Store
+tmp/uploads
+**/tmp/uploads
+uploads
+**/uploads

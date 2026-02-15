@@ -1,0 +1,33 @@
+Você é o Codex e vai implementar, nesta rodada, um **grande lote** de funcionalidades no monorepo /mnt/c/dev/clube, seguindo a especificação em docs/PRODUTO.md.
+
+ATENÇÃO
+- Sim, é um pedido de execução em lote. Foque em entregar o máximo possível **sem quebrar o projeto**.
+- Se algum item ficar grande demais, implemente a versão completa do backend + UI mínima, e deixe claramente no PENDENCIAS.md o que faltou.
+
+REGRAS
+- Ler docs/PRODUTO.md e PENDENCIAS.md.
+- Proibido texto de teste/placeholder em telas finais.
+- Não inventar dados fake.
+- Sempre rodar: pnpm -r test -- --passWithNoTests.
+- Garantir pnpm dev funcionando.
+
+ESCOPO DO LOTE (ordem)
+1) Grupos — convite por link + aceitar/recusar (A2)
+   - Backend: gerar token/slug de convite por grupo; endpoint pra criar/rotacionar convite; endpoint pra aceitar convite e entrar no grupo; checagens de permissão.
+   - Frontend: botão "Convidar" com link copiável; tela de aceitar convite (via rota /invite/<token> ou query) e confirmação.
+
+2) Grupos — página do grupo (A1)
+   - Garantir que /groups/:id está polida e completa (membros, ações, estados vazios, navegação).
+
+3) Livro do mês (B3)
+   - Modelo e UI: grupo tem "livro do mês" e histórico. Permitir definir livro do mês dentro do grupo.
+   - Se não der pra integrar Open Library agora, permita seleção a partir dos livros cadastrados e deixe na fila integração externa.
+
+4) Auth — Login com Google (D0)
+   - Implementar OAuth Google com sessão segura.
+   - Se for complexo demais sem secrets/config, ao menos estruturar o fluxo end-to-end com .env.example + docs claros.
+
+ENTREGÁVEIS
+- Atualizar PENDENCIAS.md: marcar itens iniciados como [~], e finalizar os concluídos como [x].
+- Atualizar docs/PRODUTO.md se decisões técnicas forem necessárias.
+- Não deixar o repo quebrado.

@@ -1,0 +1,121 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Group {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  ownerId     String
+  createdAt   DateTime @default(now())
+
+  memberships Membership[]
+  requests    JoinRequest[]
+  invites     GroupInvite[]
+  bookOfMonthSelections GroupBookOfMonthSelection[]
+}
+
+model Membership {
+  id      String @id @default(cuid())
+  groupId String
+  userId  String
+  role    String
+
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, userId])
+  @@index([userId])
+}
+
+model JoinRequest {
+  id        String   @id @default(cuid())
+  groupId   String
+  userId    String
+  status    String
+  createdAt DateTime @default(now())
+
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, userId, status])
+  @@index([userId])
+}
+
+model GroupInvite {
+  // This id is the invite token used in the URL. Keep it unguessable (cuid).
+  id              String   @id @default(cuid())
+  groupId          String
+  createdByUserId String
+  createdAt       DateTime @default(now())
+  revokedAt       DateTime?
+
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@index([groupId])
+  @@index([revokedAt])
+}
+
+model GroupBookOfMonthSelection {
+  id          String   @id @default(cuid())
+  groupId     String
+  bookId      String
+  setByUserId String
+  setAt       DateTime @default(now())
+
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@index([groupId, setAt])
+  @@index([bookId])
+}
+
+model ClubBook {
+  id              String   @id @default(cuid())
+  bookId          String
+  title           String
+  author          String
+  colorKey        String
+  isActive        Boolean  @default(false)
+  createdByUserId String
+  createdAt       DateTime @default(now())
+  activatedAt     DateTime?
+
+  messages  ClubBookMessage[]
+  artifacts ClubBookArtifact[]
+
+  @@index([createdAt])
+  @@index([isActive])
+}
+
+model ClubBookMessage {
+  id         String   @id @default(cuid())
+  clubBookId String
+  userId     String
+  text       String
+  createdAt  DateTime @default(now())
+
+  clubBook ClubBook @relation(fields: [clubBookId], references: [id], onDelete: Cascade)
+
+  @@index([clubBookId, createdAt])
+  @@index([userId])
+}
+
+model ClubBookArtifact {
+  id               String   @id @default(cuid())
+  clubBookId       String
+  uploadedByUserId String
+  fileName         String
+  mimeType         String
+  size             Int
+  url              String
+  createdAt        DateTime @default(now())
+
+  clubBook ClubBook @relation(fields: [clubBookId], references: [id], onDelete: Cascade)
+
+  @@index([clubBookId, createdAt])
+  @@index([uploadedByUserId])
+}

@@ -1,0 +1,47 @@
+Você é o Codex e vai evoluir o monorepo /mnt/c/dev/clube para um produto completo e profissional: um app privado de CLUBE DO LIVRO entre amigos, com vibe WhatsApp/Instagram.
+
+REGRAS GERAIS (obrigatórias)
+- Ler primeiro: docs/PRODUTO.md e PENDENCIAS.md.
+- Não usar texto de teste/placeholder em telas finais.
+- Não adicionar dívidas técnicas escondidas.
+- Fazer mudanças pequenas e entregáveis: UMA épica/feature de cada vez.
+- Sempre atualizar PENDENCIAS.md: marcar [~] quando iniciar e [x] ao concluir. Criar subtarefas quando necessário.
+- Sempre rodar: pnpm -r test -- --passWithNoTests.
+- Manter build/dev funcionando: pnpm dev.
+
+OBJETIVO DE ALTO NÍVEL
+Implementar as funcionalidades especificadas em docs/PRODUTO.md, priorizando retorno pro usuário (grupo/livro/chat/feed/stories) e autenticacao Google.
+
+FASE 0 — BASE DE AUTENTICAÇÃO (Google Login)
+- Implementar Login com Google (OAuth) e sessão segura.
+- A aplicação é privada: só membros entram (convite).
+- Frontend: tela de login com botão "Entrar com Google".
+- Backend: validação de token/flow OAuth, criação/atualização do usuário.
+- Definir claramente o modelo de sessão (cookie httpOnly + CSRF ou JWT + refresh). Escolher uma abordagem e documentar.
+
+FASE 1 — CHAT DO CLUBE (#geral)
+- Implementar mensagens com: enviar, listar, reply/quote, reações, @menções.
+- UX mobile-first semelhante a WhatsApp.
+
+FASE 2 — SUBCANAIS POR LIVRO DO MÊS
+- Criar canais: #livro-do-mes e marcos anti-spoiler (sem-spoiler/cap-1-3/.../final).
+- Permitir postar no canal e ver histórico.
+
+FASE 3 — FEED COM FOTOS (Instagram-like)
+- Post com imagem(s) + legenda + comentários com reply.
+- Permitir marcar pessoas.
+
+FASE 4 — CROSS-POST CHAT ⇄ FEED
+- Botão no post: compartilhar no chat (gera card). Do chat abre o post.
+
+FASE 5 — STORIES (temporários)
+- Stories 24h + highlight do livro do mês.
+- Visualização única opcional.
+
+CONSTRAINTS
+- Não implementar tudo de uma vez. Escolha só a próxima fase/feature coerente com a fila (PENDENCIAS.md) e entregue bem.
+- Se qualquer fase exigir refatoração, crie item na fila e faça incremental.
+
+ENTREGÁVEL DA RODADA ATUAL
+- Pegue o primeiro item [ ] relevante do PENDENCIAS.md (provavelmente D0: Auth Google, ou A1/A2 conforme estado) e implemente completo.
+- Atualize docs/PRODUTO.md se necessário para refletir decisões técnicas.

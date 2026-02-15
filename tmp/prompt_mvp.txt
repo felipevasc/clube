@@ -1,0 +1,24 @@
+Tarefa (produção): implementar A1.1 (Web) — página de detalhes do grupo.
+
+Contexto:
+- Repo: /mnt/c/dev/clube (monorepo pnpm).
+- App web: apps/web.
+- Objetivo: ter uma rota /groups/:id navegável e útil.
+
+Requisitos:
+1) Criar rota/página /groups/:id (conforme padrão de rotas já usado no app).
+2) Buscar dados reais do grupo + membros via API existente (services/groups ou gateway). Se faltar endpoint, NÃO implementar agora (isso é A1.2); apenas usar o que já existe.
+3) UI mínima porém caprichada:
+   - Header com nome do grupo
+   - Descrição (se existir)
+   - Lista de membros (nome e, se houver, avatar)
+   - Estados: loading, erro, vazio (sem placeholders toscos)
+4) Manter padrões do projeto (componentes, hooks, React Query se já estiver presente).
+5) Ajustar links de navegação existentes para apontar para /groups/:id (onde fizer sentido).
+
+Validação:
+- Rodar pnpm -r test -- --passWithNoTests e corrigir o que quebrar.
+- Se necessário, rodar pnpm dev e verificar rapidamente que a página abre sem crash.
+
+Entregável:
+- Código pronto, sem texto de teste.
