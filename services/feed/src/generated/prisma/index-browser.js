@@ -150,6 +150,34 @@ exports.Prisma.CommentScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.PollScalarFieldEnum = {
+  id: 'id',
+  clubBookId: 'clubBookId',
+  userId: 'userId',
+  question: 'question',
+  description: 'description',
+  imageUrl: 'imageUrl',
+  multiChoice: 'multiChoice',
+  publicVotes: 'publicVotes',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.PollOptionScalarFieldEnum = {
+  id: 'id',
+  pollId: 'pollId',
+  text: 'text',
+  imageUrl: 'imageUrl',
+  index: 'index'
+};
+
+exports.Prisma.PollVoteScalarFieldEnum = {
+  id: 'id',
+  pollId: 'pollId',
+  optionId: 'optionId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -165,7 +193,10 @@ exports.Prisma.ModelName = {
   Post: 'Post',
   PostImage: 'PostImage',
   Like: 'Like',
-  Comment: 'Comment'
+  Comment: 'Comment',
+  Poll: 'Poll',
+  PollOption: 'PollOption',
+  PollVote: 'PollVote'
 };
 
 /**

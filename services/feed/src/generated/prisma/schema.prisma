@@ -1,6 +1,8 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  provider      = "prisma-client-js"
+  output        = "../src/generated/prisma"
+  // Keep WSL/Linux working even if `prisma generate` runs on Windows.
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -60,5 +62,52 @@ model Comment {
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@index([createdAt])
+  @@index([userId])
+}
+
+model Poll {
+  id          String   @id @default(cuid())
+  clubBookId  String
+  userId      String
+  question    String
+  description String?
+  imageUrl    String?
+  multiChoice Boolean  @default(false)
+  publicVotes Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  options PollOption[]
+  votes   PollVote[]
+
+  @@index([clubBookId])
+  @@index([createdAt])
+}
+
+model PollOption {
+  id       String  @id @default(cuid())
+  pollId   String
+  text     String
+  imageUrl String?
+  index    Int
+
+  poll  Poll       @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  votes PollVote[]
+
+  @@index([pollId])
+}
+
+model PollVote {
+  id        String   @id @default(cuid())
+  pollId    String
+  optionId  String
+  userId    String
+  createdAt DateTime @default(now())
+
+  poll   Poll       @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  option PollOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
+
+  @@unique([pollId, userId, optionId])
+  @@index([pollId])
+  @@index([optionId])
   @@index([userId])
 }

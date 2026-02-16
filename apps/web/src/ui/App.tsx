@@ -6,12 +6,16 @@ import Feed from "./screens/Feed";
 import BookOfMonth from "./screens/BookOfMonth";
 import BookDetail from "./screens/BookDetail";
 import Bookshelf from "./screens/Bookshelf";
+import BookEdit from "./screens/BookEdit";
 import ClubBookRoom from "./screens/ClubBookRoom";
 import Profile from "./screens/Profile";
 import Messages from "./screens/Messages";
 import MessageThread from "./screens/MessageThread";
 import Files from "./screens/Files";
 import FilesFolder from "./screens/FilesFolder";
+import Polls from "./screens/Polls";
+import PollsList from "./screens/PollsList";
+import PollDetail from "./screens/PollDetail";
 import Shell from "./components/Shell";
 import { apiMaybe } from "../lib/api";
 
@@ -94,11 +98,17 @@ export default function App() {
         <Route path="livros/:id" element={<ClubBookRoom />} />
         <Route path="mensagens" element={<Messages />} />
         <Route path="mensagens/:id" element={<MessageThread />} />
+        <Route path="mensagens/canal/:id" element={<MessageThread />} />
+        <Route path="mensagens/dm/:id" element={<MessageThread />} />
         <Route path="arquivos" element={<Files />} />
         <Route path="arquivos/:id" element={<FilesFolder />} />
+        <Route path="enquetes" element={<Polls />} />
+        <Route path="enquetes/livro/:clubBookId" element={<PollsList />} />
+        <Route path="enquetes/poll/:pollId" element={<PollDetail />} />
         <Route path="groups/*" element={<Navigate to="/" replace />} />
         <Route path="books/:id" element={<BookDetail />} />
-        <Route path="profile" element={<Profile />} />
+        <Route path="books/:id/edit" element={<BookEdit />} />
+        <Route path="profile/:userId?" element={<Profile />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

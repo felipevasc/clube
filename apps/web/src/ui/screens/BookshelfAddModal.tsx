@@ -5,9 +5,10 @@ type Props = {
     isOpen: boolean;
     onClose: () => void;
     onBookAdded: (book: any) => void;
+    initialGenre?: string;
 };
 
-export default function BookshelfAddModal({ isOpen, onClose, onBookAdded }: Props) {
+export default function BookshelfAddModal({ isOpen, onClose, onBookAdded, initialGenre }: Props) {
     const [title, setTitle] = useState("");
     const [author, setAuthor] = useState("");
     const [coverUrl, setCoverUrl] = useState("");
@@ -48,14 +49,12 @@ export default function BookshelfAddModal({ isOpen, onClose, onBookAdded }: Prop
         setUploading(true);
         setError("");
         try {
-            // Upload to /api/uploads which accepts raw body
-            // We need to read file as ArrayBuffer or just pass it if fetch supports it
             const buffer = await file.arrayBuffer();
             const res = await api<{ url: string }>("/uploads", {
                 method: "POST",
                 headers: {
                     "content-type": file.type || "application/octet-stream",
-                    "x-file-name": file.name // Gateway uses this for safe filename
+                    "x-file-name": file.name
                 },
                 body: buffer as any
             });
@@ -77,11 +76,10 @@ export default function BookshelfAddModal({ isOpen, onClose, onBookAdded }: Prop
         try {
             const res = await api<{ book: any }>("/books", {
                 method: "POST",
-                body: JSON.stringify({ title, author, coverUrl }),
+                body: JSON.stringify({ title, author, coverUrl, genre: initialGenre || "" }),
             });
             onBookAdded(res.book);
             onClose();
-            // Reset form
             setTitle("");
             setAuthor("");
             setCoverUrl("");
@@ -96,13 +94,11 @@ export default function BookshelfAddModal({ isOpen, onClose, onBookAdded }: Prop
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            {/* Backdrop */}
             <div
                 className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
                 onClick={onClose}
             />
 
-            {/* Modal */}
             <div
                 role="dialog"
                 aria-modal="true"

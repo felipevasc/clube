@@ -1,6 +1,8 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  provider      = "prisma-client-js"
+  output        = "../src/generated/prisma"
+  // Keep WSL/Linux working even if `prisma generate` runs on Windows.
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -16,8 +18,8 @@ model Group {
   createdAt   DateTime @default(now())
 
   memberships           Membership[]
-  requests              JoinRequest[]
   invites               GroupInvite[]
+  joinRequests          JoinRequest[]
   bookOfMonthSelections GroupBookOfMonthSelection[]
 }
 
@@ -47,7 +49,6 @@ model JoinRequest {
 }
 
 model GroupInvite {
-  // This id is the invite token used in the URL. Keep it unguessable (cuid).
   id              String    @id @default(cuid())
   groupId         String
   createdByUserId String
@@ -78,7 +79,11 @@ model ClubBook {
   bookId          String
   title           String
   author          String
+  coverUrl        String    @default("")
   colorKey        String
+  city            String    @default("FORTALEZA")
+  month           Int
+  year            Int
   isActive        Boolean   @default(false)
   createdByUserId String
   createdAt       DateTime  @default(now())
@@ -89,6 +94,7 @@ model ClubBook {
 
   @@index([createdAt])
   @@index([isActive])
+  @@index([year, month, city])
 }
 
 model ClubBookMessage {
@@ -107,15 +113,42 @@ model ClubBookMessage {
 model ClubBookArtifact {
   id               String   @id @default(cuid())
   clubBookId       String
-  uploadedByUserId String
   fileName         String
   mimeType         String
   size             Int
   url              String
+  uploadedByUserId String
   createdAt        DateTime @default(now())
 
   clubBook ClubBook @relation(fields: [clubBookId], references: [id], onDelete: Cascade)
 
   @@index([clubBookId, createdAt])
   @@index([uploadedByUserId])
+}
+
+// These are managed by raw SQL in src/routes.ts (not Prisma migrations).
+model Channel {
+  id        String   @id
+  name      String
+  type      String
+  cityCode  String?
+  createdAt DateTime @default(now())
+}
+
+model ChannelMessage {
+  id        String   @id
+  channelId String
+  userId    String
+  text      String
+  createdAt DateTime @default(now())
+}
+
+model DirectMessage {
+  id         String   @id
+  fromUserId String
+  toUserId   String
+  text       String
+  createdAt  DateTime @default(now())
+
+  @@index([fromUserId, toUserId])
 }

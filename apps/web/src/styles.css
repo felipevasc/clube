@@ -51,39 +51,67 @@
   .bookshelf {
     position: relative;
     transform-style: preserve-3d;
-    padding: 18px 12px 18px;
+    padding: 24px 16px 32px;
     z-index: 1;
+    /* Cabinet Structure */
+    background:
+      linear-gradient(90deg, rgba(0, 0, 0, 0.05) 0%, transparent 5%, transparent 95%, rgba(0, 0, 0, 0.05) 100%),
+      linear-gradient(180deg, #3e281f 0%, #2a1b15 100%);
+    border-radius: 12px;
+    box-shadow:
+      inset 0 0 0 2px rgba(255, 255, 255, 0.05),
+      0 20px 40px rgba(0, 0, 0, 0.3);
+    border: 4px solid #3e281f;
   }
 
   .shelf {
     position: relative;
-    padding: 12px 6px 34px;
+    padding: 22px 6px 1.5rem;
     transform-style: preserve-3d;
     overflow: visible;
+    /* Recessed look */
+    background:
+      linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, transparent 40%),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.1) 0%, transparent 10%, transparent 90%, rgba(0, 0, 0, 0.1) 100%),
+      #5c2e2a;
+    /* Dark back wall */
+    border-radius: 4px;
+    box-shadow:
+      inset 0 2px 20px rgba(0, 0, 0, 0.5),
+      /* Deep inner shadow */
+      0 1px 0 rgba(255, 255, 255, 0.1);
+    /* Bottom highlight */
+    margin-bottom: 2px;
   }
 
-  .shelf + .shelf {
-    margin-top: 22px;
+  .shelf+.shelf {
+    margin-top: 32px;
+    /* More space between shelf units */
   }
 
   .shelf::after {
     content: "";
     position: absolute;
-    left: -10px;
-    right: -10px;
-    bottom: 0;
-    height: 22px;
-    border-radius: 16px;
-    background: linear-gradient(180deg, #6b4b39 0%, #3a2318 100%);
-    box-shadow: 0 18px 28px rgba(0, 0, 0, 0.22);
-    z-index: 1;
+    left: 0;
+    right: 0;
+    bottom: -12px;
+    /* Hang below slightly */
+    height: 14px;
+    border-radius: 2px;
+    /* Front edge of the shelf floor */
+    background:
+      linear-gradient(180deg, #3e281f 0%, #2a1b15 100%);
+    box-shadow:
+      0 10px 24px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    z-index: 10;
   }
 
   .shelf::before {
     content: "";
     position: absolute;
-    left: -10px;
-    right: -10px;
+    left: -1px;
+    right: -1px;
     bottom: 14px;
     height: 12px;
     border-radius: 14px;
@@ -101,9 +129,39 @@
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    gap: 16px;
+    gap: 0.7rem;
+    /* Reduced from 16px */
     padding: 6px 10px 0;
     overflow: visible;
+    padding-left: 0.5rem;
+    padding-right: 2.5rem;
+  }
+
+  /* ... skipped ... */
+  .book-3d__book::before {
+    content: "";
+    position: absolute;
+    top: var(--page-inset);
+    left: 0;
+    width: var(--book-d);
+    height: calc(var(--book-h) - (var(--page-inset) * 2));
+    border-radius: 2px 4px 4px 2px;
+    background:
+      /* Back cover edge (using accent color or dark fallback) */
+      linear-gradient(90deg, transparent 0%, transparent 92%, var(--accent, #3e281f) 92%, var(--accent, #3e281f) 100%),
+      /* Shadows */
+      linear-gradient(90deg, rgba(0, 0, 0, 0.02) 0%, transparent 20%, transparent 80%, rgba(0, 0, 0, 0.02) 100%),
+      /* Explicit Page Stripes */
+      repeating-linear-gradient(90deg,
+        #fefefe 0px,
+        #fefefe 2px,
+        #f0f0f0 2px,
+        #f0f0f0 3px);
+    transform:
+      translateX(calc(var(--book-w) - (var(--book-d) / 2))) rotateY(90deg) translateX(calc(var(--book-d) / 2));
+    box-shadow:
+      inset 0 0 0 1px rgba(0, 0, 0, 0.04),
+      inset -1px 0 2px rgba(0, 0, 0, 0.05);
   }
 
   .shelf-books--center {
@@ -130,18 +188,19 @@
 
   .book-3d {
     --accent: var(--book-accent, #ffbf0f);
-    --book-w: 106px;
-    --book-h: 160px;
-    --book-d: 16px;
+    --book-w: 92px;
+    --book-h: 138px;
+    --book-d: 18px;
+    --page-inset: 3px;
 
     width: var(--book-w);
     height: var(--book-h);
     position: relative;
     display: block;
     transform-style: preserve-3d;
-    transform-origin: 16% 55%;
-    /* Cover visible by default, slightly rotated inward (into the shelf). */
-    transform: translateZ(-12px) rotateY(-24deg) rotateX(2deg) rotateZ(0.6deg);
+    transform-origin: 18% 60%;
+    /* Cover visible by default, slightly angled inward with clear depth (pages). */
+    transform: translateZ(-10px) rotateY(-40deg) rotateX(9deg) rotateZ(-2.6deg);
     transition:
       transform 520ms cubic-bezier(0.2, 0.9, 0.2, 1),
       filter 520ms cubic-bezier(0.2, 0.9, 0.2, 1);
@@ -149,6 +208,7 @@
     cursor: pointer;
     user-select: none;
     margin-bottom: -8px;
+    flex-shrink: 0;
 
     border: 0;
     padding: 0;
@@ -156,29 +216,36 @@
     text-decoration: none;
     color: inherit;
 
-    filter: drop-shadow(0 7px 10px rgba(0, 0, 0, 0.18));
+    /* Stronger, more realistic shadow */
+    filter:
+      drop-shadow(2px 6px 4px rgba(0, 0, 0, 0.2))
+      /* Contact shadow */
+      drop-shadow(6px 12px 16px rgba(0, 0, 0, 0.25));
+    /* Ambient shadow */
     -webkit-tap-highlight-color: transparent;
   }
 
   .book-3d:hover,
   .book-3d:focus-visible {
-    transform: translateZ(40px) rotateY(-10deg) rotateX(-4deg) translateY(-2px);
+    transform: translateZ(46px) rotateY(-14deg) rotateX(-6deg) translateY(-2px);
     z-index: 50;
-    filter: drop-shadow(0 18px 20px rgba(0, 0, 0, 0.26));
+    filter:
+      drop-shadow(4px 14px 12px rgba(0, 0, 0, 0.2)) drop-shadow(10px 24px 30px rgba(0, 0, 0, 0.35));
   }
 
   .book-3d:active {
-    transform: translateZ(28px) rotateY(-12deg) rotateX(-3deg) translateY(0px);
+    transform: translateZ(34px) rotateY(-16deg) rotateX(-5deg) translateY(0px);
   }
 
-  .book-3d:focus-visible .book-cover {
+  .book-3d:focus-visible .book-3d__front {
     outline: 4px solid rgba(255, 191, 15, 0.55);
     outline-offset: 3px;
   }
 
   @media (hover: none) {
     .book-3d:hover {
-      transform: translateZ(0) rotateY(0deg);
+      /* Avoid the "sticky hover" problem on touch while preserving the default angle. */
+      transform: translateZ(-10px) rotateY(-32deg) rotateX(2deg) rotateZ(0.4deg);
       filter: drop-shadow(0 7px 10px rgba(0, 0, 0, 0.18));
       z-index: auto;
     }
@@ -186,10 +253,11 @@
 
   @media (max-width: 420px) {
     .book-3d {
-      --book-w: 100px;
-      --book-h: 152px;
-      --book-d: 14px;
+      --book-w: 86px;
+      --book-h: 132px;
+      --book-d: 16px;
     }
+
     .shelf-books {
       gap: 12px;
       padding: 6px 8px 0;
@@ -200,121 +268,143 @@
     .book-3d {
       transition: none;
     }
+
     .book-3d:hover,
     .book-3d:focus-visible,
     .book-3d:active {
-      transform: translateZ(0) rotateY(0deg);
+      transform: translateZ(-10px) rotateY(-32deg) rotateX(2deg) rotateZ(0.4deg);
       filter: drop-shadow(0 7px 10px rgba(0, 0, 0, 0.18));
     }
   }
 
-  .book-spine {
+  .book-3d--detail {
+    margin-bottom: 0;
+    transform: translateZ(-8px) rotateY(-26deg) rotateX(1deg);
+  }
+
+  .book-3d__book {
     position: absolute;
-    top: 0;
+    inset: 0;
+    transform-style: preserve-3d;
+    /* Center the depth so the book doesn't rotate around a flat front plane. */
+    transform: translateZ(calc(var(--book-d) / 2));
+    border-right: 8px solid #dda;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+  }
+
+  /* Pages: a real 3D face rotated on the Y axis (inspired by common 3D book CSS demos). */
+  .book-3d__book::before {
+    content: "";
+    position: absolute;
+    top: var(--page-inset);
     left: 0;
     width: var(--book-d);
-    height: var(--book-h);
-    border-radius: 10px 0 0 10px;
-    transform-origin: left center;
-    transform: rotateY(90deg);
-    background-color: var(--accent);
-    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(0, 0, 0, 0.18));
-    border: 1px solid rgba(0, 0, 0, 0.10);
-    box-shadow: inset -10px 0 16px rgba(0, 0, 0, 0.22);
-    backface-visibility: hidden;
-    overflow: hidden;
-  }
-
-  .book-spine::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 45%, rgba(0, 0, 0, 0.12));
-    opacity: 0.7;
-    pointer-events: none;
-  }
-
-  .book-spine__title {
-    position: absolute;
-    top: 12px;
-    left: 50%;
-    transform: translateX(-50%) rotate(180deg);
-    writing-mode: vertical-rl;
-    text-orientation: mixed;
-    font-size: 9px;
-    font-weight: 900;
-    line-height: 1.1;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.92);
-    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.18);
-    max-height: calc(var(--book-h) - 46px);
-    overflow: hidden;
-    padding: 0 2px;
-  }
-
-  .book-spine__author {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%) rotate(180deg);
-    writing-mode: vertical-rl;
-    text-orientation: mixed;
-    font-size: 8px;
-    font-weight: 800;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.70);
-  }
-
-  .book-cover {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: var(--book-w);
-    height: var(--book-h);
-    transform: translateZ(0);
-    border-radius: 8px 16px 16px 8px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.26));
-    border: 1px solid rgba(0, 0, 0, 0.10);
+    height: calc(var(--book-h) - (var(--page-inset) * 2));
+    border-radius: 2px 4px 4px 2px;
+    background:
+      /* Back cover edge (using accent color or dark fallback) */
+      linear-gradient(90deg, transparent 0%, transparent 90%, var(--accent, #3e281f) 90%, var(--accent, #3e281f) 100%),
+      /* Shadows */
+      linear-gradient(90deg, rgba(0, 0, 0, 0.05) 0%, transparent 15%, transparent 85%, rgba(0, 0, 0, 0.1) 100%),
+      /* Paper Lines */
+      repeating-linear-gradient(90deg,
+        #fdfbf7 0px,
+        #fdfbf7 0.5px,
+        #f4efe1 0.5px,
+        #f4efe1 1px);
+    transform:
+      translateX(calc(var(--book-w) - (var(--book-d) / 2))) rotateY(90deg) translateX(calc(var(--book-d) / 2));
     box-shadow:
-      inset 18px 0 22px rgba(0, 0, 0, 0.10),
-      inset 0 0 0 1px rgba(255, 255, 255, 0.20);
-    backface-visibility: hidden;
-    overflow: hidden;
+      inset 0 0 0 1px rgba(0, 0, 0, 0.06),
+      inset -10px 0 16px rgba(0, 0, 0, 0.10);
   }
 
-  .book-cover::after {
+  /* Back cover: gives the book real thickness and an "antique leather" feel. */
+
+  .book-3d__book::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, transparent 46%, rgba(0, 0, 0, 0.20) 100%);
-    opacity: 0.35;
+    border-radius: 10px 18px 18px 10px;
+    background:
+      repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0px, rgba(255, 255, 255, 0.06) 1px, transparent 1px, transparent 7px),
+      linear-gradient(145deg, var(--accent, #4b2f22), #1a0f0a);
+    transform: translateZ(calc(var(--book-d) * -1));
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.10),
+      inset 18px 0 28px rgba(0, 0, 0, 0.34),
+      -10px 0 36px rgba(0, 0, 0, 0.18);
+  }
+
+  .book-3d__front {
+    position: absolute;
+    inset: 0;
+    transform: translateZ(0);
+    border-radius: 10px 18px 18px 10px;
+    overflow: hidden;
+    isolation: isolate;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.30));
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    box-shadow:
+      inset 18px 0 26px rgba(0, 0, 0, 0.16),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+    backface-visibility: hidden;
+  }
+
+  /* Spine fold + worn edges + soft sheen on top. */
+  .book-3d__front::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+      linear-gradient(90deg, rgba(0, 0, 0, 0.22) 0%, rgba(0, 0, 0, 0.0) 18%),
+      radial-gradient(220px 160px at 18% 12%, rgba(255, 255, 255, 0.18), transparent 60%),
+      repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0px, rgba(255, 255, 255, 0.05) 1px, transparent 1px, transparent 8px);
+    opacity: 0.60;
     pointer-events: none;
   }
 
-  .book-cover__image {
+  .book-3d__front::after {
+    content: "";
     position: absolute;
     inset: 0;
+    z-index: 1;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, transparent 46%, rgba(0, 0, 0, 0.26) 100%);
+    opacity: 0.40;
+    pointer-events: none;
+  }
+
+  .book-3d__image {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
     background-size: cover;
     background-position: center;
-    filter: saturate(1.02) contrast(1.02);
+    transform: scale(1.02);
+    filter: saturate(1.04) contrast(1.04);
   }
 
-  .book-cover__fallback {
+  .book-3d__fallback {
     position: absolute;
     inset: 0;
+    z-index: 0;
     display: grid;
     grid-template-rows: 1fr auto;
-    padding: 14px 14px 12px;
+    padding: 12px 12px 10px;
     color: rgba(255, 255, 255, 0.92);
+    background:
+      radial-gradient(260px 180px at 25% 0%, rgba(255, 255, 255, 0.16), transparent 60%),
+      linear-gradient(145deg, rgba(0, 0, 0, 0.22), rgba(0, 0, 0, 0.34)),
+      linear-gradient(145deg, var(--accent), rgba(0, 0, 0, 0.20));
   }
 
-  .book-cover__initial {
+  .book-3d__fallbackInitial {
     justify-self: start;
     align-self: start;
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     border-radius: 14px;
     display: grid;
     place-items: center;
@@ -325,105 +415,87 @@
     border: 1px solid rgba(255, 255, 255, 0.18);
   }
 
-  .book-cover__meta {
+  .book-3d__fallbackMeta {
     align-self: end;
   }
 
-  .book-cover__title {
+  .book-3d__fallbackTitle {
     font-weight: 900;
-    font-size: 12px;
+    font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.10em;
     line-height: 1.2;
     text-shadow: 0 1px 0 rgba(0, 0, 0, 0.18);
   }
 
-  .book-cover__author {
+  .book-3d__fallbackAuthor {
     margin-top: 6px;
     font-size: 11px;
     font-weight: 700;
     opacity: 0.86;
   }
 
-  .book-top {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: var(--book-w);
-    height: var(--book-d);
-    transform-origin: top left;
-    transform: rotateX(-90deg);
-    border-radius: 12px 12px 8px 8px;
-    background:
-      linear-gradient(180deg, rgba(0, 0, 0, 0.10), rgba(255, 255, 255, 0.0) 55%),
-      repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.92) 2px, rgba(235, 235, 235, 0.92) 3px, rgba(235, 235, 235, 0.92) 4px);
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow: inset 0 -8px 12px rgba(0, 0, 0, 0.10);
-    backface-visibility: hidden;
-  }
-
-  .book-top::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, rgba(0, 0, 0, 0.14), transparent 45%);
-    opacity: 0.55;
-    pointer-events: none;
-  }
-
   .book-3d--add {
-    --accent: rgba(255, 255, 255, 0.0);
+    --accent: #222;
   }
 
-  .book-3d--add .book-spine {
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.18));
-    border: 1px solid rgba(0, 0, 0, 0.12);
-    box-shadow: inset -10px 0 16px rgba(0, 0, 0, 0.20);
-  }
-
-  .book-3d--add .book-cover {
+  /* Dark charcoal cover with subtle texture */
+  .book-3d--add .book-3d__front {
     background:
-      radial-gradient(420px 180px at 20% 0%, rgba(255, 191, 15, 0.25), transparent 58%),
-      repeating-linear-gradient(135deg, rgba(0, 0, 0, 0.03) 0px, rgba(0, 0, 0, 0.03) 10px, transparent 10px, transparent 18px),
-      linear-gradient(180deg, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.30));
-    border: 2px dashed rgba(0, 0, 0, 0.18);
+      linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 40%),
+      repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0.05) 2px, transparent 2px, transparent 4px),
+      linear-gradient(180deg, #333 0%, #1a1a1a 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 0 0 4px rgba(255, 215, 0, 0.1);
+    /* Gold hint trace */
   }
 
-  .book-3d--add .book-top {
-    background:
-      linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(255, 255, 255, 0.0) 55%),
-      repeating-linear-gradient(90deg, rgba(250, 250, 250, 0.95), rgba(250, 250, 250, 0.95) 2px, rgba(235, 235, 235, 0.95) 3px, rgba(235, 235, 235, 0.95) 4px);
+  .book-3d--add .book-3d__book::after {
+    background: linear-gradient(145deg, #333, #000);
   }
 
   .book-add__content {
     position: absolute;
     inset: 0;
-    display: grid;
-    place-items: center;
-    gap: 10px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
     padding: 16px;
     text-align: center;
-    color: rgba(0, 0, 0, 0.70);
+    color: rgba(255, 255, 255, 0.9);
   }
 
   .book-add__plus {
-    width: 48px;
-    height: 48px;
-    border-radius: 16px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
     display: grid;
     place-items: center;
-    background: rgba(255, 255, 255, 0.70);
-    border: 1px solid rgba(0, 0, 0, 0.10);
-    box-shadow: 0 10px 16px rgba(0, 0, 0, 0.10);
+    background: linear-gradient(135deg, #ffd700, #b8860b);
+    /* Gold gradient */
+    color: #1a1a1a;
+    box-shadow:
+      0 4px 12px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    transform: translateY(0);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .book-3d--add:hover .book-add__plus {
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 8px 16px rgba(255, 215, 0, 0.3);
   }
 
   .book-add__label {
-    font-size: 11px;
-    font-weight: 900;
-    letter-spacing: 0.14em;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
-    line-height: 1.2;
-    opacity: 0.78;
+    color: rgba(255, 255, 255, 0.8);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   }
 
   .chat-wallpaper {
@@ -432,5 +504,186 @@
       radial-gradient(18px 18px at 120px 80px, rgba(0, 0, 0, 0.03), transparent 60%),
       repeating-linear-gradient(135deg, rgba(0, 0, 0, 0.015) 0px, rgba(0, 0, 0, 0.015) 1px, transparent 1px, transparent 10px),
       linear-gradient(180deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.9));
+  }
+
+  /* --- Realistic Sheets Book Reader --- */
+  .book-reader-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    perspective: 2500px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+
+  .book-reader-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .book-scene {
+    position: relative;
+    width: 900px;
+    height: min(600px, 80vh);
+    max-width: 95vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .book-volume {
+    position: relative;
+    width: min(420px, 45vw);
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+    /* ALWAYS center the spine (left edge of the volume) - Moved to inline styles for dynamic control */
+    transform: translateX(50%);
+  }
+
+  .book-sheet {
+    position: absolute;
+    inset: 0;
+    transform-origin: left center;
+    transform-style: preserve-3d;
+    transition: transform 1.2s cubic-bezier(0.645, 0.045, 0.355, 1.000);
+    cursor: pointer;
+    will-change: transform;
+  }
+
+  .book-sheet.flipped {
+    transform: rotateY(-180deg);
+  }
+
+  .book-page {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    overflow: hidden;
+    border-radius: 2px 4px 4px 2px;
+    background: #fdfbf7;
+    background-image:
+      linear-gradient(to right, rgba(0, 0, 0, 0.02) 0%, transparent 5%),
+      repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.01) 0px, transparent 2px);
+    box-shadow: inset 3px 0 10px rgba(0, 0, 0, 0.05);
+  }
+
+  .book-page-front {
+    z-index: 2;
+    box-shadow:
+      inset 18px 0 26px rgba(0, 0, 0, 0.16),
+      -2px 0 5px rgba(0, 0, 0, 0.2);
+  }
+
+  .book-page-back {
+    transform: rotateY(180deg);
+    z-index: 1;
+    border-radius: 4px 2px 2px 4px;
+    box-shadow:
+      inset -3px 0 10px rgba(0, 0, 0, 0.05),
+      2px 0 5px rgba(0, 0, 0, 0.2);
+  }
+
+  .book-page img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .book-page::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.1), transparent 40%);
+    opacity: 0;
+    transition: opacity 1.2s;
+    pointer-events: none;
+  }
+
+  .book-sheet.flipped .book-page-front::after {
+    opacity: 1;
+  }
+
+  .book-back-cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #3e281f;
+    /* Leather color */
+    transform: translateZ(-10px);
+    border-radius: 2px 6px 6px 2px;
+    box-shadow: 5px 15px 40px rgba(0, 0, 0, 0.6);
+  }
+
+  /* Responsive */
+  @media (max-width: 950px) {
+    .book-volume {
+      width: 45vw;
+      height: 65vw;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .book-scene {
+      width: 100vw;
+      height: 100dvh;
+      max-width: 100vw;
+      max-height: 100dvh;
+    }
+
+    .book-volume {
+      width: 48dvw;
+      height: 80dvw;
+      max-height: 70dvh;
+      transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+    }
+
+    /* Stacked pages effect for the closed book */
+    .book-volume::after {
+      content: "";
+      position: absolute;
+      top: 2px;
+      right: -4px;
+      width: 6px;
+      height: calc(100% - 4px);
+      background: repeating-linear-gradient(90deg,
+          #fdfbf7 0px,
+          #fdfbf7 0.5px,
+          #f4efe1 0.5px,
+          #f4efe1 1px);
+      border-radius: 0 2px 2px 0;
+      box-shadow: 1px 0 2px rgba(0, 0, 0, 0.1);
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    /* Show only when closed (translateX(0) is used in React for closed state) */
+    .book-volume[style*="translateX(0)"]::after {
+      opacity: 1;
+    }
+
+    .book-page {
+      padding: 0.5rem !important;
+    }
+
+    .book-page-front {
+      box-shadow:
+        inset 12px 0 20px rgba(0, 0, 0, 0.12),
+        -1px 0 3px rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  .book-back-cover::after {
+    content: "";
   }
 }

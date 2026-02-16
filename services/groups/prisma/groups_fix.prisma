@@ -1,0 +1,145 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Group {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  colorKey    String   @default("mel")
+  createdBy   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  memberships  Membership[]
+  invites      GroupInvite[]
+  joinRequests JoinRequest[]
+}
+
+model Membership {
+  id        String   @id @default(cuid())
+  groupId   String
+  userId    String
+  role      String   @default("MEMBER")
+  joinedAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, userId])
+}
+
+model JoinRequest {
+  id        String   @id @default(cuid())
+  groupId   String
+  userId    String
+  status    String   @default("PENDING")
+  message   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, userId])
+}
+
+model GroupInvite {
+  id        String   @id @default(cuid())
+  groupId   String
+  email     String
+  role      String   @default("MEMBER")
+  token     String   @unique
+  status    String   @default("PENDING")
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+}
+
+model GroupBookOfMonthSelection {
+  id         String   @id @default(cuid())
+  groupId    String
+  clubBookId String
+  selectedBy String
+  createdAt  DateTime @default(now())
+
+  @@unique([groupId, clubBookId])
+}
+
+model ClubBook {
+  id              String   @id @default(cuid())
+  bookId          String
+  title           String
+  author          String
+  coverUrl        String?
+  colorKey        String
+  city            String   @default("FORTALEZA")
+  month           Int
+  year            Int
+  createdByUserId String
+  createdAt       DateTime @default(now())
+
+  messages  ClubBookMessage[]
+  artifacts ClubBookArtifact[]
+
+  @@index([year, month, city])
+}
+
+model ClubBookMessage {
+  id         String   @id @default(cuid())
+  clubBookId String
+  userId     String
+  text       String
+  createdAt  DateTime @default(now())
+
+  clubBook ClubBook @relation(fields: [clubBookId], references: [id], onDelete: Cascade)
+}
+
+model ClubBookArtifact {
+  id               String   @id @default(cuid())
+  clubBookId       String
+  fileName         String
+  mimeType         String
+  size             Int
+  url              String
+  uploadedByUserId String
+  createdAt        DateTime @default(now())
+
+  clubBook ClubBook @relation(fields: [clubBookId], references: [id], onDelete: Cascade)
+}
+
+model Channel {
+  id        String   @id @default(cuid())
+  name      String
+  type      String   // GLOBAL, CITY, PRIVATE_GROUP
+  cityCode  String?  // null if GLOBAL
+  createdAt DateTime @default(now())
+
+  messages ChannelMessage[]
+}
+
+model ChannelMessage {
+  id        String   @id @default(cuid())
+  channelId String
+  userId    String
+  text      String
+  createdAt DateTime @default(now())
+
+  channel Channel @relation(fields: [channelId], references: [id], onDelete: Cascade)
+}
+
+model DirectMessage {
+  id         String   @id @default(cuid())
+  fromUserId String
+  toUserId   String
+  text       String
+  createdAt  DateTime @default(now())
+
+  @@index([fromUserId, toUserId])
+}

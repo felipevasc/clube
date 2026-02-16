@@ -19,17 +19,21 @@ function eventTargets(): string[] {
 export function registerRoutes(app: Express) {
   app.get("/books", async (req, res) => {
     const q = (req.query.q ? String(req.query.q) : "").trim();
+    const genre = req.query.genre ? String(req.query.genre) : undefined;
     const books = await prisma.book.findMany({
-      where: q
-        ? {
-          OR: [
-            // NOTE: SQLite connector (dev) does not support `mode: "insensitive"`.
-            // For now we rely on SQLite's default LIKE/contains behavior.
-            { title: { contains: q } },
-            { author: { contains: q } },
-          ],
-        }
-        : undefined,
+      where: {
+        AND: [
+          genre ? { genre } : {},
+          q
+            ? {
+              OR: [
+                { title: { contains: q } },
+                { author: { contains: q } },
+              ],
+            }
+            : {},
+        ],
+      },
       orderBy: { createdAt: "desc" },
       take: 50,
     });
@@ -51,7 +55,13 @@ export function registerRoutes(app: Express) {
     try {
       const book = await prisma.book.update({
         where: { id },
-        data: { title: input.title, author: input.author, coverUrl: input.coverUrl || "" },
+        data: {
+          title: input.title,
+          author: input.author,
+          coverUrl: input.coverUrl || "",
+          synopsis: input.synopsis || "",
+          genre: input.genre || ""
+        },
       });
       res.json({ book });
     } catch (e: any) {
@@ -66,7 +76,15 @@ export function registerRoutes(app: Express) {
     const username = getUsername(req);
     if (!username) return res.status(401).json({ error: "missing x-username" });
     const input = BookCreateSchema.parse(req.body);
-    const book = await prisma.book.create({ data: { title: input.title, author: input.author, coverUrl: input.coverUrl || "" } });
+    const book = await prisma.book.create({
+      data: {
+        title: input.title,
+        author: input.author,
+        coverUrl: input.coverUrl || "",
+        synopsis: input.synopsis || "",
+        genre: input.genre || ""
+      }
+    });
     const env = makeEventEnvelope({ source: "books", type: "book.created", data: { id: book.id } });
     await publishEvent(env, eventTargets());
     res.status(201).json({ book });

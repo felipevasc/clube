@@ -105,20 +105,17 @@ export default function ChatBubbles({
               <div className={`max-w-[78%] ${me ? "" : ""}`}>
                 <div className={`flex items-end gap-2 ${me ? "flex-row-reverse" : ""}`}>
                   {!me ? (
-                    <div className="shrink-0 w-10">
-                      {firstInGroup ? <Avatar user={u} size={38} /> : <div className="w-[38px] h-[38px]" />}
+                    <div className="shrink-0 w-9">
+                      {firstInGroup ? <Avatar user={u} size={34} className="shadow-sm border border-black/5" /> : <div className="w-[34px] h-[34px]" />}
                     </div>
-                  ) : (
-                    <div className="shrink-0 w-10" />
-                  )}
+                  ) : null}
 
                   <div
                     className={[
-                      "relative px-3.5 py-2.5 pr-12",
+                      "relative px-3 py-1.5 pr-11 shadow-sm",
                       bubbleRadius,
                       "bg-[var(--bubble-bg)]",
-                      "shadow-[0_2px_10px_rgba(0,0,0,0.08)]",
-                      "ring-1 ring-black/10",
+                      "ring-1 ring-black/5",
                       tailCls,
                     ].join(" ")}
                     style={{ ["--bubble-bg" as any]: bubbleBg }}

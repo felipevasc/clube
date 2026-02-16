@@ -1,11 +1,13 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  provider      = "prisma-client-js"
+  output        = "../src/generated/prisma"
+  // Keep WSL/Linux working even if `prisma generate` runs on Windows.
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
+  url      = "file:./dev.db"
 }
 
 model Book {
@@ -13,9 +15,12 @@ model Book {
   title     String
   author    String
   coverUrl  String   @default("")
+  synopsis  String   @default("")
+  genre     String?  @default("")
   createdAt DateTime @default(now())
 
   @@unique([title, author])
   @@index([title])
   @@index([author])
+  @@index([genre])
 }

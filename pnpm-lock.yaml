@@ -230,7 +230,7 @@ importers:
   services/users:
     dependencies:
       '@clube/shared':
-        specifier: workspace:*
+        specifier: file:../../packages/shared
         version: link:../../packages/shared
       '@prisma/client':
         specifier: ^6.3.1

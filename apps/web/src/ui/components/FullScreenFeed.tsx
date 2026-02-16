@@ -6,6 +6,7 @@ import { clubColorHex } from "../lib/clubColors";
 type FullScreenFeedProps = {
     posts: FeedPost[];
     initialPostId: string | null;
+    initialImageIndex?: number;
     onClose: () => void;
     onLike: (postId: string) => void;
     onComment: (postId: string) => void;
@@ -14,6 +15,7 @@ type FullScreenFeedProps = {
 export default function FullScreenFeed({
     posts,
     initialPostId,
+    initialImageIndex = 0,
     onClose,
     onLike,
     onComment,
@@ -51,6 +53,7 @@ export default function FullScreenFeed({
                     <FullScreenPost
                         key={post.id}
                         post={post}
+                        initialIndex={post.id === initialPostId ? initialImageIndex : 0}
                         onLike={onLike}
                         onComment={onComment}
                     />
@@ -62,10 +65,12 @@ export default function FullScreenFeed({
 
 function FullScreenPost({
     post,
+    initialIndex = 0,
     onLike,
     onComment
 }: {
     post: FeedPost;
+    initialIndex?: number;
     onLike: (id: string) => void;
     onComment: (id: string) => void;
 }) {
@@ -73,25 +78,51 @@ function FullScreenPost({
     // Prepare images array
     const images = post.images && post.images.length > 0 ? post.images : post.imageUrl ? [post.imageUrl] : [];
 
-    const [currIndex, setCurrIndex] = useState(0);
+    const [currIndex, setCurrIndex] = useState(initialIndex);
 
     // Reset index if post changes (though key mapping should handle this)
     useEffect(() => {
-        setCurrIndex(0);
-    }, [post.id]);
+        setCurrIndex(initialIndex);
+    }, [post.id, initialIndex]);
 
-    const scrollToImage = (idx: number) => {
-        setCurrIndex(idx);
+    // Swipe handlers
+    const [touchStart, setTouchStart] = useState<number | null>(null);
+    const [touchEnd, setTouchEnd] = useState<number | null>(null);
+    const minSwipeDistance = 50;
+
+    const onTouchStart = (e: React.TouchEvent) => {
+        setTouchEnd(null);
+        setTouchStart(e.targetTouches[0].clientX);
+    };
+
+    const onTouchMove = (e: React.TouchEvent) => setTouchEnd(e.targetTouches[0].clientX);
+
+    const onTouchEnd = () => {
+        if (!touchStart || !touchEnd) return;
+        const distance = touchStart - touchEnd;
+        const isLeftSwipe = distance > minSwipeDistance;
+        const isRightSwipe = distance < -minSwipeDistance;
+        if (isLeftSwipe && currIndex < images.length - 1) {
+            setCurrIndex(currIndex + 1);
+        }
+        if (isRightSwipe && currIndex > 0) {
+            setCurrIndex(currIndex - 1);
+        }
     };
 
     return (
         <div
             id={`fs-post-${post.id}`}
-            className="h-full w-full snap-start relative flex items-center justify-center bg-neutral-900"
+            className="h-full w-full snap-start relative flex items-center justify-center bg-neutral-900 group"
         >
             {/* Background Image / Media */}
             {images.length > 0 ? (
-                <div className="absolute inset-0">
+                <div
+                    className="absolute inset-0"
+                    onTouchStart={onTouchStart}
+                    onTouchMove={onTouchMove}
+                    onTouchEnd={onTouchEnd}
+                >
                     {/* Blurry Background (based on current image) */}
                     <div
                         className="absolute inset-0 bg-cover bg-center opacity-30 blur-xl scale-110 transition-all duration-700"
@@ -129,30 +160,38 @@ function FullScreenPost({
                             {images.map((_, i) => (
                                 <button
                                     key={i}
-                                    onClick={(e) => { e.stopPropagation(); scrollToImage(i); }}
+                                    onClick={(e) => { e.stopPropagation(); setCurrIndex(i); }}
                                     className={`w-1.5 h-1.5 rounded-full transition-all ${i === currIndex ? "bg-white w-2.5" : "bg-white/40"}`}
                                 />
                             ))}
                         </div>
                     )}
 
-                    {/* Navigation Areas (Invisible buttons for tapping left/right) */}
+                    {/* Navigation Arrows (Visible on Hover / Group) */}
                     {images.length > 1 && (
                         <>
-                            <div
-                                className="absolute top-20 bottom-32 left-0 w-1/4 z-10"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    if (currIndex > 0) setCurrIndex(currIndex - 1);
-                                }}
-                            />
-                            <div
-                                className="absolute top-20 bottom-32 right-0 w-1/4 z-10"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    if (currIndex < images.length - 1) setCurrIndex(currIndex + 1);
-                                }}
-                            />
+                            {currIndex > 0 && (
+                                <button
+                                    className="absolute top-1/2 left-4 -translate-y-1/2 p-3 bg-black/30 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/50 z-30 hidden sm:block"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setCurrIndex(currIndex - 1);
+                                    }}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
+                                </button>
+                            )}
+                            {currIndex < images.length - 1 && (
+                                <button
+                                    className="absolute top-1/2 right-4 -translate-y-1/2 p-3 bg-black/30 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/50 z-30 hidden sm:block"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setCurrIndex(currIndex + 1);
+                                    }}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>
+                                </button>
+                            )}
                         </>
                     )}
                 </div>

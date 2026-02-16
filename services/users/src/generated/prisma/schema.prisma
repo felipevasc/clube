@@ -1,6 +1,8 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  provider      = "prisma-client-js"
+  output        = "../src/generated/prisma"
+  // Keep WSL/Linux working even if `prisma generate` runs on Windows.
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -9,10 +11,21 @@ datasource db {
 }
 
 model User {
-  id        String   @id
+  id        String     @id
   name      String
   bio       String
   avatarUrl String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  coverUrl  String     @default("")
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  cities    UserCity[]
+}
+
+model UserCity {
+  id     String @id @default(cuid())
+  userId String
+  city   String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, city])
 }

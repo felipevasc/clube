@@ -6,6 +6,13 @@ export const UsernameSchema = z
   .max(32)
   .regex(/^[a-zA-Z0-9_]+$/, "Use apenas letras, numeros e _");
 
+export const MediaUrlSchema = z
+  .string()
+  .min(1)
+  .max(2000)
+  // Allow either absolute URLs or same-origin relative paths (used by the /api proxy in dev).
+  .refine((v) => v.startsWith("/") || v.startsWith("http://") || v.startsWith("https://"), "URL invalida");
+
 export const LoginSchema = z.object({
   username: UsernameSchema,
 });
@@ -13,13 +20,17 @@ export const LoginSchema = z.object({
 export const UserProfileSchema = z.object({
   name: z.string().min(1).max(60),
   bio: z.string().max(200).optional().default(""),
-  avatarUrl: z.string().url().optional().default(""),
+  avatarUrl: z.union([MediaUrlSchema, z.literal("")]).optional().default(""),
+  coverUrl: z.union([MediaUrlSchema, z.literal("")]).optional().default(""),
+  cities: z.array(z.string()).default([]),
 });
 
 export const BookCreateSchema = z.object({
   title: z.string().min(1).max(120),
   author: z.string().min(1).max(80),
   coverUrl: z.string().max(2000).optional().default(""),
+  synopsis: z.string().max(1000000).optional().default(""),
+  genre: z.string().max(40).optional().default(""),
 });
 
 export const BookUpdateSchema = BookCreateSchema;
@@ -29,12 +40,7 @@ export const GroupCreateSchema = z.object({
   description: z.string().max(200).optional().default(""),
 });
 
-export const MediaUrlSchema = z
-  .string()
-  .min(1)
-  .max(2000)
-  // Allow either absolute URLs or same-origin relative paths (used by the /api proxy in dev).
-  .refine((v) => v.startsWith("/") || v.startsWith("http://") || v.startsWith("https://"), "URL invalida");
+
 
 // "Livro do mes" palette: 24 distinct accents that still feel cohesive with the app.
 // Stored as a key in the DB, rendered by the UI via the hex values below.
@@ -94,10 +100,16 @@ export const ClubColorKeySchema = z.enum([
 
 export type ClubColorKey = z.infer<typeof ClubColorKeySchema>;
 
+export const CitySchema = z.enum(["FORTALEZA", "BRASILIA"]);
+export type City = z.infer<typeof CitySchema>;
+
 export const ClubBookCreateInputSchema = z.object({
   bookId: z.string().min(1).max(64),
+  coverUrl: z.union([MediaUrlSchema, z.literal("")]).optional().default(""),
   colorKey: ClubColorKeySchema,
-  isActive: z.boolean().optional().default(true),
+  city: CitySchema,
+  month: z.number().int().min(1).max(12),
+  year: z.number().int().min(2025).max(2100),
 });
 
 // Internal: gateway enriches with title/author so services can render labels without extra calls.
@@ -143,3 +155,27 @@ export const EventEnvelopeSchema = z.object({
 });
 
 export type EventEnvelope = z.infer<typeof EventEnvelopeSchema>;
+
+export const PollOptionCreateSchema = z.object({
+  text: z.string().min(1).max(200),
+  imageUrl: MediaUrlSchema.optional(),
+});
+
+export const PollCreateSchema = z.object({
+  question: z.string().min(1).max(500),
+  description: z.string().max(1000).optional().default(""),
+  imageUrl: MediaUrlSchema.optional(),
+  multiChoice: z.boolean().optional().default(false),
+  publicVotes: z.boolean().optional().default(false),
+  options: z.array(PollOptionCreateSchema).min(2).max(10),
+  clubBookId: z.string().min(1).max(64),
+});
+
+export const PollVoteSchema = z.object({
+  optionId: z.string().min(1),
+}).or(
+  z.object({
+    // Single "ballot" submission (esp. for multi-choice). The API should reject revotes.
+    optionIds: z.array(z.string().min(1)).min(1).max(10),
+  })
+);

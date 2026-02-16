@@ -142,32 +142,36 @@ export function registerRoutes(app: Express) {
     res.json({ ok: true });
   });
 
+  app.get("/api/ping", (req, res) => {
+    res.json({ pong: true, time: Date.now() });
+  });
+
   // Media upload (stores on disk; returns a same-origin URL under /api/media/*).
   app.post(
     "/api/uploads",
     express.raw({ type: "*/*", limit: "25mb" }),
     async (req, res) => {
-    const secret = getSessionSecret();
-    const userId = getUserIdFromRequest(req, secret || undefined);
-    if (!userId) return res.status(401).json({ error: "unauthorized" });
+      const secret = getSessionSecret();
+      const userId = getUserIdFromRequest(req, secret || undefined);
+      if (!userId) return res.status(401).json({ error: "unauthorized" });
 
-    const mime = String(req.headers["content-type"] || "");
-    const buf: any = (req as any).body;
-    if (!buf || !(buf instanceof Buffer) || buf.length === 0) return res.status(400).json({ error: "missing body" });
+      const mime = String(req.headers["content-type"] || "");
+      const buf: any = (req as any).body;
+      if (!buf || !(buf instanceof Buffer) || buf.length === 0) return res.status(400).json({ error: "missing body" });
 
-    const ext = mimeToExt(mime) || "bin";
-    const key = `${crypto.randomBytes(16).toString("hex")}.${ext}`;
-    const dst = path.join(UPLOAD_DIR, key);
-    await fsp.writeFile(dst, buf);
+      const ext = mimeToExt(mime) || "bin";
+      const key = `${crypto.randomBytes(16).toString("hex")}.${ext}`;
+      const dst = path.join(UPLOAD_DIR, key);
+      await fsp.writeFile(dst, buf);
 
-    const fileName = safeFileName(req.headers["x-file-name"] || "");
-    res.status(201).json({
-      key,
-      url: `/api/media/${encodeURIComponent(key)}`,
-      mime,
-      size: Number(buf.length || 0),
-      fileName,
-    });
+      const fileName = safeFileName(req.headers["x-file-name"] || "");
+      res.status(201).json({
+        key,
+        url: `/api/media/${encodeURIComponent(key)}`,
+        mime,
+        size: Number(buf.length || 0),
+        fileName,
+      });
     }
   );
 
@@ -275,6 +279,12 @@ export function registerRoutes(app: Express) {
 
   app.put("/api/me", async (req, res) => {
     const out = await httpJson("PUT", `${USERS_URL}/me`, req.body, authHeaders(req));
+    res.json(out);
+  });
+
+  app.get("/api/users", async (req, res) => {
+    const q = req.query.q ? `?q=${encodeURIComponent(String(req.query.q))}` : "";
+    const out = await httpJson("GET", `${USERS_URL}/users${q}`);
     res.json(out);
   });
 
@@ -495,6 +505,7 @@ export function registerRoutes(app: Express) {
         bookId: String(input.bookId),
         title: String(b.title || ""),
         author: String(b.author || ""),
+        coverUrl: input.coverUrl,
         colorKey: String(input.colorKey),
         isActive: !!input.isActive,
       },
@@ -537,6 +548,53 @@ export function registerRoutes(app: Express) {
     res.status(201).json(out);
   });
 
+  // Channels
+  app.get("/api/channels", async (req, res) => {
+    const out = await httpJson("GET", `${GROUPS_URL}/channels`, undefined, authHeaders(req));
+    res.json(out);
+  });
+
+  app.get("/api/channels/:id/messages", async (req, res) => {
+    const out = await httpJson(
+      "GET",
+      `${GROUPS_URL}/channels/${encodeURIComponent(String(req.params.id))}/messages`,
+      undefined,
+      authHeaders(req)
+    );
+    res.json(out);
+  });
+
+  app.post("/api/channels/:id/messages", async (req, res) => {
+    const out = await httpJson(
+      "POST",
+      `${GROUPS_URL}/channels/${encodeURIComponent(String(req.params.id))}/messages`,
+      req.body,
+      authHeaders(req)
+    );
+    res.status(201).json(out);
+  });
+
+  // Direct Messages
+  app.get("/api/direct-messages/:userId", async (req, res) => {
+    const out = await httpJson(
+      "GET",
+      `${GROUPS_URL}/direct-messages/${encodeURIComponent(String(req.params.userId))}`,
+      undefined,
+      authHeaders(req)
+    );
+    res.json(out);
+  });
+
+  app.post("/api/direct-messages/:userId", async (req, res) => {
+    const out = await httpJson(
+      "POST",
+      `${GROUPS_URL}/direct-messages/${encodeURIComponent(String(req.params.userId))}`,
+      req.body,
+      authHeaders(req)
+    );
+    res.status(201).json(out);
+  });
+
   app.get("/api/club-books/:id/artifacts", async (req, res) => {
     const out = await httpJson(
       "GET",
@@ -562,6 +620,7 @@ export function registerRoutes(app: Express) {
     const req = _req as any;
     const qs = new URLSearchParams();
     if (req.query?.clubBookId) qs.set("clubBookId", String(req.query.clubBookId));
+    if (req.query?.userId) qs.set("userId", String(req.query.userId));
     const out = await httpJson("GET", `${FEED_URL}/feed${qs.toString() ? `?${qs.toString()}` : ""}`, undefined, authHeaders(req));
     const posts = out.posts || [];
     const userIds = Array.from(
@@ -606,6 +665,77 @@ export function registerRoutes(app: Express) {
     });
   });
 
+  // Enquetes (Polls)
+  app.get("/api/polls", async (_req, res) => {
+    const req = _req as any;
+    const qs = new URLSearchParams();
+    if (req.query?.clubBookId) qs.set("clubBookId", String(req.query.clubBookId));
+    const out = await httpJson(
+      "GET",
+      `${FEED_URL}/polls${qs.toString() ? `?${qs.toString()}` : ""}`,
+      undefined,
+      authHeaders(req)
+    );
+    res.json(out);
+  });
+
+  app.post("/api/polls", async (req, res) => {
+    const out = await httpJson("POST", `${FEED_URL}/polls`, req.body, authHeaders(req));
+    res.status(201).json(out);
+  });
+
+  app.get("/api/polls/:id", async (_req, res) => {
+    const req = _req as any;
+    const out = await httpJson("GET", `${FEED_URL}/polls/${encodeURIComponent(String(req.params.id))}`, undefined, authHeaders(req));
+    const poll = out?.poll;
+    if (!poll) return res.status(404).json({ error: "poll not found" });
+
+    // If publicVotes is enabled and the viewer already voted, feed returns voter ids per option.
+    // Attach basic user profiles to keep UI simple.
+    const voterIds: string[] = Array.from(
+      new Set(
+        (Array.isArray(poll?.options) ? poll.options : [])
+          .flatMap((o: any) => (Array.isArray(o?.voters) ? o.voters : []))
+          .map((v: any) => String(v))
+          .filter(Boolean)
+      )
+    );
+    if (voterIds.length === 0) return res.json(out);
+
+    const usersEntries = await Promise.all(
+      voterIds.map(async (id: string) => {
+        try {
+          const u = await httpJson("GET", `${USERS_URL}/users/${encodeURIComponent(id)}`);
+          return [id, u.user] as const;
+        } catch {
+          return [id, null] as const;
+        }
+      })
+    );
+    const usersById = Object.fromEntries(usersEntries);
+
+    res.json({
+      ...out,
+      poll: {
+        ...poll,
+        options: (Array.isArray(poll.options) ? poll.options : []).map((o: any) => ({
+          ...o,
+          voters: Array.isArray(o?.voters) ? o.voters.map((id: any) => usersById[String(id)] || { id: String(id), name: String(id) }) : o?.voters,
+        })),
+      },
+    });
+  });
+
+  app.post("/api/polls/:id/vote", async (req, res) => {
+    const out = await httpJson(
+      "POST",
+      `${FEED_URL}/polls/${encodeURIComponent(String(req.params.id))}/vote`,
+      req.body,
+      authHeaders(req)
+    );
+    res.json(out);
+  });
+
   app.get("/api/posts/:id", async (req, res) => {
     const out = await httpJson(
       "GET",
@@ -637,11 +767,11 @@ export function registerRoutes(app: Express) {
         : null;
     const cb = clubBookOut?.clubBooks?.[0]
       ? {
-          id: String(clubBookOut.clubBooks[0].id),
-          title: String(clubBookOut.clubBooks[0].title || ""),
-          author: String(clubBookOut.clubBooks[0].author || ""),
-          colorKey: String(clubBookOut.clubBooks[0].colorKey || ""),
-        }
+        id: String(clubBookOut.clubBooks[0].id),
+        title: String(clubBookOut.clubBooks[0].title || ""),
+        author: String(clubBookOut.clubBooks[0].author || ""),
+        colorKey: String(clubBookOut.clubBooks[0].colorKey || ""),
+      }
       : null;
 
     res.json({

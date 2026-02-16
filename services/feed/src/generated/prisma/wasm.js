@@ -122,6 +122,34 @@ exports.Prisma.CommentScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.PollScalarFieldEnum = {
+  id: 'id',
+  clubBookId: 'clubBookId',
+  userId: 'userId',
+  question: 'question',
+  description: 'description',
+  imageUrl: 'imageUrl',
+  multiChoice: 'multiChoice',
+  publicVotes: 'publicVotes',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.PollOptionScalarFieldEnum = {
+  id: 'id',
+  pollId: 'pollId',
+  text: 'text',
+  imageUrl: 'imageUrl',
+  index: 'index'
+};
+
+exports.Prisma.PollVoteScalarFieldEnum = {
+  id: 'id',
+  pollId: 'pollId',
+  optionId: 'optionId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -137,7 +165,10 @@ exports.Prisma.ModelName = {
   Post: 'Post',
   PostImage: 'PostImage',
   Like: 'Like',
-  Comment: 'Comment'
+  Comment: 'Comment',
+  Poll: 'Poll',
+  PollOption: 'PollOption',
+  PollVote: 'PollVote'
 };
 /**
  * Create the Client
@@ -161,6 +192,10 @@ const config = {
         "fromEnvVar": null,
         "value": "debian-openssl-3.0.x",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "debian-openssl-3.0.x"
       }
     ],
     "previewFeatures": [],
@@ -187,13 +222,13 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Post {\n  id         String   @id @default(cuid())\n  userId     String\n  text       String\n  imageUrl   String?\n  clubBookId String?\n  createdAt  DateTime @default(now())\n\n  likes    Like[]\n  comments Comment[]\n  images   PostImage[]\n\n  @@index([createdAt])\n  @@index([userId])\n  @@index([clubBookId])\n}\n\nmodel PostImage {\n  id     String @id @default(cuid())\n  postId String\n  url    String\n  index  Int    @default(0)\n\n  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)\n\n  @@index([postId])\n}\n\nmodel Like {\n  id        String   @id @default(cuid())\n  postId    String\n  userId    String\n  type      String   @default(\"like\")\n  createdAt DateTime @default(now())\n\n  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)\n\n  @@unique([postId, userId])\n  @@index([userId])\n  @@index([postId, type])\n}\n\nmodel Comment {\n  id        String   @id @default(cuid())\n  postId    String\n  userId    String\n  text      String\n  createdAt DateTime @default(now())\n\n  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)\n\n  @@index([createdAt])\n  @@index([userId])\n}\n",
-  "inlineSchemaHash": "8baece71f26e7b13e4efd8b6e463e97d610240f58dd629ce90de984dbfa6e85e",
+  "inlineSchema": "generator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../src/generated/prisma\"\n  // Keep WSL/Linux working even if `prisma generate` runs on Windows.\n  binaryTargets = [\"native\", \"debian-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"sqlite\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Post {\n  id         String   @id @default(cuid())\n  userId     String\n  text       String\n  imageUrl   String?\n  clubBookId String?\n  createdAt  DateTime @default(now())\n\n  likes    Like[]\n  comments Comment[]\n  images   PostImage[]\n\n  @@index([createdAt])\n  @@index([userId])\n  @@index([clubBookId])\n}\n\nmodel PostImage {\n  id     String @id @default(cuid())\n  postId String\n  url    String\n  index  Int    @default(0)\n\n  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)\n\n  @@index([postId])\n}\n\nmodel Like {\n  id        String   @id @default(cuid())\n  postId    String\n  userId    String\n  type      String   @default(\"like\")\n  createdAt DateTime @default(now())\n\n  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)\n\n  @@unique([postId, userId])\n  @@index([userId])\n  @@index([postId, type])\n}\n\nmodel Comment {\n  id        String   @id @default(cuid())\n  postId    String\n  userId    String\n  text      String\n  createdAt DateTime @default(now())\n\n  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)\n\n  @@index([createdAt])\n  @@index([userId])\n}\n\nmodel Poll {\n  id          String   @id @default(cuid())\n  clubBookId  String\n  userId      String\n  question    String\n  description String?\n  imageUrl    String?\n  multiChoice Boolean  @default(false)\n  publicVotes Boolean  @default(false)\n  createdAt   DateTime @default(now())\n\n  options PollOption[]\n  votes   PollVote[]\n\n  @@index([clubBookId])\n  @@index([createdAt])\n}\n\nmodel PollOption {\n  id       String  @id @default(cuid())\n  pollId   String\n  text     String\n  imageUrl String?\n  index    Int\n\n  poll  Poll       @relation(fields: [pollId], references: [id], onDelete: Cascade)\n  votes PollVote[]\n\n  @@index([pollId])\n}\n\nmodel PollVote {\n  id        String   @id @default(cuid())\n  pollId    String\n  optionId  String\n  userId    String\n  createdAt DateTime @default(now())\n\n  poll   Poll       @relation(fields: [pollId], references: [id], onDelete: Cascade)\n  option PollOption @relation(fields: [optionId], references: [id], onDelete: Cascade)\n\n  @@unique([pollId, userId, optionId])\n  @@index([pollId])\n  @@index([optionId])\n  @@index([userId])\n}\n",
+  "inlineSchemaHash": "a663e0c4a91b34b09816eddedca7f36a02a80c66a7bc5a9f495e0b20da74d6bf",
   "copyEngine": true
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"Post\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"text\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"imageUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"clubBookId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"likes\",\"kind\":\"object\",\"type\":\"Like\",\"relationName\":\"LikeToPost\"},{\"name\":\"comments\",\"kind\":\"object\",\"type\":\"Comment\",\"relationName\":\"CommentToPost\"},{\"name\":\"images\",\"kind\":\"object\",\"type\":\"PostImage\",\"relationName\":\"PostToPostImage\"}],\"dbName\":null},\"PostImage\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"postId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"url\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"index\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"post\",\"kind\":\"object\",\"type\":\"Post\",\"relationName\":\"PostToPostImage\"}],\"dbName\":null},\"Like\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"postId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"type\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"post\",\"kind\":\"object\",\"type\":\"Post\",\"relationName\":\"LikeToPost\"}],\"dbName\":null},\"Comment\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"postId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"text\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"post\",\"kind\":\"object\",\"type\":\"Post\",\"relationName\":\"CommentToPost\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"Post\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"text\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"imageUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"clubBookId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"likes\",\"kind\":\"object\",\"type\":\"Like\",\"relationName\":\"LikeToPost\"},{\"name\":\"comments\",\"kind\":\"object\",\"type\":\"Comment\",\"relationName\":\"CommentToPost\"},{\"name\":\"images\",\"kind\":\"object\",\"type\":\"PostImage\",\"relationName\":\"PostToPostImage\"}],\"dbName\":null},\"PostImage\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"postId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"url\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"index\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"post\",\"kind\":\"object\",\"type\":\"Post\",\"relationName\":\"PostToPostImage\"}],\"dbName\":null},\"Like\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"postId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"type\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"post\",\"kind\":\"object\",\"type\":\"Post\",\"relationName\":\"LikeToPost\"}],\"dbName\":null},\"Comment\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"postId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"text\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"post\",\"kind\":\"object\",\"type\":\"Post\",\"relationName\":\"CommentToPost\"}],\"dbName\":null},\"Poll\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"clubBookId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"question\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"imageUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"multiChoice\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"publicVotes\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"options\",\"kind\":\"object\",\"type\":\"PollOption\",\"relationName\":\"PollToPollOption\"},{\"name\":\"votes\",\"kind\":\"object\",\"type\":\"PollVote\",\"relationName\":\"PollToPollVote\"}],\"dbName\":null},\"PollOption\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"pollId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"text\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"imageUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"index\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"poll\",\"kind\":\"object\",\"type\":\"Poll\",\"relationName\":\"PollToPollOption\"},{\"name\":\"votes\",\"kind\":\"object\",\"type\":\"PollVote\",\"relationName\":\"PollOptionToPollVote\"}],\"dbName\":null},\"PollVote\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"pollId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"optionId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"poll\",\"kind\":\"object\",\"type\":\"Poll\",\"relationName\":\"PollToPollVote\"},{\"name\":\"option\",\"kind\":\"object\",\"type\":\"PollOption\",\"relationName\":\"PollOptionToPollVote\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = {
   getRuntime: async () => require('./query_engine_bg.js'),

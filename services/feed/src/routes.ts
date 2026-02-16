@@ -4,10 +4,14 @@ import {
   EventEnvelopeSchema,
   PostCreateSchema,
   PostReactSchema,
+  PollCreateSchema,
+  PollVoteSchema,
   makeEventEnvelope,
   publishEvent,
 } from "@clube/shared";
 import { prisma } from "./db.js";
+
+declare const process: any;
 
 function getUsername(req: any): string | null {
   const v = req.header("x-username");
@@ -43,16 +47,33 @@ export function registerRoutes(app: Express) {
     const viewerId = getUsername(req);
     const clubBookId = String(req.query?.clubBookId || "").trim();
     const posts = await prisma.post.findMany({
-      where: clubBookId ? { clubBookId } : undefined,
+      where: {
+        ...(clubBookId ? { clubBookId } : {}),
+        ...(req.query?.userId ? { userId: String(req.query.userId) } : {}),
+      },
       orderBy: { createdAt: "desc" },
       take: 50,
       include: {
         comments: { orderBy: { createdAt: "desc" }, take: 2 },
         _count: { select: { likes: true, comments: true } },
-        images: { orderBy: { index: "asc" } },
       },
     });
+
+    // Manual fetch of images due to Prisma Client generation issues
     const postIds = posts.map((p) => p.id);
+    const imagesByPostId: Record<string, string[]> = {};
+
+    if (postIds.length > 0) {
+      try {
+        const postIdsString = postIds.map(id => `'${id}'`).join(",");
+        const rawImages = await prisma.$queryRawUnsafe(`SELECT * FROM PostImage WHERE postId IN (${postIdsString}) ORDER BY "index" ASC`) as any[];
+        for (const img of rawImages) {
+          (imagesByPostId[img.postId] ||= []).push(img.url);
+        }
+      } catch (e) {
+        console.error("Failed to fetch images via raw SQL", e);
+      }
+    }
 
     const reactionsRows =
       postIds.length === 0
@@ -84,7 +105,7 @@ export function registerRoutes(app: Express) {
     res.json({
       posts: posts.map((p) => ({
         ...p,
-        images: p.images?.map((i) => i.url) || [],
+        images: imagesByPostId[p.id] || [],
         reactions: reactionsByPostId[p.id] || {},
         viewerReaction: viewerReactionByPostId[p.id] || null,
       })),
@@ -100,10 +121,18 @@ export function registerRoutes(app: Express) {
         likes: true, // actually reactions (one per user)
         comments: { orderBy: { createdAt: "asc" } },
         _count: { select: { likes: true, comments: true } },
-        images: { orderBy: { index: "asc" } },
       },
     });
     if (!post) return res.status(404).json({ error: "post not found" });
+
+    // Manual fetch images
+    let postImages: string[] = [];
+    try {
+      const rawImages = await prisma.$queryRawUnsafe(`SELECT * FROM PostImage WHERE postId = '${id}' ORDER BY "index" ASC`) as any[];
+      postImages = rawImages.map(img => img.url);
+    } catch (e) {
+      console.error("Failed to fetch single post images", e);
+    }
 
     const reactionsRows = await prisma.like.groupBy({
       by: ["type"],
@@ -124,7 +153,7 @@ export function registerRoutes(app: Express) {
 
     const formattedPost = {
       ...post,
-      images: post.images?.map((i) => i.url) || [],
+      images: postImages,
       reactions,
       viewerReaction,
     };
@@ -141,11 +170,21 @@ export function registerRoutes(app: Express) {
         text: String(input.text || ""),
         imageUrl: input.imageUrl ? String(input.imageUrl) : null,
         clubBookId: input.clubBookId ? String(input.clubBookId) : null,
-        images: {
-          create: input.images?.map((url, idx) => ({ url, index: idx })) || [],
-        },
       },
     });
+
+    // Manual insert images
+    if (input.images && input.images.length > 0) {
+      try {
+        for (let i = 0; i < input.images.length; i++) {
+          const url = input.images[i];
+          const id = Math.random().toString(36).substring(2, 15); // Simple ID gen
+          await prisma.$executeRawUnsafe(`INSERT INTO PostImage (id, postId, url, "index") VALUES ('${id}', '${post.id}', '${url}', ${i})`);
+        }
+      } catch (e) {
+        console.error("Failed to insert images", e);
+      }
+    }
     const env = makeEventEnvelope({ source: "feed", type: "post.created", data: { id: post.id } });
     await publishEvent(env, eventTargets());
     res.status(201).json({ post });
@@ -220,6 +259,146 @@ export function registerRoutes(app: Express) {
     });
     await publishEvent(env, eventTargets());
     res.status(201).json({ comment });
+  });
+
+  app.get("/polls", async (_req, res) => {
+    const req = _req as any;
+    const clubBookId = String(req.query?.clubBookId || "").trim();
+    if (!clubBookId) return res.status(400).json({ error: "missing clubBookId" });
+    const polls = await prisma.poll.findMany({
+      where: { clubBookId },
+      orderBy: { createdAt: "desc" },
+      include: {
+        options: { orderBy: { index: "asc" } },
+        _count: { select: { votes: true } },
+      },
+    });
+    res.json({ polls });
+  });
+
+  app.get("/polls/:id", async (req, res) => {
+    const id = String(req.params.id);
+    const userId = getUsername(req);
+
+    const poll = await prisma.poll.findUnique({
+      where: { id },
+      include: {
+        options: { orderBy: { index: "asc" } },
+        votes: userId ? { where: { userId } } : false,
+      },
+    });
+
+    if (!poll) return res.status(404).json({ error: "poll not found" });
+
+    const userVotes = poll.votes || [];
+    const hasVoted = userVotes.length > 0;
+    const showResults = hasVoted;
+
+    let voteCounts: Record<string, number> = {};
+    let totalVotes = 0;
+    let votersByOptionId: Record<string, string[]> = {};
+
+    if (showResults) {
+      const results = await prisma.pollVote.groupBy({
+        by: ["optionId"],
+        where: { pollId: id },
+        _count: { _all: true },
+      });
+      for (const r of results) {
+        voteCounts[r.optionId] = r._count._all;
+        totalVotes += r._count._all;
+      }
+
+      if (poll.publicVotes) {
+        const votes = await prisma.pollVote.findMany({
+          where: { pollId: id },
+          select: { optionId: true, userId: true },
+          orderBy: { createdAt: "asc" },
+        });
+        for (const v of votes) {
+          (votersByOptionId[v.optionId] ||= []).push(v.userId);
+        }
+      }
+    }
+
+    const optionsWithResults = poll.options.map((o) => ({
+      ...o,
+      votes: showResults ? voteCounts[o.id] || 0 : undefined,
+      userVoted: userVotes.some((v) => v.optionId === o.id),
+      voters: showResults && poll.publicVotes ? votersByOptionId[o.id] || [] : undefined,
+    }));
+
+    res.json({
+      poll: {
+        ...poll,
+        options: optionsWithResults,
+        votes: undefined,
+        totalVotes: showResults ? totalVotes : undefined,
+        userHasVoted: hasVoted,
+      },
+    });
+  });
+
+  app.post("/polls", async (req, res) => {
+    const userId = getUsername(req);
+    if (!userId) return res.status(401).json({ error: "unauthorized" });
+    const input = PollCreateSchema.parse(req.body);
+
+    const poll = await prisma.poll.create({
+      data: {
+        userId,
+        clubBookId: input.clubBookId,
+        question: input.question,
+        description: input.description,
+        imageUrl: input.imageUrl,
+        multiChoice: input.multiChoice,
+        publicVotes: input.publicVotes,
+        options: {
+          create: input.options.map((o, i) => ({
+            text: o.text,
+            imageUrl: o.imageUrl,
+            index: i,
+          })),
+        },
+      },
+      include: { options: true },
+    });
+    res.status(201).json({ poll });
+  });
+
+  app.post("/polls/:id/vote", async (req, res) => {
+    const userId = getUsername(req);
+    if (!userId) return res.status(401).json({ error: "unauthorized" });
+    const pollId = String(req.params.id);
+    const input = PollVoteSchema.parse(req.body);
+
+    const poll = await prisma.poll.findUnique({ where: { id: pollId }, include: { options: true } });
+    if (!poll) return res.status(404).json({ error: "poll not found" });
+
+    const optionIdsRaw = (input as any)?.optionIds
+      ? (input as any).optionIds
+      : (input as any)?.optionId
+        ? [(input as any).optionId]
+        : [];
+    const optionIds = Array.from(new Set(optionIdsRaw.map((v: any) => String(v)).filter(Boolean)));
+    if (optionIds.length === 0) return res.status(400).json({ error: "missing optionIds" });
+    if (!poll.multiChoice && optionIds.length !== 1) return res.status(400).json({ error: "single_choice_requires_one_option" });
+
+    const optionIdSet = new Set(poll.options.map((o) => o.id));
+    for (const id of optionIds) {
+      if (!optionIdSet.has(id)) return res.status(400).json({ error: "invalid option" });
+    }
+
+    const existingVotes = await prisma.pollVote.findMany({ where: { pollId, userId }, select: { id: true } });
+    if (existingVotes.length > 0) return res.status(409).json({ error: "already_voted" });
+
+    await prisma.$transaction(async (tx) => {
+      await tx.pollVote.createMany({
+        data: optionIds.map((optionId) => ({ pollId, optionId, userId })),
+      });
+    });
+
+    res.json({ ok: true, action: "added" });
   });
 
   app.post("/events", async (req, res) => {

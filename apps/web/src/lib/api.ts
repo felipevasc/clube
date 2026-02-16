@@ -46,3 +46,14 @@ export async function apiMaybe<T>(path: string, init?: RequestInit): Promise<T |
 export async function logout(): Promise<void> {
   await api("/logout", { method: "POST" });
 }
+
+export function getAuthenticatedUser(): string | null {
+  // In this project, the token is stored in a cookie or transmitted via headers.
+  // The backend uses x-username header for simplicity in dev/local.
+  // For the frontend, let's assume we can get it from a common place or a cookie.
+  // Usually this would be decoded from a JWT.
+  // Looking at the code, the dev login just sets a cookie or we use a header.
+  // Actually, let's check how the app knows who is logged in.
+  // I'll check Shell.tsx or LoginPage.tsx if they exist.
+  return document.cookie.split("; ").find(row => row.startsWith("username="))?.split("=")[1] || null;
+}

@@ -22,35 +22,35 @@ export default function Book3D({
 }) {
   const accent = bookAccentHex(book.title);
   const initial = bookInitial(book.title);
-  const titleShort = String(book.title || "").slice(0, 44);
-  const authorShort = String(book.author || "").split(" ").slice(-1)[0] || "";
 
-  const mergedStyle = { ["--book-accent" as any]: accent, ...(style || {}) } as CSSProperties;
+  // Deterministic random rotation based on ID hash
+  const rotSeed = book.id.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0);
+  // Range: -2deg to +2deg approx
+  const rotateDeg = (rotSeed % 5) - 2;
+
+  const mergedStyle = {
+    ["--book-accent" as any]: accent,
+    transform: `rotateZ(${rotateDeg}deg)`,
+    ...(style || {}),
+  } as CSSProperties;
   const cls = `book-3d ${className || ""}`.trim();
 
   const inner = (
-    <>
-      <div className="book-cover" aria-hidden>
+    <div className="book-3d__book" aria-hidden>
+      <div className="book-3d__front">
         {book.coverUrl ? (
-          <div className="book-cover__image" style={{ backgroundImage: `url(${book.coverUrl})` }} />
+          <div className="book-3d__image" style={{ backgroundImage: `url(${book.coverUrl})` }} />
         ) : (
-          <div className="book-cover__fallback">
-            <div className="book-cover__initial">{initial}</div>
-            <div className="book-cover__meta">
-              <div className="book-cover__title">{String(book.title || "").slice(0, 60)}</div>
-              <div className="book-cover__author">{String(book.author || "").slice(0, 44)}</div>
+          <div className="book-3d__fallback">
+            <div className="book-3d__fallbackInitial">{initial}</div>
+            <div className="book-3d__fallbackMeta">
+              <div className="book-3d__fallbackTitle">{String(book.title || "").slice(0, 60)}</div>
+              <div className="book-3d__fallbackAuthor">{String(book.author || "").slice(0, 44)}</div>
             </div>
           </div>
         )}
       </div>
-
-      <div className="book-spine" aria-hidden>
-        <div className="book-spine__title">{titleShort}</div>
-        <div className="book-spine__author">{authorShort}</div>
-      </div>
-
-      <div className="book-top" aria-hidden />
-    </>
+    </div>
   );
 
   if (href) {
@@ -67,4 +67,3 @@ export default function Book3D({
     </div>
   );
 }
-

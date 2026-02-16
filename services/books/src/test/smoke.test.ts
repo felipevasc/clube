@@ -46,5 +46,8 @@ describe("books smoke", () => {
 
     const bookHandler = findRouteHandler(app as any, "get", "/books/:id");
     expect(typeof bookHandler).toBe("function");
+
+    const bookUpdateHandler = findRouteHandler(app as any, "put", "/books/:id");
+    expect(typeof bookUpdateHandler).toBe("function");
   });
 });

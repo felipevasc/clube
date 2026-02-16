@@ -162,7 +162,11 @@ exports.Prisma.ClubBookScalarFieldEnum = {
   bookId: 'bookId',
   title: 'title',
   author: 'author',
+  coverUrl: 'coverUrl',
   colorKey: 'colorKey',
+  city: 'city',
+  month: 'month',
+  year: 'year',
   isActive: 'isActive',
   createdByUserId: 'createdByUserId',
   createdAt: 'createdAt',
@@ -180,11 +184,35 @@ exports.Prisma.ClubBookMessageScalarFieldEnum = {
 exports.Prisma.ClubBookArtifactScalarFieldEnum = {
   id: 'id',
   clubBookId: 'clubBookId',
-  uploadedByUserId: 'uploadedByUserId',
   fileName: 'fileName',
   mimeType: 'mimeType',
   size: 'size',
   url: 'url',
+  uploadedByUserId: 'uploadedByUserId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ChannelScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  type: 'type',
+  cityCode: 'cityCode',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ChannelMessageScalarFieldEnum = {
+  id: 'id',
+  channelId: 'channelId',
+  userId: 'userId',
+  text: 'text',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.DirectMessageScalarFieldEnum = {
+  id: 'id',
+  fromUserId: 'fromUserId',
+  toUserId: 'toUserId',
+  text: 'text',
   createdAt: 'createdAt'
 };
 
@@ -207,7 +235,10 @@ exports.Prisma.ModelName = {
   GroupBookOfMonthSelection: 'GroupBookOfMonthSelection',
   ClubBook: 'ClubBook',
   ClubBookMessage: 'ClubBookMessage',
-  ClubBookArtifact: 'ClubBookArtifact'
+  ClubBookArtifact: 'ClubBookArtifact',
+  Channel: 'Channel',
+  ChannelMessage: 'ChannelMessage',
+  DirectMessage: 'DirectMessage'
 };
 
 /**

@@ -13,10 +13,11 @@ type ClubBook = {
   title: string;
   author: string;
   colorKey: string;
-  isActive: boolean;
+  city: string;
+  month: number;
+  year: number;
   createdByUserId: string;
   createdAt: string;
-  activatedAt?: string | null;
 };
 
 type Book = { id: string; title: string; author: string };
@@ -78,10 +79,19 @@ function hexWithAlpha(hex: string, alphaHex: string): string {
 }
 
 export default function BookOfMonth() {
+  const [selectedCity, setSelectedCity] = useState<string>("FORTALEZA");
   const [clubBooks, setClubBooks] = useState<ClubBook[]>([]);
   const [selectedId, setSelectedId] = useState<string>("");
   const selected = useMemo(() => clubBooks.find((b) => b.id === selectedId) || null, [clubBooks, selectedId]);
-  const active = useMemo(() => clubBooks.find((b) => b.isActive) || null, [clubBooks]);
+
+  const now = new Date();
+  const currentMonth = now.getMonth() + 1;
+  const currentYear = now.getFullYear();
+
+  const active = useMemo(() =>
+    clubBooks.find((b) => b.city === selectedCity && b.month === currentMonth && b.year === currentYear) || null,
+    [clubBooks, selectedCity, currentMonth, currentYear]);
+
   const [clubMsg, setClubMsg] = useState("");
 
   const [viewerId, setViewerId] = useState<string>("");
@@ -101,19 +111,22 @@ export default function BookOfMonth() {
   const [books, setBooks] = useState<Book[]>([]);
   const [chosenBook, setChosenBook] = useState<Book | null>(null);
   const [colorKey, setColorKey] = useState<ClubColorKey>("mel");
-  const [makeActive, setMakeActive] = useState(true);
+  const [createCity, setCreateCity] = useState<string>("FORTALEZA");
+  const [createMonth, setCreateMonth] = useState<number>(currentMonth);
+  const [createYear, setCreateYear] = useState<number>(currentYear);
   const [creating, setCreating] = useState(false);
   const [createBookTitle, setCreateBookTitle] = useState("");
   const [createBookAuthor, setCreateBookAuthor] = useState("");
   const [createBookMsg, setCreateBookMsg] = useState("");
   const [createBookLoading, setCreateBookLoading] = useState(false);
 
-  const refreshClubBooks = async () => {
+  const refreshClubBooks = async (city: string) => {
     try {
-      const out = await api<{ clubBooks: ClubBook[] }>("/club-books");
+      const out = await api<{ clubBooks: ClubBook[] }>(`/club-books?city=${encodeURIComponent(city)}`);
       const rows = Array.isArray(out?.clubBooks) ? out.clubBooks : [];
       setClubBooks(rows);
-      const activeId = rows.find((b) => b.isActive)?.id || "";
+
+      const activeId = rows.find((b) => b.month === currentMonth && b.year === currentYear)?.id || "";
       setSelectedId((prev) => {
         if (prev && rows.some((b) => b.id === prev)) return prev;
         return activeId || (rows[0]?.id || "");
@@ -164,11 +177,11 @@ export default function BookOfMonth() {
   };
 
   useEffect(() => {
-    refreshClubBooks();
+    refreshClubBooks(selectedCity);
     api<{ user: User }>("/me")
       .then((out) => setViewerId(String(out?.user?.id || "")))
       .catch(() => setViewerId(""));
-  }, []);
+  }, [selectedCity]);
 
   useEffect(() => {
     if (!selectedId) return;
@@ -198,7 +211,9 @@ export default function BookOfMonth() {
     setBookQ("");
     setBooks([]);
     setColorKey("mel");
-    setMakeActive(true);
+    setCreateCity(selectedCity);
+    setCreateMonth(currentMonth);
+    setCreateYear(currentYear);
     await searchBooks();
   };
 
@@ -209,10 +224,16 @@ export default function BookOfMonth() {
     try {
       await api("/club-books", {
         method: "POST",
-        body: JSON.stringify({ bookId: chosenBook.id, colorKey, isActive: makeActive }),
+        body: JSON.stringify({
+          bookId: chosenBook.id,
+          colorKey,
+          city: createCity,
+          month: createMonth,
+          year: createYear
+        }),
       });
       setCreateOpen(false);
-      await refreshClubBooks();
+      await refreshClubBooks(selectedCity);
     } catch (e: any) {
       setClubMsg(e?.message || "Não foi possível criar o livro do mês.");
     } finally {
@@ -220,15 +241,7 @@ export default function BookOfMonth() {
     }
   };
 
-  const activate = async (id: string) => {
-    setClubMsg("");
-    try {
-      await api(`/club-books/${encodeURIComponent(id)}/activate`, { method: "POST", body: JSON.stringify({}) });
-      await refreshClubBooks();
-    } catch (e: any) {
-      setClubMsg(e?.message || "Não foi possível ativar este livro.");
-    }
-  };
+  // Manual activation removed, scheduling is month-based.
 
   const createBook = async () => {
     const title = createBookTitle.trim();
@@ -321,20 +334,39 @@ export default function BookOfMonth() {
             )}, transparent 55%), linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.92))`,
           }}
         >
-          <div className="flex items-start gap-3">
-            <div className="w-12 h-12 rounded-2xl shadow-card grid place-items-center font-black text-lg border border-black/5" style={{ backgroundColor: selectedHex }}>
-              L
+          <div className="flex flex-col gap-4">
+            <div className="flex items-start gap-3">
+              <div className="w-12 h-12 rounded-2xl shadow-card grid place-items-center font-black text-lg border border-black/5" style={{ backgroundColor: selectedHex }}>
+                L
+              </div>
+              <div className="flex-1">
+                <div className="text-sm font-black">Livro do mes</div>
+                <div className="text-xs text-neutral-600">chat + artefatos + referencia para posts</div>
+              </div>
+              <button
+                onClick={openCreate}
+                className="text-xs font-black px-3 py-2 rounded-xl bg-white/80 border border-black/10 hover:bg-white transition"
+              >
+                Cadastrar
+              </button>
             </div>
-            <div className="flex-1">
-              <div className="text-sm font-black">Livro do mes</div>
-              <div className="text-xs text-neutral-600">chat + artefatos + referencia para posts</div>
+
+            <div className="flex items-center gap-1 p-1 rounded-2xl bg-black/5 self-start">
+              <button
+                onClick={() => setSelectedCity("FORTALEZA")}
+                className={`px-4 py-1.5 rounded-xl text-xs font-black transition ${selectedCity === "FORTALEZA" ? "bg-white shadow-card border border-black/5" : "text-neutral-500 hover:text-neutral-700"
+                  }`}
+              >
+                Fortaleza
+              </button>
+              <button
+                onClick={() => setSelectedCity("BRASILIA")}
+                className={`px-4 py-1.5 rounded-xl text-xs font-black transition ${selectedCity === "BRASILIA" ? "bg-white shadow-card border border-black/5" : "text-neutral-500 hover:text-neutral-700"
+                  }`}
+              >
+                Brasilia
+              </button>
             </div>
-            <button
-              onClick={openCreate}
-              className="text-xs font-black px-3 py-2 rounded-xl bg-white/80 border border-black/10 hover:bg-white transition"
-            >
-              Cadastrar
-            </button>
           </div>
 
           {selected ? (
@@ -346,13 +378,16 @@ export default function BookOfMonth() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <div className="text-base font-black leading-tight truncate">{selected.title}</div>
-                    {selected.isActive ? (
+                    {selected.month === currentMonth && selected.year === currentYear ? (
                       <span className="text-[11px] font-black rounded-full px-2 py-1 border" style={{ backgroundColor: hexWithAlpha(selectedHex, "18"), borderColor: hexWithAlpha(selectedHex, "55") }}>
                         ATIVO
                       </span>
                     ) : null}
                   </div>
                   <div className="text-xs text-neutral-700">{selected.author}</div>
+                  <div className="mt-1 text-[10px] font-black uppercase tracking-wider text-neutral-500">
+                    {selected.month}/{selected.year} — {selected.city}
+                  </div>
                   <div className="mt-2">
                     <BookChip clubBook={{ id: selected.id, title: selected.title, author: selected.author, colorKey: selected.colorKey }} />
                   </div>
@@ -370,7 +405,7 @@ export default function BookOfMonth() {
       <Card>
         <div className="p-4">
           <div className="flex items-center justify-between gap-3">
-            <div className="text-sm font-black">Historico</div>
+            <div className="text-sm font-black">Historico ({selectedCity})</div>
             {active ? <div className="text-xs text-neutral-600">Ativo: {active.title}</div> : null}
           </div>
           <div className="mt-3 grid gap-2">
@@ -390,39 +425,29 @@ export default function BookOfMonth() {
                   }}
                   role="button"
                   tabIndex={0}
-                  className={`w-full text-left rounded-2xl border px-3 py-3 transition cursor-pointer ${
-                    selectedNow ? "bg-white" : "bg-white/70 hover:bg-white"
-                  }`}
+                  className={`w-full text-left rounded-2xl border px-3 py-3 transition cursor-pointer ${selectedNow ? "bg-white" : "bg-white/70 hover:bg-white"
+                    }`}
                   style={{ borderColor: selectedNow ? hexWithAlpha(hex, "70") : "rgba(0,0,0,0.08)" }}
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-2xl border border-black/10 grid place-items-center font-black" style={{ backgroundColor: hexWithAlpha(hex, "28") }}>
-                      {b.title.slice(0, 1).toUpperCase()}
+                      {(b.title || "?").slice(0, 1).toUpperCase()}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
                         <div className="text-sm font-black truncate">{b.title}</div>
-                        {activeNow ? (
+                        {b.month === currentMonth && b.year === currentYear ? (
                           <span className="text-[10px] font-black rounded-full px-2 py-1 border" style={{ backgroundColor: hexWithAlpha(hex, "16"), borderColor: hexWithAlpha(hex, "55") }}>
                             ATIVO
                           </span>
                         ) : null}
                       </div>
                       <div className="text-xs text-neutral-600 truncate">{b.author}</div>
+                      <div className="text-[10px] font-bold text-neutral-500 uppercase">{b.month}/{b.year}</div>
                     </div>
-                    {!activeNow ? (
-                        <button
-                          onClick={async (e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          await activate(b.id);
-                        }}
-                          className="shrink-0 text-xs font-black px-3 py-2 rounded-xl border border-black/10 bg-white/70 hover:bg-white transition"
-                          title="Tornar este o livro ativo"
-                        >
-                          Ativar
-                        </button>
-                    ) : null}
+                    <div className="shrink-0 text-[10px] font-black px-2 py-1 rounded bg-black/5">
+                      {(b.city || "???").slice(0, 3)}
+                    </div>
                   </div>
                 </div>
               );
@@ -564,24 +589,24 @@ export default function BookOfMonth() {
         </>
       ) : null}
 
-	      {createOpen ? (
-	        <div className="fixed inset-0 z-20">
-	          <button onClick={() => setCreateOpen(false)} className="absolute inset-0 bg-black/20" aria-label="Fechar" />
-	          <div className="absolute inset-x-0 bottom-0 max-h-[85dvh] overflow-hidden rounded-t-[32px] border-t border-black/10 bg-[rgba(255,255,255,0.92)] backdrop-blur-xl">
+      {createOpen ? (
+        <div className="fixed inset-0 z-20">
+          <button onClick={() => setCreateOpen(false)} className="absolute inset-0 bg-black/20" aria-label="Fechar" />
+          <div className="absolute inset-x-0 bottom-0 max-h-[85dvh] overflow-hidden rounded-t-[32px] border-t border-black/10 bg-[rgba(255,255,255,0.92)] backdrop-blur-xl">
             <div className="px-4 py-3 border-b border-black/5 flex items-center gap-3">
               <div className="w-10 h-1.5 rounded-full bg-black/10 mx-auto" />
             </div>
-	            <div className="max-h-[calc(85dvh-54px)] overflow-auto">
-	              <div className="p-4 space-y-4">
-	                <div>
-	                  <div className="text-sm font-black">Cadastrar livro do mes</div>
-	                  <div className="text-xs text-neutral-600">Escolha o livro, uma cor e se ele ja sera o ativo.</div>
-	                </div>
-                  {clubMsg ? <div className="text-sm text-red-600">{clubMsg}</div> : null}
+            <div className="max-h-[calc(85dvh-54px)] overflow-auto">
+              <div className="p-4 space-y-4">
+                <div>
+                  <div className="text-sm font-black">Cadastrar livro do mes</div>
+                  <div className="text-xs text-neutral-600">Escolha o livro, a cidade e o periodo.</div>
+                </div>
+                {clubMsg ? <div className="text-sm text-red-600">{clubMsg}</div> : null}
 
-	                <div className="rounded-3xl border border-black/10 bg-white/70 p-3">
-	                  <div className="text-xs font-semibold text-neutral-600">Buscar livro</div>
-	                  <div className="mt-2 flex gap-2">
+                <div className="rounded-3xl border border-black/10 bg-white/70 p-3">
+                  <div className="text-xs font-semibold text-neutral-600">Buscar livro</div>
+                  <div className="mt-2 flex gap-2">
                     <input
                       value={bookQ}
                       onChange={(e) => setBookQ(e.target.value)}
@@ -595,53 +620,52 @@ export default function BookOfMonth() {
                       Buscar
                     </button>
                   </div>
-	                  <div className="mt-3 grid gap-2">
-	                    {books.slice(0, 10).map((b) => (
-	                      <button
-	                        key={b.id}
-	                        onClick={() => setChosenBook(b)}
-	                        className={`text-left rounded-2xl border px-3 py-3 transition ${
-	                          chosenBook?.id === b.id ? "bg-white" : "bg-white/70 hover:bg-white"
-	                        }`}
-	                      >
-	                        <div className="text-sm font-black">{b.title}</div>
-	                        <div className="text-xs text-neutral-600">{b.author}</div>
-	                      </button>
-	                    ))}
-	                    {books.length === 0 ? <div className="text-sm text-neutral-600">Nenhum livro encontrado.</div> : null}
-	                  </div>
-	                </div>
+                  <div className="mt-3 grid gap-2">
+                    {books.slice(0, 10).map((b) => (
+                      <button
+                        key={b.id}
+                        onClick={() => setChosenBook(b)}
+                        className={`text-left rounded-2xl border px-3 py-3 transition ${chosenBook?.id === b.id ? "bg-white" : "bg-white/70 hover:bg-white"
+                          }`}
+                      >
+                        <div className="text-sm font-black">{b.title}</div>
+                        <div className="text-xs text-neutral-600">{b.author}</div>
+                      </button>
+                    ))}
+                    {books.length === 0 ? <div className="text-sm text-neutral-600">Nenhum livro encontrado.</div> : null}
+                  </div>
+                </div>
 
-	                <div className="rounded-3xl border border-black/10 bg-white/70 p-3">
-	                  <div className="text-xs font-semibold text-neutral-600">Cadastrar novo livro</div>
-	                  <div className="mt-2 grid gap-2">
-	                    <input
-	                      value={createBookTitle}
-	                      onChange={(e) => setCreateBookTitle(e.target.value)}
-	                      className="rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-4 focus:ring-sun-200"
-	                      placeholder="Título"
-	                    />
-	                    <input
-	                      value={createBookAuthor}
-	                      onChange={(e) => setCreateBookAuthor(e.target.value)}
-	                      className="rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-4 focus:ring-sun-200"
-	                      placeholder="Autor"
-	                    />
-	                    {createBookMsg ? <div className="text-sm text-red-600">{createBookMsg}</div> : null}
-	                    <button
-	                      onClick={createBook}
-	                      disabled={createBookLoading}
-	                      className="rounded-2xl px-4 py-3 text-sm font-black bg-white border border-black/10 hover:bg-sun-50 transition disabled:opacity-60"
-	                    >
-	                      {createBookLoading ? "Criando..." : "Adicionar livro"}
-	                    </button>
-	                  </div>
-	                </div>
+                <div className="rounded-3xl border border-black/10 bg-white/70 p-3">
+                  <div className="text-xs font-semibold text-neutral-600">Cadastrar novo livro</div>
+                  <div className="mt-2 grid gap-2">
+                    <input
+                      value={createBookTitle}
+                      onChange={(e) => setCreateBookTitle(e.target.value)}
+                      className="rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-4 focus:ring-sun-200"
+                      placeholder="Título"
+                    />
+                    <input
+                      value={createBookAuthor}
+                      onChange={(e) => setCreateBookAuthor(e.target.value)}
+                      className="rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-4 focus:ring-sun-200"
+                      placeholder="Autor"
+                    />
+                    {createBookMsg ? <div className="text-sm text-red-600">{createBookMsg}</div> : null}
+                    <button
+                      onClick={createBook}
+                      disabled={createBookLoading}
+                      className="rounded-2xl px-4 py-3 text-sm font-black bg-white border border-black/10 hover:bg-sun-50 transition disabled:opacity-60"
+                    >
+                      {createBookLoading ? "Criando..." : "Adicionar livro"}
+                    </button>
+                  </div>
+                </div>
 
-	                <div className="rounded-3xl border border-black/10 bg-white/70 p-3">
-	                  <div className="flex items-center justify-between gap-3">
-	                    <div className="text-xs font-semibold text-neutral-600">Cor</div>
-	                    <div className="text-[11px] text-neutral-600">{CLUB_COLORS.find((c) => c.key === colorKey)?.label}</div>
+                <div className="rounded-3xl border border-black/10 bg-white/70 p-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="text-xs font-semibold text-neutral-600">Cor</div>
+                    <div className="text-[11px] text-neutral-600">{CLUB_COLORS.find((c) => c.key === colorKey)?.label}</div>
                   </div>
                   <div className="mt-3 grid grid-cols-8 gap-2">
                     {CLUB_COLORS.map((c) => (
@@ -657,27 +681,60 @@ export default function BookOfMonth() {
                   </div>
                 </div>
 
-                <div className="rounded-3xl border border-black/10 bg-white/70 p-3 flex items-center justify-between gap-3">
-                  <div>
-                    <div className="text-xs font-semibold text-neutral-700">Ativo agora</div>
-                    <div className="text-[11px] text-neutral-600">Se desligado, ele fica como proximo (na lista, mas nao ativo).</div>
+                <div className="rounded-3xl border border-black/10 bg-white/70 p-3 space-y-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="text-xs font-semibold text-neutral-700">Cidade</div>
+                    <div className="flex items-center gap-1 p-0.5 rounded-xl bg-black/5">
+                      <button
+                        onClick={() => setCreateCity("FORTALEZA")}
+                        className={`px-3 py-1 rounded-lg text-[10px] font-black transition ${createCity === "FORTALEZA" ? "bg-white shadow-card" : "text-neutral-500"
+                          }`}
+                      >
+                        Fortaleza
+                      </button>
+                      <button
+                        onClick={() => setCreateCity("BRASILIA")}
+                        className={`px-3 py-1 rounded-lg text-[10px] font-black transition ${createCity === "BRASILIA" ? "bg-white shadow-card" : "text-neutral-500"
+                          }`}
+                      >
+                        Brasilia
+                      </button>
+                    </div>
                   </div>
-                  <button
-                    onClick={() => setMakeActive((v) => !v)}
-                    className={`rounded-full px-3 py-2 text-xs font-black border transition ${makeActive ? "bg-sun-500 hover:bg-sun-400" : "bg-white hover:bg-neutral-50"}`}
-                  >
-                    {makeActive ? "Sim" : "Nao"}
-                  </button>
+
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="text-xs font-semibold text-neutral-700">Mes / Ano</div>
+                    <div className="flex items-center gap-2">
+                      <select
+                        value={createMonth}
+                        onChange={(e) => setCreateMonth(Number(e.target.value))}
+                        className="rounded-xl border border-black/10 bg-white px-2 py-1 text-xs font-black outline-none"
+                      >
+                        {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
+                          <option key={m} value={m}>{m.toString().padStart(2, "0")}</option>
+                        ))}
+                      </select>
+                      <select
+                        value={createYear}
+                        onChange={(e) => setCreateYear(Number(e.target.value))}
+                        className="rounded-xl border border-black/10 bg-white px-2 py-1 text-xs font-black outline-none"
+                      >
+                        {[2025, 2026, 2027].map((y) => (
+                          <option key={y} value={y}>{y}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
                 </div>
 
-	                <PrimaryButton disabled={!chosenBook || creating} onClick={createClubBook}>
-	                  {creating ? "Criando..." : "Criar livro do mes"}
-	                </PrimaryButton>
-	              </div>
-	            </div>
-	          </div>
-	        </div>
-	      ) : null}
+                <PrimaryButton disabled={!chosenBook || creating} onClick={createClubBook}>
+                  {creating ? "Criando..." : "Criar livro do mes"}
+                </PrimaryButton>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

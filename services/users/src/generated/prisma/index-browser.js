@@ -123,8 +123,15 @@ exports.Prisma.UserScalarFieldEnum = {
   name: 'name',
   bio: 'bio',
   avatarUrl: 'avatarUrl',
+  coverUrl: 'coverUrl',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.UserCityScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  city: 'city'
 };
 
 exports.Prisma.SortOrder = {
@@ -134,7 +141,8 @@ exports.Prisma.SortOrder = {
 
 
 exports.Prisma.ModelName = {
-  User: 'User'
+  User: 'User',
+  UserCity: 'UserCity'
 };
 
 /**

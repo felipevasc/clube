@@ -13,7 +13,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@clube/shared": "workspace:*",
+    "@clube/shared": "file:../../packages/shared",
     "@prisma/client": "^6.3.1",
     "cors": "^2.8.5",
     "express": "^4.19.2",

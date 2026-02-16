@@ -58,6 +58,53 @@ const GroupBookOfMonthSetSchema = z.object({
 });
 
 export function registerRoutes(app: Express) {
+  // Database Initialization (Workaround for environment Prisma issues)
+  (async () => {
+    try {
+      await (prisma as any).$executeRawUnsafe(`
+        CREATE TABLE IF NOT EXISTS "Channel" (
+          "id" TEXT NOT NULL PRIMARY KEY,
+          "name" TEXT NOT NULL,
+          "type" TEXT NOT NULL,
+          "cityCode" TEXT,
+          "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+        );
+      `);
+      await (prisma as any).$executeRawUnsafe(`
+        CREATE TABLE IF NOT EXISTS "ChannelMessage" (
+          "id" TEXT NOT NULL PRIMARY KEY,
+          "channelId" TEXT NOT NULL,
+          "userId" TEXT NOT NULL,
+          "text" TEXT NOT NULL,
+          "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+        );
+      `);
+      await (prisma as any).$executeRawUnsafe(`
+        CREATE TABLE IF NOT EXISTS "DirectMessage" (
+          "id" TEXT NOT NULL PRIMARY KEY,
+          "fromUserId" TEXT NOT NULL,
+          "toUserId" TEXT NOT NULL,
+          "text" TEXT NOT NULL,
+          "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+        );
+      `);
+
+      // Seed initial channels if empty
+      const countResult: any = await (prisma as any).$queryRawUnsafe('SELECT COUNT(*) as count FROM "Channel"');
+      const count = Number(countResult[0]?.count ?? 0);
+      if (count === 0) {
+        await (prisma as any).$executeRawUnsafe(`
+          INSERT INTO "Channel" ("id", "name", "type", "cityCode") VALUES 
+          ('geral', 'Geral', 'GLOBAL', NULL),
+          ('fortaleza', 'Fortaleza', 'CITY', 'FORTALEZA'),
+          ('brasilia', 'Brasília', 'CITY', 'BRASILIA')
+        `);
+      }
+    } catch (e) {
+      console.error("[database init error]", e);
+    }
+  })();
+
   // Express 4 does not automatically handle async errors. Wrap handlers so any
   // thrown/rejected error goes to the error middleware instead of crashing the process.
   const ah = (fn: any) => (req: any, res: any, next: any) => Promise.resolve(fn(req, res, next)).catch(next);
@@ -84,10 +131,10 @@ export function registerRoutes(app: Express) {
     const groups =
       ids.length > 0
         ? await prisma.group.findMany({
-            where: { id: { in: ids } },
-            orderBy: { createdAt: "desc" },
-            take: 50,
-          })
+          where: { id: { in: ids } },
+          orderBy: { createdAt: "desc" },
+          take: 50,
+        })
         : [];
     res.json({ groups });
   });
@@ -392,12 +439,12 @@ export function registerRoutes(app: Express) {
     res.json({
       current: current
         ? {
-            id: current.id,
-            groupId: current.groupId,
-            bookId: current.bookId,
-            setByUserId: current.setByUserId,
-            setAt: current.setAt,
-          }
+          id: current.id,
+          groupId: current.groupId,
+          bookId: current.bookId,
+          setByUserId: current.setByUserId,
+          setAt: current.setAt,
+        }
         : null,
       history: history.map((h) => ({
         id: h.id,
@@ -440,18 +487,25 @@ export function registerRoutes(app: Express) {
   app.get("/club-books", async (req, res) => {
     const username = getUsername(req);
     if (!username) return res.status(401).json({ error: "missing x-username" });
-    const clubBooks = await prisma.clubBook.findMany({ orderBy: { createdAt: "desc" }, take: 60 });
+    const city = req.query.city ? String(req.query.city) : undefined;
+    const clubBooks = await prisma.clubBook.findMany({
+      where: city ? { city } : undefined,
+      orderBy: { createdAt: "desc" },
+      take: 60,
+    });
     res.json({
       clubBooks: clubBooks.map((b) => ({
         id: b.id,
         bookId: b.bookId,
         title: b.title,
         author: b.author,
+        coverUrl: b.coverUrl,
         colorKey: b.colorKey,
-        isActive: b.isActive,
+        city: b.city,
+        month: b.month,
+        year: b.year,
         createdByUserId: b.createdByUserId,
         createdAt: b.createdAt,
-        activatedAt: b.activatedAt,
       })),
     });
   });
@@ -467,8 +521,8 @@ export function registerRoutes(app: Express) {
       ids.length === 0
         ? []
         : await prisma.clubBook.findMany({
-            where: { id: { in: ids } },
-          });
+          where: { id: { in: ids } },
+        });
     res.json({
       clubBooks: clubBooks.map((b) => ({
         id: b.id,
@@ -488,27 +542,35 @@ export function registerRoutes(app: Express) {
     const username = getUsername(req);
     if (!username) return res.status(401).json({ error: "missing x-username" });
 
+    const city = String(req.query.city || "FORTALEZA");
+    const now = new Date();
+    const month = now.getMonth() + 1;
+    const year = now.getFullYear();
+
     const active = await prisma.clubBook.findFirst({
-      where: { isActive: true },
-      orderBy: { activatedAt: "desc" },
+      where: { city, month, year },
+      orderBy: { createdAt: "desc" },
     });
-    const fallback =
-      active ||
-      (await prisma.clubBook.findFirst({
-        orderBy: { createdAt: "desc" },
-      }));
-    if (!fallback) return res.json({ clubBook: null });
+
+    // If no exact match for this month, find the most recent one as fallback?
+    // User requested "active whenever it is in that month". 
+    // If no book for this month, we return null or fallback to last one?
+    // Let's stick to the specific month/year/city for now.
+
+    if (!active) return res.json({ clubBook: null });
     res.json({
       clubBook: {
-        id: fallback.id,
-        bookId: fallback.bookId,
-        title: fallback.title,
-        author: fallback.author,
-        colorKey: fallback.colorKey,
-        isActive: fallback.isActive,
-        createdByUserId: fallback.createdByUserId,
-        createdAt: fallback.createdAt,
-        activatedAt: fallback.activatedAt,
+        id: active.id,
+        bookId: active.bookId,
+        title: active.title,
+        author: active.author,
+        coverUrl: active.coverUrl,
+        colorKey: active.colorKey,
+        city: active.city,
+        month: active.month,
+        year: active.year,
+        createdByUserId: active.createdByUserId,
+        createdAt: active.createdAt,
       },
     });
   });
@@ -518,29 +580,24 @@ export function registerRoutes(app: Express) {
     if (!username) return res.status(401).json({ error: "missing x-username" });
     const input = ClubBookCreateSchema.parse(req.body);
 
-    const now = new Date();
-    const isActive = !!input.isActive;
-    const clubBook = await prisma.$transaction(async (tx) => {
-      if (isActive) {
-        await tx.clubBook.updateMany({ where: { isActive: true }, data: { isActive: false } });
-      }
-      return tx.clubBook.create({
-        data: {
-          bookId: input.bookId,
-          title: input.title,
-          author: input.author,
-          colorKey: input.colorKey,
-          isActive,
-          createdByUserId: username,
-          activatedAt: isActive ? now : null,
-        },
-      });
+    const clubBook = await prisma.clubBook.create({
+      data: {
+        bookId: input.bookId,
+        title: input.title,
+        author: input.author,
+        coverUrl: input.coverUrl,
+        colorKey: input.colorKey,
+        city: input.city,
+        month: input.month,
+        year: input.year,
+        createdByUserId: username,
+      },
     });
 
     const env = makeEventEnvelope({
       source: "groups",
       type: "club_book.created",
-      data: { id: clubBook.id, bookId: clubBook.bookId, createdByUserId: username, isActive: clubBook.isActive },
+      data: { id: clubBook.id, bookId: clubBook.bookId, createdByUserId: username, city: clubBook.city },
     });
     await publishEvent(env, eventTargets());
 
@@ -551,32 +608,16 @@ export function registerRoutes(app: Express) {
         title: clubBook.title,
         author: clubBook.author,
         colorKey: clubBook.colorKey,
-        isActive: clubBook.isActive,
+        city: clubBook.city,
+        month: clubBook.month,
+        year: clubBook.year,
         createdByUserId: clubBook.createdByUserId,
         createdAt: clubBook.createdAt,
-        activatedAt: clubBook.activatedAt,
       },
     });
   });
 
-  app.post("/club-books/:id/activate", async (req, res) => {
-    const username = getUsername(req);
-    if (!username) return res.status(401).json({ error: "missing x-username" });
-    const id = String(req.params.id);
-    if (!(await assertClubBookExists(id))) return res.status(404).json({ error: "club book not found" });
-    const now = new Date();
-    const clubBook = await prisma.$transaction(async (tx) => {
-      await tx.clubBook.updateMany({ where: { isActive: true }, data: { isActive: false } });
-      return tx.clubBook.update({ where: { id }, data: { isActive: true, activatedAt: now } });
-    });
-    const env = makeEventEnvelope({
-      source: "groups",
-      type: "club_book.activated",
-      data: { id: clubBook.id, activatedByUserId: username },
-    });
-    await publishEvent(env, eventTargets());
-    res.json({ ok: true });
-  });
+  // Manual activation removed, logic is month-based.
 
   app.get("/club-books/:id/messages", async (req, res) => {
     const username = getUsername(req);
@@ -617,7 +658,6 @@ export function registerRoutes(app: Express) {
       })),
     });
   });
-
   app.post("/club-books/:id/messages", async (req, res) => {
     const username = getUsername(req);
     if (!username) return res.status(401).json({ error: "missing x-username" });
@@ -636,6 +676,101 @@ export function registerRoutes(app: Express) {
     res.status(201).json({
       message: { id: msg.id, clubBookId: msg.clubBookId, userId: msg.userId, text: msg.text, createdAt: msg.createdAt },
     });
+  });
+
+  // Channels (Geral, Cities)
+  app.get("/channels", async (req, res) => {
+    const username = getUsername(req);
+    if (!username) return res.status(401).json({ error: "missing x-username" });
+
+    // In a real app we might filter by user.cities, for now return all 
+    // and let frontend filter or just return based on query param
+    const channels = await (prisma as any).$queryRawUnsafe(`SELECT * FROM "Channel" ORDER BY "createdAt" ASC`);
+    res.json({ channels });
+  });
+
+  app.get("/channels/:id/messages", async (req, res) => {
+    const username = getUsername(req);
+    if (!username) return res.status(401).json({ error: "missing x-username" });
+    const channelId = String(req.params.id);
+    const after = String(req.query.after || "").trim();
+    const limitRaw = String(req.query.limit || "").trim();
+
+    let afterDate: Date | null = null;
+    if (after) {
+      const d = new Date(after);
+      if (!Number.isNaN(d.valueOf())) afterDate = d;
+    }
+
+    const messages = await (prisma as any).$queryRawUnsafe(
+      `SELECT * FROM "ChannelMessage" WHERE "channelId" = $1 ${afterDate ? `AND "createdAt" > $2` : ""} ORDER BY "createdAt" ASC LIMIT $3`,
+      channelId,
+      afterDate,
+      limitRaw ? Math.min(200, Number(limitRaw)) : 100
+    );
+    res.json({ messages });
+  });
+
+  app.post("/channels/:id/messages", async (req, res) => {
+    const username = getUsername(req);
+    if (!username) return res.status(401).json({ error: "missing x-username" });
+    const channelId = String(req.params.id);
+    const { text } = req.body;
+    if (!text) return res.status(400).json({ error: "missing text" });
+
+    const id = `msg_${Math.random().toString(36).slice(2, 11)}`;
+    try {
+      await (prisma as any).$executeRawUnsafe(
+        `INSERT INTO "ChannelMessage" ("id", "channelId", "userId", "text", "createdAt") VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP)`,
+        id,
+        channelId,
+        username,
+        text
+      );
+      const msg = { id, channelId, userId: username, text, createdAt: new Date().toISOString() };
+      res.status(201).json({ message: msg });
+    } catch (e: any) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
+  // Direct Messages
+  app.get("/direct-messages/:userId", async (req, res) => {
+    const username = getUsername(req);
+    if (!username) return res.status(401).json({ error: "missing x-username" });
+    const otherUser = String(req.params.userId);
+
+    const messages = await (prisma as any).$queryRawUnsafe(
+      `SELECT * FROM "DirectMessage" WHERE ("fromUserId" = $1 AND "toUserId" = $2) OR ("fromUserId" = $3 AND "toUserId" = $4) ORDER BY "createdAt" ASC LIMIT 100`,
+      username,
+      otherUser,
+      otherUser,
+      username
+    );
+    res.json({ messages });
+  });
+
+  app.post("/direct-messages/:userId", async (req, res) => {
+    const username = getUsername(req);
+    if (!username) return res.status(401).json({ error: "missing x-username" });
+    const otherUser = String(req.params.userId);
+    const { text } = req.body;
+    if (!text) return res.status(400).json({ error: "missing text" });
+
+    const id = `dm_${Math.random().toString(36).slice(2, 11)}`;
+    try {
+      await (prisma as any).$executeRawUnsafe(
+        `INSERT INTO "DirectMessage" ("id", "fromUserId", "toUserId", "text", "createdAt") VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP)`,
+        id,
+        username,
+        otherUser,
+        text
+      );
+      const msg = { id, fromUserId: username, toUserId: otherUser, text, createdAt: new Date().toISOString() };
+      res.status(201).json({ message: msg });
+    } catch (e: any) {
+      res.status(500).json({ error: e.message });
+    }
   });
 
   app.get("/club-books/:id/artifacts", async (req, res) => {

@@ -8,7 +8,9 @@
     "apps/*"
   ],
   "scripts": {
-    "dev": "pnpm -r db:setup && node scripts/dev.mjs",
+    "dev": "node scripts/dev.mjs",
+    "setup": "pnpm -r db:setup",
+    "dev:setup": "pnpm setup && pnpm dev",
     "test": "pnpm -r test",
     "lint": "pnpm -r lint",
     "typecheck": "pnpm -r typecheck"

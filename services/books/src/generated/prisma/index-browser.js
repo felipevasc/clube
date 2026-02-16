@@ -123,12 +123,19 @@ exports.Prisma.BookScalarFieldEnum = {
   title: 'title',
   author: 'author',
   coverUrl: 'coverUrl',
+  synopsis: 'synopsis',
+  genre: 'genre',
   createdAt: 'createdAt'
 };
 
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
 };
 
 

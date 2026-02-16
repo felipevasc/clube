@@ -18,6 +18,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  * 
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
+/**
+ * Model UserCity
+ * 
+ */
+export type UserCity = $Result.DefaultSelection<Prisma.$UserCityPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -146,6 +151,16 @@ export class PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.userCity`: Exposes CRUD operations for the **UserCity** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UserCities
+    * const userCities = await prisma.userCity.findMany()
+    * ```
+    */
+  get userCity(): Prisma.UserCityDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -587,7 +602,8 @@ export namespace Prisma {
 
 
   export const ModelName: {
-    User: 'User'
+    User: 'User',
+    UserCity: 'UserCity'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -606,7 +622,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user"
+      modelProps: "user" | "userCity"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -681,6 +697,80 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      UserCity: {
+        payload: Prisma.$UserCityPayload<ExtArgs>
+        fields: Prisma.UserCityFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UserCityFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserCityPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UserCityFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserCityPayload>
+          }
+          findFirst: {
+            args: Prisma.UserCityFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserCityPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UserCityFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserCityPayload>
+          }
+          findMany: {
+            args: Prisma.UserCityFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserCityPayload>[]
+          }
+          create: {
+            args: Prisma.UserCityCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserCityPayload>
+          }
+          createMany: {
+            args: Prisma.UserCityCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.UserCityCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserCityPayload>[]
+          }
+          delete: {
+            args: Prisma.UserCityDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserCityPayload>
+          }
+          update: {
+            args: Prisma.UserCityUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserCityPayload>
+          }
+          deleteMany: {
+            args: Prisma.UserCityDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UserCityUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.UserCityUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserCityPayload>[]
+          }
+          upsert: {
+            args: Prisma.UserCityUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserCityPayload>
+          }
+          aggregate: {
+            args: Prisma.UserCityAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUserCity>
+          }
+          groupBy: {
+            args: Prisma.UserCityGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UserCityGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.UserCityCountArgs<ExtArgs>
+            result: $Utils.Optional<UserCityCountAggregateOutputType> | number
           }
         }
       }
@@ -781,6 +871,7 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     user?: UserOmit
+    userCity?: UserCityOmit
   }
 
   /* Types for Logging */
@@ -856,6 +947,36 @@ export namespace Prisma {
    */
 
 
+  /**
+   * Count Type UserCountOutputType
+   */
+
+  export type UserCountOutputType = {
+    cities: number
+  }
+
+  export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    cities?: boolean | UserCountOutputTypeCountCitiesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCountOutputType
+     */
+    select?: UserCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserCityWhereInput
+  }
+
 
   /**
    * Models
@@ -876,6 +997,7 @@ export namespace Prisma {
     name: string | null
     bio: string | null
     avatarUrl: string | null
+    coverUrl: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -885,6 +1007,7 @@ export namespace Prisma {
     name: string | null
     bio: string | null
     avatarUrl: string | null
+    coverUrl: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -894,6 +1017,7 @@ export namespace Prisma {
     name: number
     bio: number
     avatarUrl: number
+    coverUrl: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -905,6 +1029,7 @@ export namespace Prisma {
     name?: true
     bio?: true
     avatarUrl?: true
+    coverUrl?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -914,6 +1039,7 @@ export namespace Prisma {
     name?: true
     bio?: true
     avatarUrl?: true
+    coverUrl?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -923,6 +1049,7 @@ export namespace Prisma {
     name?: true
     bio?: true
     avatarUrl?: true
+    coverUrl?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -1005,6 +1132,7 @@ export namespace Prisma {
     name: string
     bio: string
     avatarUrl: string
+    coverUrl: string
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
@@ -1031,8 +1159,11 @@ export namespace Prisma {
     name?: boolean
     bio?: boolean
     avatarUrl?: boolean
+    coverUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    cities?: boolean | User$citiesArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1040,6 +1171,7 @@ export namespace Prisma {
     name?: boolean
     bio?: boolean
     avatarUrl?: boolean
+    coverUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -1049,6 +1181,7 @@ export namespace Prisma {
     name?: boolean
     bio?: boolean
     avatarUrl?: boolean
+    coverUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -1058,20 +1191,30 @@ export namespace Prisma {
     name?: boolean
     bio?: boolean
     avatarUrl?: boolean
+    coverUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "bio" | "avatarUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "bio" | "avatarUrl" | "coverUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    cities?: boolean | User$citiesArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
-    objects: {}
+    objects: {
+      cities: Prisma.$UserCityPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
       bio: string
       avatarUrl: string
+      coverUrl: string
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["user"]>
@@ -1468,6 +1611,7 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    cities<T extends User$citiesArgs<ExtArgs> = {}>(args?: Subset<T, User$citiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserCityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1501,6 +1645,7 @@ export namespace Prisma {
     readonly name: FieldRef<"User", 'String'>
     readonly bio: FieldRef<"User", 'String'>
     readonly avatarUrl: FieldRef<"User", 'String'>
+    readonly coverUrl: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
   }
@@ -1520,6 +1665,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where: UserWhereUniqueInput
@@ -1538,6 +1687,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where: UserWhereUniqueInput
@@ -1555,6 +1708,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * Filter, which User to fetch.
      */
@@ -1604,6 +1761,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where?: UserWhereInput
@@ -1652,6 +1813,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which Users to fetch.
      */
     where?: UserWhereInput
@@ -1694,6 +1859,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * The data needed to create a User.
      */
@@ -1740,6 +1909,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * The data needed to update a User.
      */
@@ -1807,6 +1980,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * The filter to search for the User to update in case it exists.
      */
     where: UserWhereUniqueInput
@@ -1833,6 +2010,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter which User to delete.
      */
     where: UserWhereUniqueInput
@@ -1853,6 +2034,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.cities
+   */
+  export type User$citiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCity
+     */
+    select?: UserCitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserCity
+     */
+    omit?: UserCityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserCityInclude<ExtArgs> | null
+    where?: UserCityWhereInput
+    orderBy?: UserCityOrderByWithRelationInput | UserCityOrderByWithRelationInput[]
+    cursor?: UserCityWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserCityScalarFieldEnum | UserCityScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1864,6 +2069,1040 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model UserCity
+   */
+
+  export type AggregateUserCity = {
+    _count: UserCityCountAggregateOutputType | null
+    _min: UserCityMinAggregateOutputType | null
+    _max: UserCityMaxAggregateOutputType | null
+  }
+
+  export type UserCityMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    city: string | null
+  }
+
+  export type UserCityMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    city: string | null
+  }
+
+  export type UserCityCountAggregateOutputType = {
+    id: number
+    userId: number
+    city: number
+    _all: number
+  }
+
+
+  export type UserCityMinAggregateInputType = {
+    id?: true
+    userId?: true
+    city?: true
+  }
+
+  export type UserCityMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    city?: true
+  }
+
+  export type UserCityCountAggregateInputType = {
+    id?: true
+    userId?: true
+    city?: true
+    _all?: true
+  }
+
+  export type UserCityAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserCity to aggregate.
+     */
+    where?: UserCityWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserCities to fetch.
+     */
+    orderBy?: UserCityOrderByWithRelationInput | UserCityOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UserCityWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserCities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserCities.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UserCities
+    **/
+    _count?: true | UserCityCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UserCityMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UserCityMaxAggregateInputType
+  }
+
+  export type GetUserCityAggregateType<T extends UserCityAggregateArgs> = {
+        [P in keyof T & keyof AggregateUserCity]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUserCity[P]>
+      : GetScalarType<T[P], AggregateUserCity[P]>
+  }
+
+
+
+
+  export type UserCityGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserCityWhereInput
+    orderBy?: UserCityOrderByWithAggregationInput | UserCityOrderByWithAggregationInput[]
+    by: UserCityScalarFieldEnum[] | UserCityScalarFieldEnum
+    having?: UserCityScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UserCityCountAggregateInputType | true
+    _min?: UserCityMinAggregateInputType
+    _max?: UserCityMaxAggregateInputType
+  }
+
+  export type UserCityGroupByOutputType = {
+    id: string
+    userId: string
+    city: string
+    _count: UserCityCountAggregateOutputType | null
+    _min: UserCityMinAggregateOutputType | null
+    _max: UserCityMaxAggregateOutputType | null
+  }
+
+  type GetUserCityGroupByPayload<T extends UserCityGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UserCityGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UserCityGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UserCityGroupByOutputType[P]>
+            : GetScalarType<T[P], UserCityGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UserCitySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    city?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userCity"]>
+
+  export type UserCitySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    city?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userCity"]>
+
+  export type UserCitySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    city?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userCity"]>
+
+  export type UserCitySelectScalar = {
+    id?: boolean
+    userId?: boolean
+    city?: boolean
+  }
+
+  export type UserCityOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "city", ExtArgs["result"]["userCity"]>
+  export type UserCityInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type UserCityIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type UserCityIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $UserCityPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "UserCity"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      city: string
+    }, ExtArgs["result"]["userCity"]>
+    composites: {}
+  }
+
+  type UserCityGetPayload<S extends boolean | null | undefined | UserCityDefaultArgs> = $Result.GetResult<Prisma.$UserCityPayload, S>
+
+  type UserCityCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UserCityFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UserCityCountAggregateInputType | true
+    }
+
+  export interface UserCityDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UserCity'], meta: { name: 'UserCity' } }
+    /**
+     * Find zero or one UserCity that matches the filter.
+     * @param {UserCityFindUniqueArgs} args - Arguments to find a UserCity
+     * @example
+     * // Get one UserCity
+     * const userCity = await prisma.userCity.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UserCityFindUniqueArgs>(args: SelectSubset<T, UserCityFindUniqueArgs<ExtArgs>>): Prisma__UserCityClient<$Result.GetResult<Prisma.$UserCityPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one UserCity that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {UserCityFindUniqueOrThrowArgs} args - Arguments to find a UserCity
+     * @example
+     * // Get one UserCity
+     * const userCity = await prisma.userCity.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UserCityFindUniqueOrThrowArgs>(args: SelectSubset<T, UserCityFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserCityClient<$Result.GetResult<Prisma.$UserCityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserCity that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserCityFindFirstArgs} args - Arguments to find a UserCity
+     * @example
+     * // Get one UserCity
+     * const userCity = await prisma.userCity.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UserCityFindFirstArgs>(args?: SelectSubset<T, UserCityFindFirstArgs<ExtArgs>>): Prisma__UserCityClient<$Result.GetResult<Prisma.$UserCityPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserCity that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserCityFindFirstOrThrowArgs} args - Arguments to find a UserCity
+     * @example
+     * // Get one UserCity
+     * const userCity = await prisma.userCity.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UserCityFindFirstOrThrowArgs>(args?: SelectSubset<T, UserCityFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserCityClient<$Result.GetResult<Prisma.$UserCityPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more UserCities that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserCityFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UserCities
+     * const userCities = await prisma.userCity.findMany()
+     * 
+     * // Get first 10 UserCities
+     * const userCities = await prisma.userCity.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const userCityWithIdOnly = await prisma.userCity.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends UserCityFindManyArgs>(args?: SelectSubset<T, UserCityFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserCityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a UserCity.
+     * @param {UserCityCreateArgs} args - Arguments to create a UserCity.
+     * @example
+     * // Create one UserCity
+     * const UserCity = await prisma.userCity.create({
+     *   data: {
+     *     // ... data to create a UserCity
+     *   }
+     * })
+     * 
+     */
+    create<T extends UserCityCreateArgs>(args: SelectSubset<T, UserCityCreateArgs<ExtArgs>>): Prisma__UserCityClient<$Result.GetResult<Prisma.$UserCityPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many UserCities.
+     * @param {UserCityCreateManyArgs} args - Arguments to create many UserCities.
+     * @example
+     * // Create many UserCities
+     * const userCity = await prisma.userCity.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends UserCityCreateManyArgs>(args?: SelectSubset<T, UserCityCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many UserCities and returns the data saved in the database.
+     * @param {UserCityCreateManyAndReturnArgs} args - Arguments to create many UserCities.
+     * @example
+     * // Create many UserCities
+     * const userCity = await prisma.userCity.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many UserCities and only return the `id`
+     * const userCityWithIdOnly = await prisma.userCity.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends UserCityCreateManyAndReturnArgs>(args?: SelectSubset<T, UserCityCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserCityPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a UserCity.
+     * @param {UserCityDeleteArgs} args - Arguments to delete one UserCity.
+     * @example
+     * // Delete one UserCity
+     * const UserCity = await prisma.userCity.delete({
+     *   where: {
+     *     // ... filter to delete one UserCity
+     *   }
+     * })
+     * 
+     */
+    delete<T extends UserCityDeleteArgs>(args: SelectSubset<T, UserCityDeleteArgs<ExtArgs>>): Prisma__UserCityClient<$Result.GetResult<Prisma.$UserCityPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one UserCity.
+     * @param {UserCityUpdateArgs} args - Arguments to update one UserCity.
+     * @example
+     * // Update one UserCity
+     * const userCity = await prisma.userCity.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends UserCityUpdateArgs>(args: SelectSubset<T, UserCityUpdateArgs<ExtArgs>>): Prisma__UserCityClient<$Result.GetResult<Prisma.$UserCityPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more UserCities.
+     * @param {UserCityDeleteManyArgs} args - Arguments to filter UserCities to delete.
+     * @example
+     * // Delete a few UserCities
+     * const { count } = await prisma.userCity.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends UserCityDeleteManyArgs>(args?: SelectSubset<T, UserCityDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserCities.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserCityUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UserCities
+     * const userCity = await prisma.userCity.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends UserCityUpdateManyArgs>(args: SelectSubset<T, UserCityUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserCities and returns the data updated in the database.
+     * @param {UserCityUpdateManyAndReturnArgs} args - Arguments to update many UserCities.
+     * @example
+     * // Update many UserCities
+     * const userCity = await prisma.userCity.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more UserCities and only return the `id`
+     * const userCityWithIdOnly = await prisma.userCity.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends UserCityUpdateManyAndReturnArgs>(args: SelectSubset<T, UserCityUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserCityPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one UserCity.
+     * @param {UserCityUpsertArgs} args - Arguments to update or create a UserCity.
+     * @example
+     * // Update or create a UserCity
+     * const userCity = await prisma.userCity.upsert({
+     *   create: {
+     *     // ... data to create a UserCity
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UserCity we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UserCityUpsertArgs>(args: SelectSubset<T, UserCityUpsertArgs<ExtArgs>>): Prisma__UserCityClient<$Result.GetResult<Prisma.$UserCityPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of UserCities.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserCityCountArgs} args - Arguments to filter UserCities to count.
+     * @example
+     * // Count the number of UserCities
+     * const count = await prisma.userCity.count({
+     *   where: {
+     *     // ... the filter for the UserCities we want to count
+     *   }
+     * })
+    **/
+    count<T extends UserCityCountArgs>(
+      args?: Subset<T, UserCityCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UserCityCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UserCity.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserCityAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UserCityAggregateArgs>(args: Subset<T, UserCityAggregateArgs>): Prisma.PrismaPromise<GetUserCityAggregateType<T>>
+
+    /**
+     * Group by UserCity.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserCityGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UserCityGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UserCityGroupByArgs['orderBy'] }
+        : { orderBy?: UserCityGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UserCityGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserCityGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the UserCity model
+   */
+  readonly fields: UserCityFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UserCity.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UserCityClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the UserCity model
+   */
+  interface UserCityFieldRefs {
+    readonly id: FieldRef<"UserCity", 'String'>
+    readonly userId: FieldRef<"UserCity", 'String'>
+    readonly city: FieldRef<"UserCity", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * UserCity findUnique
+   */
+  export type UserCityFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCity
+     */
+    select?: UserCitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserCity
+     */
+    omit?: UserCityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserCityInclude<ExtArgs> | null
+    /**
+     * Filter, which UserCity to fetch.
+     */
+    where: UserCityWhereUniqueInput
+  }
+
+  /**
+   * UserCity findUniqueOrThrow
+   */
+  export type UserCityFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCity
+     */
+    select?: UserCitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserCity
+     */
+    omit?: UserCityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserCityInclude<ExtArgs> | null
+    /**
+     * Filter, which UserCity to fetch.
+     */
+    where: UserCityWhereUniqueInput
+  }
+
+  /**
+   * UserCity findFirst
+   */
+  export type UserCityFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCity
+     */
+    select?: UserCitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserCity
+     */
+    omit?: UserCityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserCityInclude<ExtArgs> | null
+    /**
+     * Filter, which UserCity to fetch.
+     */
+    where?: UserCityWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserCities to fetch.
+     */
+    orderBy?: UserCityOrderByWithRelationInput | UserCityOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserCities.
+     */
+    cursor?: UserCityWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserCities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserCities.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserCities.
+     */
+    distinct?: UserCityScalarFieldEnum | UserCityScalarFieldEnum[]
+  }
+
+  /**
+   * UserCity findFirstOrThrow
+   */
+  export type UserCityFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCity
+     */
+    select?: UserCitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserCity
+     */
+    omit?: UserCityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserCityInclude<ExtArgs> | null
+    /**
+     * Filter, which UserCity to fetch.
+     */
+    where?: UserCityWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserCities to fetch.
+     */
+    orderBy?: UserCityOrderByWithRelationInput | UserCityOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserCities.
+     */
+    cursor?: UserCityWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserCities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserCities.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserCities.
+     */
+    distinct?: UserCityScalarFieldEnum | UserCityScalarFieldEnum[]
+  }
+
+  /**
+   * UserCity findMany
+   */
+  export type UserCityFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCity
+     */
+    select?: UserCitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserCity
+     */
+    omit?: UserCityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserCityInclude<ExtArgs> | null
+    /**
+     * Filter, which UserCities to fetch.
+     */
+    where?: UserCityWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserCities to fetch.
+     */
+    orderBy?: UserCityOrderByWithRelationInput | UserCityOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UserCities.
+     */
+    cursor?: UserCityWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserCities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserCities.
+     */
+    skip?: number
+    distinct?: UserCityScalarFieldEnum | UserCityScalarFieldEnum[]
+  }
+
+  /**
+   * UserCity create
+   */
+  export type UserCityCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCity
+     */
+    select?: UserCitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserCity
+     */
+    omit?: UserCityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserCityInclude<ExtArgs> | null
+    /**
+     * The data needed to create a UserCity.
+     */
+    data: XOR<UserCityCreateInput, UserCityUncheckedCreateInput>
+  }
+
+  /**
+   * UserCity createMany
+   */
+  export type UserCityCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many UserCities.
+     */
+    data: UserCityCreateManyInput | UserCityCreateManyInput[]
+  }
+
+  /**
+   * UserCity createManyAndReturn
+   */
+  export type UserCityCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCity
+     */
+    select?: UserCitySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserCity
+     */
+    omit?: UserCityOmit<ExtArgs> | null
+    /**
+     * The data used to create many UserCities.
+     */
+    data: UserCityCreateManyInput | UserCityCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserCityIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UserCity update
+   */
+  export type UserCityUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCity
+     */
+    select?: UserCitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserCity
+     */
+    omit?: UserCityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserCityInclude<ExtArgs> | null
+    /**
+     * The data needed to update a UserCity.
+     */
+    data: XOR<UserCityUpdateInput, UserCityUncheckedUpdateInput>
+    /**
+     * Choose, which UserCity to update.
+     */
+    where: UserCityWhereUniqueInput
+  }
+
+  /**
+   * UserCity updateMany
+   */
+  export type UserCityUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update UserCities.
+     */
+    data: XOR<UserCityUpdateManyMutationInput, UserCityUncheckedUpdateManyInput>
+    /**
+     * Filter which UserCities to update
+     */
+    where?: UserCityWhereInput
+    /**
+     * Limit how many UserCities to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserCity updateManyAndReturn
+   */
+  export type UserCityUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCity
+     */
+    select?: UserCitySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserCity
+     */
+    omit?: UserCityOmit<ExtArgs> | null
+    /**
+     * The data used to update UserCities.
+     */
+    data: XOR<UserCityUpdateManyMutationInput, UserCityUncheckedUpdateManyInput>
+    /**
+     * Filter which UserCities to update
+     */
+    where?: UserCityWhereInput
+    /**
+     * Limit how many UserCities to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserCityIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UserCity upsert
+   */
+  export type UserCityUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCity
+     */
+    select?: UserCitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserCity
+     */
+    omit?: UserCityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserCityInclude<ExtArgs> | null
+    /**
+     * The filter to search for the UserCity to update in case it exists.
+     */
+    where: UserCityWhereUniqueInput
+    /**
+     * In case the UserCity found by the `where` argument doesn't exist, create a new UserCity with this data.
+     */
+    create: XOR<UserCityCreateInput, UserCityUncheckedCreateInput>
+    /**
+     * In case the UserCity was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UserCityUpdateInput, UserCityUncheckedUpdateInput>
+  }
+
+  /**
+   * UserCity delete
+   */
+  export type UserCityDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCity
+     */
+    select?: UserCitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserCity
+     */
+    omit?: UserCityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserCityInclude<ExtArgs> | null
+    /**
+     * Filter which UserCity to delete.
+     */
+    where: UserCityWhereUniqueInput
+  }
+
+  /**
+   * UserCity deleteMany
+   */
+  export type UserCityDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserCities to delete
+     */
+    where?: UserCityWhereInput
+    /**
+     * Limit how many UserCities to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserCity without action
+   */
+  export type UserCityDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCity
+     */
+    select?: UserCitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserCity
+     */
+    omit?: UserCityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserCityInclude<ExtArgs> | null
   }
 
 
@@ -1883,11 +3122,21 @@ export namespace Prisma {
     name: 'name',
     bio: 'bio',
     avatarUrl: 'avatarUrl',
+    coverUrl: 'coverUrl',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+  export const UserCityScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    city: 'city'
+  };
+
+  export type UserCityScalarFieldEnum = (typeof UserCityScalarFieldEnum)[keyof typeof UserCityScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -1935,8 +3184,10 @@ export namespace Prisma {
     name?: StringFilter<"User"> | string
     bio?: StringFilter<"User"> | string
     avatarUrl?: StringFilter<"User"> | string
+    coverUrl?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    cities?: UserCityListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -1944,8 +3195,10 @@ export namespace Prisma {
     name?: SortOrder
     bio?: SortOrder
     avatarUrl?: SortOrder
+    coverUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    cities?: UserCityOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -1956,8 +3209,10 @@ export namespace Prisma {
     name?: StringFilter<"User"> | string
     bio?: StringFilter<"User"> | string
     avatarUrl?: StringFilter<"User"> | string
+    coverUrl?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    cities?: UserCityListRelationFilter
   }, "id">
 
   export type UserOrderByWithAggregationInput = {
@@ -1965,6 +3220,7 @@ export namespace Prisma {
     name?: SortOrder
     bio?: SortOrder
     avatarUrl?: SortOrder
+    coverUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -1980,8 +3236,55 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"User"> | string
     bio?: StringWithAggregatesFilter<"User"> | string
     avatarUrl?: StringWithAggregatesFilter<"User"> | string
+    coverUrl?: StringWithAggregatesFilter<"User"> | string
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+  }
+
+  export type UserCityWhereInput = {
+    AND?: UserCityWhereInput | UserCityWhereInput[]
+    OR?: UserCityWhereInput[]
+    NOT?: UserCityWhereInput | UserCityWhereInput[]
+    id?: StringFilter<"UserCity"> | string
+    userId?: StringFilter<"UserCity"> | string
+    city?: StringFilter<"UserCity"> | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type UserCityOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    city?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type UserCityWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId_city?: UserCityUserIdCityCompoundUniqueInput
+    AND?: UserCityWhereInput | UserCityWhereInput[]
+    OR?: UserCityWhereInput[]
+    NOT?: UserCityWhereInput | UserCityWhereInput[]
+    userId?: StringFilter<"UserCity"> | string
+    city?: StringFilter<"UserCity"> | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "userId_city">
+
+  export type UserCityOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    city?: SortOrder
+    _count?: UserCityCountOrderByAggregateInput
+    _max?: UserCityMaxOrderByAggregateInput
+    _min?: UserCityMinOrderByAggregateInput
+  }
+
+  export type UserCityScalarWhereWithAggregatesInput = {
+    AND?: UserCityScalarWhereWithAggregatesInput | UserCityScalarWhereWithAggregatesInput[]
+    OR?: UserCityScalarWhereWithAggregatesInput[]
+    NOT?: UserCityScalarWhereWithAggregatesInput | UserCityScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"UserCity"> | string
+    userId?: StringWithAggregatesFilter<"UserCity"> | string
+    city?: StringWithAggregatesFilter<"UserCity"> | string
   }
 
   export type UserCreateInput = {
@@ -1989,8 +3292,10 @@ export namespace Prisma {
     name: string
     bio: string
     avatarUrl: string
+    coverUrl?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    cities?: UserCityCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -1998,8 +3303,10 @@ export namespace Prisma {
     name: string
     bio: string
     avatarUrl: string
+    coverUrl?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    cities?: UserCityUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -2007,8 +3314,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     bio?: StringFieldUpdateOperationsInput | string
     avatarUrl?: StringFieldUpdateOperationsInput | string
+    coverUrl?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cities?: UserCityUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -2016,8 +3325,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     bio?: StringFieldUpdateOperationsInput | string
     avatarUrl?: StringFieldUpdateOperationsInput | string
+    coverUrl?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cities?: UserCityUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -2025,6 +3336,7 @@ export namespace Prisma {
     name: string
     bio: string
     avatarUrl: string
+    coverUrl?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -2034,6 +3346,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     bio?: StringFieldUpdateOperationsInput | string
     avatarUrl?: StringFieldUpdateOperationsInput | string
+    coverUrl?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -2043,8 +3356,50 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     bio?: StringFieldUpdateOperationsInput | string
     avatarUrl?: StringFieldUpdateOperationsInput | string
+    coverUrl?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserCityCreateInput = {
+    id?: string
+    city: string
+    user: UserCreateNestedOneWithoutCitiesInput
+  }
+
+  export type UserCityUncheckedCreateInput = {
+    id?: string
+    userId: string
+    city: string
+  }
+
+  export type UserCityUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    user?: UserUpdateOneRequiredWithoutCitiesNestedInput
+  }
+
+  export type UserCityUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type UserCityCreateManyInput = {
+    id?: string
+    userId: string
+    city: string
+  }
+
+  export type UserCityUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type UserCityUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -2072,11 +3427,22 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type UserCityListRelationFilter = {
+    every?: UserCityWhereInput
+    some?: UserCityWhereInput
+    none?: UserCityWhereInput
+  }
+
+  export type UserCityOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     bio?: SortOrder
     avatarUrl?: SortOrder
+    coverUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -2086,6 +3452,7 @@ export namespace Prisma {
     name?: SortOrder
     bio?: SortOrder
     avatarUrl?: SortOrder
+    coverUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -2095,6 +3462,7 @@ export namespace Prisma {
     name?: SortOrder
     bio?: SortOrder
     avatarUrl?: SortOrder
+    coverUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -2130,12 +3498,96 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
+  export type UserCityUserIdCityCompoundUniqueInput = {
+    userId: string
+    city: string
+  }
+
+  export type UserCityCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    city?: SortOrder
+  }
+
+  export type UserCityMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    city?: SortOrder
+  }
+
+  export type UserCityMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    city?: SortOrder
+  }
+
+  export type UserCityCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserCityCreateWithoutUserInput, UserCityUncheckedCreateWithoutUserInput> | UserCityCreateWithoutUserInput[] | UserCityUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserCityCreateOrConnectWithoutUserInput | UserCityCreateOrConnectWithoutUserInput[]
+    createMany?: UserCityCreateManyUserInputEnvelope
+    connect?: UserCityWhereUniqueInput | UserCityWhereUniqueInput[]
+  }
+
+  export type UserCityUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserCityCreateWithoutUserInput, UserCityUncheckedCreateWithoutUserInput> | UserCityCreateWithoutUserInput[] | UserCityUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserCityCreateOrConnectWithoutUserInput | UserCityCreateOrConnectWithoutUserInput[]
+    createMany?: UserCityCreateManyUserInputEnvelope
+    connect?: UserCityWhereUniqueInput | UserCityWhereUniqueInput[]
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type UserCityUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserCityCreateWithoutUserInput, UserCityUncheckedCreateWithoutUserInput> | UserCityCreateWithoutUserInput[] | UserCityUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserCityCreateOrConnectWithoutUserInput | UserCityCreateOrConnectWithoutUserInput[]
+    upsert?: UserCityUpsertWithWhereUniqueWithoutUserInput | UserCityUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserCityCreateManyUserInputEnvelope
+    set?: UserCityWhereUniqueInput | UserCityWhereUniqueInput[]
+    disconnect?: UserCityWhereUniqueInput | UserCityWhereUniqueInput[]
+    delete?: UserCityWhereUniqueInput | UserCityWhereUniqueInput[]
+    connect?: UserCityWhereUniqueInput | UserCityWhereUniqueInput[]
+    update?: UserCityUpdateWithWhereUniqueWithoutUserInput | UserCityUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserCityUpdateManyWithWhereWithoutUserInput | UserCityUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserCityScalarWhereInput | UserCityScalarWhereInput[]
+  }
+
+  export type UserCityUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserCityCreateWithoutUserInput, UserCityUncheckedCreateWithoutUserInput> | UserCityCreateWithoutUserInput[] | UserCityUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserCityCreateOrConnectWithoutUserInput | UserCityCreateOrConnectWithoutUserInput[]
+    upsert?: UserCityUpsertWithWhereUniqueWithoutUserInput | UserCityUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserCityCreateManyUserInputEnvelope
+    set?: UserCityWhereUniqueInput | UserCityWhereUniqueInput[]
+    disconnect?: UserCityWhereUniqueInput | UserCityWhereUniqueInput[]
+    delete?: UserCityWhereUniqueInput | UserCityWhereUniqueInput[]
+    connect?: UserCityWhereUniqueInput | UserCityWhereUniqueInput[]
+    update?: UserCityUpdateWithWhereUniqueWithoutUserInput | UserCityUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserCityUpdateManyWithWhereWithoutUserInput | UserCityUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserCityScalarWhereInput | UserCityScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutCitiesInput = {
+    create?: XOR<UserCreateWithoutCitiesInput, UserUncheckedCreateWithoutCitiesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCitiesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutCitiesNestedInput = {
+    create?: XOR<UserCreateWithoutCitiesInput, UserUncheckedCreateWithoutCitiesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCitiesInput
+    upsert?: UserUpsertWithoutCitiesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCitiesInput, UserUpdateWithoutCitiesInput>, UserUncheckedUpdateWithoutCitiesInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -2203,6 +3655,126 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type UserCityCreateWithoutUserInput = {
+    id?: string
+    city: string
+  }
+
+  export type UserCityUncheckedCreateWithoutUserInput = {
+    id?: string
+    city: string
+  }
+
+  export type UserCityCreateOrConnectWithoutUserInput = {
+    where: UserCityWhereUniqueInput
+    create: XOR<UserCityCreateWithoutUserInput, UserCityUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserCityCreateManyUserInputEnvelope = {
+    data: UserCityCreateManyUserInput | UserCityCreateManyUserInput[]
+  }
+
+  export type UserCityUpsertWithWhereUniqueWithoutUserInput = {
+    where: UserCityWhereUniqueInput
+    update: XOR<UserCityUpdateWithoutUserInput, UserCityUncheckedUpdateWithoutUserInput>
+    create: XOR<UserCityCreateWithoutUserInput, UserCityUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserCityUpdateWithWhereUniqueWithoutUserInput = {
+    where: UserCityWhereUniqueInput
+    data: XOR<UserCityUpdateWithoutUserInput, UserCityUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserCityUpdateManyWithWhereWithoutUserInput = {
+    where: UserCityScalarWhereInput
+    data: XOR<UserCityUpdateManyMutationInput, UserCityUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type UserCityScalarWhereInput = {
+    AND?: UserCityScalarWhereInput | UserCityScalarWhereInput[]
+    OR?: UserCityScalarWhereInput[]
+    NOT?: UserCityScalarWhereInput | UserCityScalarWhereInput[]
+    id?: StringFilter<"UserCity"> | string
+    userId?: StringFilter<"UserCity"> | string
+    city?: StringFilter<"UserCity"> | string
+  }
+
+  export type UserCreateWithoutCitiesInput = {
+    id: string
+    name: string
+    bio: string
+    avatarUrl: string
+    coverUrl?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserUncheckedCreateWithoutCitiesInput = {
+    id: string
+    name: string
+    bio: string
+    avatarUrl: string
+    coverUrl?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserCreateOrConnectWithoutCitiesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCitiesInput, UserUncheckedCreateWithoutCitiesInput>
+  }
+
+  export type UserUpsertWithoutCitiesInput = {
+    update: XOR<UserUpdateWithoutCitiesInput, UserUncheckedUpdateWithoutCitiesInput>
+    create: XOR<UserCreateWithoutCitiesInput, UserUncheckedCreateWithoutCitiesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCitiesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCitiesInput, UserUncheckedUpdateWithoutCitiesInput>
+  }
+
+  export type UserUpdateWithoutCitiesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    bio?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: StringFieldUpdateOperationsInput | string
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUncheckedUpdateWithoutCitiesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    bio?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: StringFieldUpdateOperationsInput | string
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserCityCreateManyUserInput = {
+    id?: string
+    city: string
+  }
+
+  export type UserCityUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type UserCityUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type UserCityUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
   }
 
 

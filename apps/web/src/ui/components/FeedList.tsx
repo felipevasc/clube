@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import Avatar from "./Avatar";
 import BookChip from "./BookChip";
 import { api } from "../../lib/api";
@@ -78,10 +79,12 @@ const Icons = {
 
 export default function FeedList({
   clubBookId,
+  userId,
   refreshToken,
   showBookChip = true,
 }: {
   clubBookId?: string;
+  userId?: string;
   refreshToken?: number;
   showBookChip?: boolean;
 }) {
@@ -93,11 +96,14 @@ export default function FeedList({
 
   const [commentText, setCommentText] = useState("");
   const [fullScreenPostId, setFullScreenPostId] = useState<string | null>(null);
+  const [clickedImageIndex, setClickedImageIndex] = useState(0);
 
   const feedPath = useMemo(() => {
-    if (!clubBookId) return "/feed";
-    return `/feed?clubBookId=${encodeURIComponent(clubBookId)}`;
-  }, [clubBookId]);
+    const qs = new URLSearchParams();
+    if (clubBookId) qs.set("clubBookId", clubBookId);
+    if (userId) qs.set("userId", userId);
+    return `/feed${qs.toString() ? `?${qs.toString()}` : ""}`;
+  }, [clubBookId, userId]);
 
   const refresh = async () => {
     const out = await api<{ posts: FeedPost[] }>(feedPath);
@@ -163,7 +169,7 @@ export default function FeedList({
 
             {/* Header */}
             <div className="px-4 py-3 flex items-center justify-between pl-5"> {/* Increased left padding for the border */}
-              <div className="flex items-center gap-3">
+              <Link to={`/profile/${p.userId}`} className="flex items-center gap-3">
                 <Avatar user={p.user || { id: p.userId, name: p.userId }} size={32} />
                 <div className="leading-tight">
                   <div className="text-sm font-bold text-neutral-900">{p.user?.name || p.userId}</div>
@@ -173,7 +179,7 @@ export default function FeedList({
                     <div className="text-xs text-neutral-500">{new Date(p.createdAt).toLocaleDateString()}</div>
                   )}
                 </div>
-              </div>
+              </Link>
               <button className="text-neutral-400 hover:text-neutral-600">
                 <Icons.More />
               </button>
@@ -181,41 +187,68 @@ export default function FeedList({
 
             {/* Media */}
 
+            {/* Media */}
             {images.length > 0 && (
-              <div className="w-full bg-neutral-100 overflow-hidden">
+              <div
+                className="w-full bg-neutral-100 overflow-hidden aspect-[4/5] relative"
+                onClick={(e) => {
+                  // Default to first image if not clicked deeply
+                  setFullScreenPostId(p.id);
+                  setClickedImageIndex(0);
+                }}
+              >
                 {images.length === 1 ? (
                   <img
                     src={images[0]}
                     alt="Post content"
-                    className="w-full h-auto object-cover max-h-[600px] cursor-pointer"
+                    className="w-full h-full object-cover cursor-pointer"
                     loading="lazy"
-                    onClick={() => setFullScreenPostId(p.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setFullScreenPostId(p.id);
+                      setClickedImageIndex(0);
+                    }}
                   />
                 ) : (
-                  <div
-                    className={`grid grid-cols-2 gap-0.5 w-full cursor-pointer ${images.length === 2 ? "aspect-[2/1]" : "aspect-square"
-                      }`}
-                    onClick={() => setFullScreenPostId(p.id)}
-                  >
+                  <div className="grid grid-cols-2 gap-0.5 w-full h-full cursor-pointer">
                     {/* First image (Left, spans all rows) */}
-                    <div className={`relative h-full ${images.length === 2 ? "row-span-1" :
-                      images.length === 3 ? "row-span-2" :
-                        "row-span-3"
-                      }`}>
-                      <img src={images[0]} alt="Post content 1" className="w-full h-full object-cover" />
+                    <div className={`relative h-full ${images.length === 2 ? "row-span-1" : images.length === 3 ? "row-span-2" : "row-span-3"}`}>
+                      <img
+                        src={images[0]}
+                        alt="Post content 1"
+                        className="w-full h-full object-cover"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setFullScreenPostId(p.id);
+                          setClickedImageIndex(0);
+                        }}
+                      />
                     </div>
 
-                    {/* Right column images (Stack of up to 3) */}
-                    <div className={`flex flex-col gap-0.5 h-full ${images.length === 2 ? "row-span-1" :
-                      images.length === 3 ? "row-span-2" :
-                        "row-span-3"
-                      }`}>
+                    {/* Right column images */}
+                    <div className={`flex flex-col gap-0.5 h-full ${images.length === 2 ? "row-span-1" : images.length === 3 ? "row-span-2" : "row-span-3"}`}>
                       {images.slice(1, 4).map((img, idx) => (
-                        <div key={idx} className="relative h-full flex-1">
-                          <img src={img} alt={`Post content ${idx + 2}`} className="w-full h-full object-cover" />
+                        <div key={idx} className="relative h-full flex-1 overflow-hidden">
+                          <img
+                            src={img}
+                            alt={`Post content ${idx + 2}`}
+                            className="w-full h-full object-cover"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setFullScreenPostId(p.id);
+                              setClickedImageIndex(idx + 1);
+                            }}
+                          />
                           {/* Overlay on the last visible item if there are more */}
                           {idx === 2 && images.length > 4 && (
-                            <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                            <div
+                              className="absolute inset-0 bg-black/50 flex items-center justify-center"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setFullScreenPostId(p.id);
+                                setClickedImageIndex(idx + 1);
+                              }}
+                            >
                               <span className="text-white font-bold text-xl">+{images.length - 4}</span>
                             </div>
                           )}
@@ -225,8 +258,7 @@ export default function FeedList({
                   </div>
                 )}
               </div>
-            )
-            }
+            )}
 
             {/* Actions */}
             <div className="px-4 pt-3 pb-2">
@@ -406,6 +438,7 @@ export default function FeedList({
           <FullScreenFeed
             posts={posts}
             initialPostId={fullScreenPostId}
+            initialImageIndex={clickedImageIndex}
             onClose={() => setFullScreenPostId(null)}
             onLike={(id) => react(id, "like")}
             onComment={(id) => setDetailId(id)}

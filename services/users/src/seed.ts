@@ -1,7 +1,7 @@
 import { prisma } from "./db.js";
 
 async function main() {
-  await prisma.user.upsert({
+  const user = await prisma.user.upsert({
     where: { id: "alice" },
     create: {
       id: "alice",
@@ -9,6 +9,17 @@ async function main() {
       bio: "Leitora voraz. MVP seed.",
       avatarUrl: ""
     },
+    update: {},
+  });
+
+  await prisma.userCity.upsert({
+    where: { userId_city: { userId: "alice", city: "FORTALEZA" } },
+    create: { userId: "alice", city: "FORTALEZA" },
+    update: {},
+  });
+  await prisma.userCity.upsert({
+    where: { userId_city: { userId: "alice", city: "BRASILIA" } },
+    create: { userId: "alice", city: "BRASILIA" },
     update: {},
   });
 }
