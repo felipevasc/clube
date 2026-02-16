@@ -61,30 +61,41 @@ export default function MessageThread() {
     const load = async () => {
       setLoading(true);
       try {
+        let fetchedMsgs: Msg[] = [];
         if (threadType === "book") {
           const books = await api<{ clubBooks: ClubBook[] }>("/club-books");
           const b = books.clubBooks.find(x => x.id === id);
           if (alive) setClubBook(b || null);
           const msgs = await api<{ messages: Msg[] }>(`/club-books/${id}/messages?limit=80&order=desc`);
-          if (alive) setMessages(msgs.messages.reverse());
+          if (alive) {
+            const sorted = msgs.messages.reverse();
+            setMessages(sorted);
+            fetchedMsgs = sorted;
+          }
         } else if (threadType === "channel") {
           const chans = await api<{ channels: Channel[] }>("/channels");
           const c = chans.channels.find(x => x.id === id);
           if (alive) setChannel(c || null);
           const msgs = await api<{ messages: Msg[] }>(`/channels/${id}/messages?limit=80`);
-          if (alive) setMessages(msgs.messages);
+          if (alive) {
+            setMessages(msgs.messages);
+            fetchedMsgs = msgs.messages;
+          }
         } else if (threadType === "dm") {
           const other = await api<{ user: User }>(`/users/${id}`);
           if (alive) setTargetUser(other.user);
           const msgs = await api<{ messages: any[] }>(`/direct-messages/${id}`);
           // Normalize DM model (fromUserId -> userId)
           const norm = msgs.messages.map(m => ({ ...m, userId: m.fromUserId }));
-          if (alive) setMessages(norm);
+          if (alive) {
+            setMessages(norm);
+            fetchedMsgs = norm;
+          }
         }
 
         // Load users for initial messages
-        if (alive) {
-          const uids = messages.map(m => m.userId).filter(Boolean);
+        if (alive && fetchedMsgs.length > 0) {
+          const uids = fetchedMsgs.map(m => m.userId).filter(Boolean);
           await ensureUsers(uids);
         }
       } catch (e) {
@@ -151,7 +162,7 @@ export default function MessageThread() {
         <Card>
           <div className="h-full flex flex-col overflow-hidden">
             <div className="flex-1 overflow-y-auto chat-wallpaper p-3 space-y-4">
-              <ChatBubbles messages={messages} usersById={usersById} viewerId={viewerId} accentHex={hex} />
+              <ChatBubbles messages={messages} usersById={usersById} viewerId={viewerId} accentHex={hex} isGroup={threadType !== "dm"} />
             </div>
 
             <div className="p-3 border-t border-black/5 bg-white/80">
@@ -160,7 +171,7 @@ export default function MessageThread() {
                   value={chatText}
                   onChange={e => setChatText(e.target.value)}
                   className="flex-1 bg-white border border-black/10 rounded-2xl p-2 text-sm outline-none resize-none"
-                  placeholder="Escriba sua mensagem..."
+                  placeholder="Escreva sua mensagem..."
                   rows={1}
                 />
                 <button

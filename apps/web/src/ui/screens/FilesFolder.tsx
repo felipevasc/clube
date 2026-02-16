@@ -408,7 +408,7 @@ export default function FilesFolder() {
           </div>
 
           <div className="flex-1 min-w-0">
-            <div className="text-sm font-black truncate">{clubBook?.title || "Arquivos"}</div>
+            <div className="text-sm font-black truncate">{clubBook?.title || "Repositório"}</div>
             {loadingBook ? (
               <div className="text-xs text-neutral-600">Carregando...</div>
             ) : bookError ? (

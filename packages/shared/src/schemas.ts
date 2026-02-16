@@ -15,6 +15,7 @@ export const MediaUrlSchema = z
 
 export const LoginSchema = z.object({
   username: UsernameSchema,
+  cities: z.array(z.string()).optional(),
 });
 
 export const UserProfileSchema = z.object({

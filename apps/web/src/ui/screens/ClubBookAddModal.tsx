@@ -60,13 +60,15 @@ export default function ClubBookAddModal({ isOpen, onClose, onBookAdded, city }:
     }, [isOpen]);
 
     useEffect(() => {
-        if (searchQuery.trim().length < 2) {
-            setSearchResults([]);
-            return;
-        }
-
+        if (!isOpen) return;
+        // Clear previous timeout
         window.clearTimeout(searchTimeout.current);
+
+        // Show loading state
         setSearching(true);
+
+        // Debounce search slightly (300ms) to avoid spamming as user types rapidly
+        // If query is empty, it fetches default list (e.g. latest books)
         searchTimeout.current = window.setTimeout(async () => {
             try {
                 const res = await api<{ books: Book[] }>(`/books?q=${encodeURIComponent(searchQuery)}`);
@@ -76,8 +78,8 @@ export default function ClubBookAddModal({ isOpen, onClose, onBookAdded, city }:
             } finally {
                 setSearching(false);
             }
-        }, 500);
-    }, [searchQuery]);
+        }, 300);
+    }, [searchQuery, isOpen]);
 
     const handleSelectBook = (book: Book) => {
         setSelectedBook(book);
@@ -212,7 +214,7 @@ export default function ClubBookAddModal({ isOpen, onClose, onBookAdded, city }:
                                     </button>
                                 ))}
 
-                                {searchQuery.length > 2 && !searching && searchResults.length === 0 && (
+                                {!searching && searchResults.length === 0 && (
                                     <div className="py-8 text-center">
                                         <p className="text-sm text-neutral-500 font-medium mb-4">Nenhum livro encontrado.</p>
                                         <button
@@ -224,7 +226,7 @@ export default function ClubBookAddModal({ isOpen, onClose, onBookAdded, city }:
                                         </button>
                                     </div>
                                 )}
-                                {searchQuery.length > 2 && !searching && searchResults.length > 0 && (
+                                {!searching && searchResults.length > 0 && (
                                     <div className="pt-2 text-center">
                                         <button
                                             onClick={() => setStep("create_book")}

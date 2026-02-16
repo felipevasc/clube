@@ -4,6 +4,36 @@ import Avatar from "./Avatar";
 export type ChatMsg = { id: string; userId: string; text: string; createdAt: string };
 export type ChatUser = { id: string; name: string; avatarUrl?: string };
 
+const USER_THEMES = [
+  { text: "text-red-600", bg: "#fef2f2" },
+  { text: "text-orange-600", bg: "#fff7ed" },
+  { text: "text-amber-600", bg: "#fffbeb" },
+  { text: "text-yellow-600", bg: "#fefce8" },
+  { text: "text-lime-600", bg: "#f7fee7" },
+  { text: "text-green-600", bg: "#f0fdf4" },
+  { text: "text-emerald-600", bg: "#ecfdf5" },
+  { text: "text-teal-600", bg: "#f0fdfa" },
+  { text: "text-cyan-600", bg: "#ecfeff" },
+  { text: "text-sky-600", bg: "#f0f9ff" },
+  { text: "text-blue-600", bg: "#eff6ff" },
+  { text: "text-indigo-600", bg: "#eef2ff" },
+  { text: "text-violet-600", bg: "#f5f3ff" },
+  { text: "text-purple-600", bg: "#faf5ff" },
+  { text: "text-fuchsia-600", bg: "#fdf4ff" },
+  { text: "text-pink-600", bg: "#fdf2f8" },
+  { text: "text-rose-600", bg: "#fff1f2" },
+  { text: "text-slate-600", bg: "#f8fafc" },
+];
+
+function getUserTheme(userId: string) {
+  let hash = 0;
+  for (let i = 0; i < userId.length; i++) {
+    hash = userId.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const index = Math.abs(hash) % USER_THEMES.length;
+  return USER_THEMES[index];
+}
+
 function safeDate(iso: string | null | undefined): Date | null {
   if (!iso) return null;
   const d = new Date(iso);
@@ -33,11 +63,9 @@ function fmtTime(iso: string): string {
 
 function bubbleFill(me: boolean, accent: string): string {
   // WhatsApp-like: outgoing is a soft green; incoming is near-white.
-  // Using gradients prevents the UI from feeling "flat blocks" on top of the wallpaper.
   if (me) {
     return "linear-gradient(180deg, rgba(217, 253, 211, 0.98), rgba(200, 248, 202, 0.96))";
   }
-  // Slightly tint with the accent so different rooms feel distinct without becoming "colorful bubbles".
   return `linear-gradient(180deg, rgba(255,255,255,0.98), ${accent}08)`;
 }
 
@@ -45,12 +73,14 @@ export default function ChatBubbles({
   messages,
   usersById,
   viewerId,
+  isGroup,
   accentHex,
   className = "",
 }: {
   messages: ChatMsg[];
   usersById: Record<string, ChatUser>;
   viewerId: string;
+  isGroup?: boolean;
   accentHex?: string;
   className?: string;
 }) {
@@ -77,69 +107,64 @@ export default function ChatBubbles({
         const lastInGroup = !next || next.userId !== m.userId || nextDay !== dkey;
 
         const u = usersById[m.userId] || { id: m.userId, name: m.userId };
+        const theme = getUserTheme(m.userId);
 
-        // Use CSS vars so the bubble + tail can share the same background.
-        const bubbleBg = bubbleFill(me, accent);
+        // WhatsApp Colors
+        // Me: Green, Others: Dynamic Pastel Theme
+        const bubbleBg = me ? "#d9fdd3" : theme.bg;
 
+        // WhatsApp Shape
+        const rBase = "rounded-lg";
         const bubbleRadius = me
-          ? `${firstInGroup ? "rounded-tr-2xl" : "rounded-tr-md"} ${lastInGroup ? "rounded-br-2xl" : "rounded-br-md"} rounded-tl-2xl rounded-bl-2xl`
-          : `${firstInGroup ? "rounded-tl-2xl" : "rounded-tl-md"} ${lastInGroup ? "rounded-bl-2xl" : "rounded-bl-md"} rounded-tr-2xl rounded-br-2xl`;
+          ? `${rBase} ${firstInGroup ? "rounded-tr-none" : ""}`
+          : `${rBase} ${firstInGroup ? "rounded-tl-none" : ""}`;
 
-        const tailCls = lastInGroup
+        // Tail - uses CSS var for background match to support dynamic theme
+        const tailCls = firstInGroup
           ? me
-            ? "after:content-[''] after:absolute after:bottom-3 after:right-[-6px] after:w-3.5 after:h-3.5 after:bg-[var(--bubble-bg)] after:rotate-45 after:rounded-[3px] after:shadow-[0_2px_6px_rgba(0,0,0,0.08)] after:ring-1 after:ring-black/5"
-            : "after:content-[''] after:absolute after:bottom-3 after:left-[-6px] after:w-3.5 after:h-3.5 after:bg-[var(--bubble-bg)] after:rotate-45 after:rounded-[3px] after:shadow-[0_2px_6px_rgba(0,0,0,0.08)] after:ring-1 after:ring-black/5"
+            ? "after:content-[''] after:absolute after:top-0 after:right-[-8px] after:w-3 after:h-3 after:bg-[var(--bubble-bg)] after:[clip-path:polygon(0_0,100%_0,0_100%)]"
+            : "after:content-[''] after:absolute after:top-0 after:left-[-8px] after:w-3 after:h-3 after:bg-[var(--bubble-bg)] after:[clip-path:polygon(0_0,100%_0,100%_100%)]"
           : "";
 
         return (
           <Fragment key={m.id}>
             {dayChanged ? (
               <div className="sticky top-0 z-[1] py-2 flex justify-center">
-                <div className="px-3 py-1 rounded-full border border-black/10 bg-white/70 backdrop-blur text-[11px] font-black text-neutral-700">
+                <div className="px-3 py-1 rounded-lg bg-[#e1f3fb] text-[11px] font-medium text-neutral-600 shadow-sm">
                   {fmtDayLabel(m.createdAt)}
                 </div>
               </div>
             ) : null}
 
-            <div className={`flex ${me ? "justify-end" : "justify-start"}`}>
-              <div className={`max-w-[78%] ${me ? "" : ""}`}>
-                <div className={`flex items-end gap-2 ${me ? "flex-row-reverse" : ""}`}>
-                  {!me ? (
-                    <div className="shrink-0 w-9">
-                      {firstInGroup ? <Avatar user={u} size={34} className="shadow-sm border border-black/5" /> : <div className="w-[34px] h-[34px]" />}
+            <div className={`flex ${me ? "justify-end" : "justify-start"} mb-1 ${firstInGroup && idx > 0 ? "mt-4" : ""}`}>
+              <div className={`max-w-[78%] flex items-start gap-3 ${me ? "flex-row-reverse" : ""}`}>
+                {!me && firstInGroup ? (
+                  <div className="shrink-0 w-[24px]">
+                    <Avatar user={u} size={24} className="shadow-sm" />
+                  </div>
+                ) : !me ? <div className="w-[24px]" /> : null}
+
+                <div
+                  className={[
+                    "relative px-2 py-1 shadow-sm text-sm text-neutral-800",
+                    bubbleRadius,
+                    tailCls,
+                  ].join(" ")}
+                  style={{ backgroundColor: bubbleBg, ["--bubble-bg" as any]: bubbleBg }}
+                >
+                  {!me && firstInGroup && isGroup ? (
+                    <div className={`text-[12px] font-bold leading-tight mb-0.5 ${theme.text}`}>
+                      {u.name}
                     </div>
                   ) : null}
 
-                  <div
-                    className={[
-                      "relative px-3 py-1.5 pr-11 shadow-sm",
-                      bubbleRadius,
-                      "bg-[var(--bubble-bg)]",
-                      "ring-1 ring-black/5",
-                      tailCls,
-                    ].join(" ")}
-                    style={{ ["--bubble-bg" as any]: bubbleBg }}
-                  >
-                    {!me && firstInGroup ? (
-                      <div className="text-[11px] font-black leading-none text-neutral-800">
-                        {u.name}
-                      </div>
-                    ) : null}
+                  <div className="whitespace-pre-wrap break-words leading-snug pr-14 pb-1">
+                    {m.text}
+                  </div>
 
-                    <div
-                      className={[
-                        "text-[14px] leading-[1.35] whitespace-pre-wrap break-words text-neutral-900",
-                        !me && firstInGroup ? "mt-1" : "",
-                      ].join(" ")}
-                    >
-                      {m.text}
-                    </div>
-
-                    {lastInGroup ? (
-                      <div className="absolute bottom-1.5 right-2.5 text-[10px] text-neutral-600 tabular-nums select-none">
-                        {fmtTime(m.createdAt)}
-                      </div>
-                    ) : null}
+                  <div className="absolute bottom-1 right-2 text-[10px] text-neutral-500 tabular-nums select-none leading-none">
+                    {fmtTime(m.createdAt)}
+                    {me && <span className="ml-1 text-blue-500">✓</span>}
                   </div>
                 </div>
               </div>

@@ -1,0 +1,306 @@
+generator client {
+  provider      = "prisma-client-js"
+  output        = "../src/generated/prisma"
+  // Keep WSL/Linux working even if `prisma generate` runs on Windows.
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// --- USERS ---
+
+model User {
+  id        String     @id
+  name      String
+  bio       String
+  avatarUrl String
+  coverUrl  String     @default("")
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  cities    UserCity[]
+}
+
+model UserCity {
+  id     String @id @default(cuid())
+  userId String
+  city   String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, city])
+}
+
+// --- BOOKS ---
+
+model Book {
+  id        String   @id @default(cuid())
+  title     String
+  author    String
+  coverUrl  String   @default("")
+  synopsis  String   @default("")
+  genre     String?  @default("")
+  createdAt DateTime @default(now())
+
+  @@unique([title, author])
+  @@index([title])
+  @@index([author])
+  @@index([genre])
+}
+
+// --- GROUPS ---
+
+model Group {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  ownerId     String
+  createdAt   DateTime @default(now())
+
+  memberships           Membership[]
+  invites               GroupInvite[]
+  joinRequests          JoinRequest[]
+  bookOfMonthSelections GroupBookOfMonthSelection[]
+}
+
+model Membership {
+  id      String @id @default(cuid())
+  groupId String
+  userId  String
+  role    String
+
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, userId])
+  @@index([userId])
+}
+
+model JoinRequest {
+  id        String   @id @default(cuid())
+  groupId   String
+  userId    String
+  status    String
+  createdAt DateTime @default(now())
+
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, userId, status])
+  @@index([userId])
+}
+
+model GroupInvite {
+  id              String    @id @default(cuid())
+  groupId         String
+  createdByUserId String
+  createdAt       DateTime  @default(now())
+  revokedAt       DateTime?
+
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@index([groupId])
+  @@index([revokedAt])
+}
+
+model GroupBookOfMonthSelection {
+  id          String   @id @default(cuid())
+  groupId     String
+  bookId      String
+  setByUserId String
+  setAt       DateTime @default(now())
+
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@index([groupId, setAt])
+  @@index([bookId])
+}
+
+model ClubBook {
+  id              String    @id @default(cuid())
+  bookId          String
+  title           String
+  author          String
+  coverUrl        String    @default("")
+  colorKey        String
+  city            String    @default("FORTALEZA")
+  month           Int
+  year            Int
+  isActive        Boolean   @default(false)
+  createdByUserId String
+  createdAt       DateTime  @default(now())
+  activatedAt     DateTime?
+
+  messages  ClubBookMessage[]
+  artifacts ClubBookArtifact[]
+
+  @@index([createdAt])
+  @@index([isActive])
+  @@index([year, month, city])
+}
+
+model ClubBookMessage {
+  id         String   @id @default(cuid())
+  clubBookId String
+  userId     String
+  text       String
+  createdAt  DateTime @default(now())
+
+  clubBook ClubBook @relation(fields: [clubBookId], references: [id], onDelete: Cascade)
+
+  @@index([clubBookId, createdAt])
+  @@index([userId])
+}
+
+model ClubBookArtifact {
+  id               String   @id @default(cuid())
+  clubBookId       String
+  fileName         String
+  mimeType         String
+  size             Int
+  url              String
+  uploadedByUserId String
+  createdAt        DateTime @default(now())
+
+  clubBook ClubBook @relation(fields: [clubBookId], references: [id], onDelete: Cascade)
+
+  @@index([clubBookId, createdAt])
+  @@index([uploadedByUserId])
+}
+
+// Channels & Messages (initially raw SQL in microservices, now properly modeled)
+
+model Channel {
+  id        String   @id
+  name      String
+  type      String
+  cityCode  String?
+  createdAt DateTime @default(now())
+
+  messages ChannelMessage[]
+}
+
+model ChannelMessage {
+  id        String   @id
+  channelId String
+  userId    String
+  text      String
+  createdAt DateTime @default(now())
+
+  channel Channel @relation(fields: [channelId], references: [id], onDelete: Cascade)
+
+  @@index([channelId, createdAt])
+}
+
+model DirectMessage {
+  id         String   @id
+  fromUserId String
+  toUserId   String
+  text       String
+  createdAt  DateTime @default(now())
+
+  @@index([fromUserId, toUserId])
+}
+
+// --- FEED ---
+
+model Post {
+  id         String   @id @default(cuid())
+  userId     String
+  text       String
+  imageUrl   String?
+  clubBookId String?
+  createdAt  DateTime @default(now())
+
+  likes    Like[]
+  comments Comment[]
+  images   PostImage[]
+
+  @@index([createdAt])
+  @@index([userId])
+  @@index([clubBookId])
+}
+
+model PostImage {
+  id     String @id @default(cuid())
+  postId String
+  url    String
+  index  Int    @default(0)
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([postId])
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  postId    String
+  userId    String
+  type      String   @default("like")
+  createdAt DateTime @default(now())
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, userId])
+  @@index([userId])
+  @@index([postId, type])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  postId    String
+  userId    String
+  text      String
+  createdAt DateTime @default(now())
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([createdAt])
+  @@index([userId])
+}
+
+model Poll {
+  id          String   @id @default(cuid())
+  clubBookId  String
+  userId      String
+  question    String
+  description String?
+  imageUrl    String?
+  multiChoice Boolean  @default(false)
+  publicVotes Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  options PollOption[]
+  votes   PollVote[]
+
+  @@index([clubBookId])
+  @@index([createdAt])
+}
+
+model PollOption {
+  id       String  @id @default(cuid())
+  pollId   String
+  text     String
+  imageUrl String?
+  index    Int
+
+  poll  Poll       @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  votes PollVote[]
+
+  @@index([pollId])
+}
+
+model PollVote {
+  id        String   @id @default(cuid())
+  pollId    String
+  optionId  String
+  userId    String
+  createdAt DateTime @default(now())
+
+  poll   Poll       @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  option PollOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
+
+  @@unique([pollId, userId, optionId])
+  @@index([pollId])
+  @@index([optionId])
+  @@index([userId])
+}

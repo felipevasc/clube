@@ -121,8 +121,8 @@ export default function Files() {
       <div className="px-4 pt-4 pb-2">
         <div className="flex items-end justify-between gap-3">
           <div>
-            <div className="text-sm font-black">Arquivos</div>
-            <div className="mt-1 text-xs text-neutral-600">Entre em um livro para ver os arquivos</div>
+            <div className="text-sm font-black">Repositórios</div>
+            <div className="mt-1 text-xs text-neutral-600">Selecione um repositório para ver os arquivos</div>
           </div>
           <div className="text-xs text-neutral-600 tabular-nums">{rows.length}</div>
         </div>
@@ -130,63 +130,55 @@ export default function Files() {
         {error ? <div className="mt-3 text-sm text-red-600">{error}</div> : null}
       </div>
 
-      <div className="mt-2 border-t border-black/5 divide-y divide-black/5">
+      <div className="px-4 pb-4 grid grid-cols-2 gap-3">
         {rows.map((b) => {
           const hex = clubColorHex(b.colorKey);
           const meta = metaByBook[b.id] || { count: 0, lastAt: "" };
-          const time = meta.lastAt ? fmtListTime(meta.lastAt) : fmtListTime(b.activatedAt || b.createdAt);
+          // const time = meta.lastAt ? fmtListTime(meta.lastAt) : fmtListTime(b.activatedAt || b.createdAt);
+
           return (
             <button
               key={b.id}
               onClick={() => nav(`/arquivos/${encodeURIComponent(String(b.id))}`)}
-              className="w-full text-left px-4 py-3 bg-transparent hover:bg-white/70 active:bg-white/80 transition"
-              style={{ minHeight: 72 }}
+              className="group relative w-full aspect-[10/9] flex flex-col items-center justify-center p-3 bg-white border border-black/10 rounded-3xl shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] active:scale-[0.98] transition overflow-hidden"
             >
-              <div className="flex items-center gap-3">
-                <div
-                  className="shrink-0 w-[52px] h-[52px] rounded-2xl border border-black/10 shadow-card grid place-items-center"
-                  style={{
-                    background:
-                      `radial-gradient(240px 90px at 20% 0%, ${hexWithAlpha(hex, "30")}, transparent 60%), ` +
-                      `linear-gradient(180deg, rgba(255,255,255,0.86), rgba(255,255,255,0.86))`,
-                  }}
-                  aria-hidden="true"
-                >
-                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-                    <path
-                      d="M3.75 7.5a2.25 2.25 0 0 1 2.25-2.25h4.5l1.5 1.5H18A2.25 2.25 0 0 1 20.25 9v7.5A2.25 2.25 0 0 1 18 18.75H6A2.25 2.25 0 0 1 3.75 16.5V7.5z"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </div>
+              {/* Background Decoration */}
+              <div
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-500"
+                style={{
+                  background: `radial-gradient(circle at 50% 100%, ${hexWithAlpha(hex, "15")}, transparent 70%)`
+                }}
+              />
 
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="text-[15px] leading-tight font-black truncate">{b.title}</div>
-                    <div className="shrink-0 text-[11px] tabular-nums text-neutral-600">{time}</div>
-                  </div>
+              <div
+                className="relative shrink-0 w-14 h-14 mb-3 rounded-2xl border border-black/5 shadow-sm grid place-items-center"
+                style={{
+                  background:
+                    `linear-gradient(135deg, ${hexWithAlpha(hex, "20")}, ${hexWithAlpha(hex, "05")})`,
+                  color: hex
+                }}
+              >
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" className="drop-shadow-sm opacity-90">
+                  <path d="M19.5 21a3 3 0 0 0 3-3v-4.5a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3V18a3 3 0 0 0 3 3h15ZM1.5 10.146V6a3 3 0 0 1 3-3h5.379a2.25 2.25 0 0 1 1.59.659l2.122 2.121c.14.141.331.22.53.22H19.5a3 3 0 0 1 3 3v1.146A4.483 4.483 0 0 0 19.5 9h-15a4.483 4.483 0 0 0-3 1.146Z" />
+                </svg>
+              </div>
 
-                  <div className="mt-1 flex items-center justify-between gap-2">
-                    <div className="flex-1 min-w-0 text-[13px] text-neutral-700 truncate">{b.author}</div>
-                    <div className="shrink-0 flex items-center gap-2">
-                      <div className="text-[11px] text-neutral-600 tabular-nums">{meta.count} arquivo(s)</div>
-                      {b.isActive ? (
-                        <div className="w-2 h-2 rounded-full bg-sun-500" title="Livro ativo" aria-label="Livro ativo" />
-                      ) : null}
-                    </div>
-                  </div>
+              <div className="relative w-full text-center">
+                <div className="text-[14px] leading-tight font-bold text-neutral-900 truncate px-1">{b.title}</div>
+                <div className="mt-1 text-[11px] text-neutral-500 truncate px-2">{b.author}</div>
+              </div>
 
-                  {loadingMeta ? <div className="mt-1 text-[11px] text-neutral-500">Atualizando...</div> : null}
-                </div>
+              <div className="mt-2 text-[10px] font-medium text-neutral-400 bg-neutral-50 px-2 py-0.5 rounded-full border border-black/5">
+                {meta.count} itens
               </div>
             </button>
           );
         })}
 
         {!loading && rows.length === 0 ? (
-          <div className="px-4 py-6 text-sm text-neutral-600">Nenhum livro ainda.</div>
+          <div className="col-span-2 py-10 text-center text-sm text-neutral-500">
+            Nenhum repositório encontrado.
+          </div>
         ) : null}
       </div>
     </div>

@@ -14,6 +14,7 @@ type DevUser = {
 export default function Login() {
   const [username, setU] = useState("");
   const [name, setName] = useState("");
+  const [cities, setCities] = useState<string[]>([]);
   const [selectedUserId, setSelectedUserId] = useState("");
   const [devUsers, setDevUsers] = useState<DevUser[]>([]);
   const [devUsersLoading, setDevUsersLoading] = useState(false);
@@ -181,6 +182,36 @@ export default function Login() {
                   />
                 </div>
 
+                <div className="mt-3">
+                  <div className="text-xs font-semibold text-neutral-600 mb-2">Cidades</div>
+                  <div className="flex gap-4">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={cities.includes("FORTALEZA")}
+                        onChange={(e) => {
+                          if (e.target.checked) setCities((p) => [...p, "FORTALEZA"]);
+                          else setCities((p) => p.filter((c) => c !== "FORTALEZA"));
+                        }}
+                        className="rounded border-gray-300 text-sun-500 focus:ring-sun-200"
+                      />
+                      <span className="text-sm">Fortaleza</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={cities.includes("BRASILIA")}
+                        onChange={(e) => {
+                          if (e.target.checked) setCities((p) => [...p, "BRASILIA"]);
+                          else setCities((p) => p.filter((c) => c !== "BRASILIA"));
+                        }}
+                        className="rounded border-gray-300 text-sun-500 focus:ring-sun-200"
+                      />
+                      <span className="text-sm">Brasília</span>
+                    </label>
+                  </div>
+                </div>
+
                 <PrimaryButton
                   disabled={loading}
                   onClick={async () => {
@@ -190,7 +221,7 @@ export default function Login() {
                       const u = username.trim();
                       await api("/login", {
                         method: "POST",
-                        body: JSON.stringify({ username: u }),
+                        body: JSON.stringify({ username: u, cities }),
                       });
                       const n = name.trim();
                       if (n) {

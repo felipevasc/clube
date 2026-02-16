@@ -2,9 +2,10 @@
 import { useNavigate } from "react-router-dom";
 import { api } from "../../lib/api";
 import { clubColorHex } from "../lib/clubColors";
+import Avatar from "../components/Avatar";
 
 type User = { id: string; name: string; avatarUrl?: string; cities?: string[] };
-type ClubBook = { id: string; bookId: string; title: string; author: string; colorKey: string; isActive: boolean; createdAt: string; activatedAt?: string | null };
+type ClubBook = { id: string; bookId: string; title: string; author: string; coverUrl?: string; colorKey: string; isActive: boolean; createdAt: string; activatedAt?: string | null };
 type Channel = { id: string; name: string; type: string; cityCode?: string | null };
 type DirectMessage = { id: string; fromUserId: string; toUserId: string; text: string; createdAt: string };
 type Msg = { id: string; text: string; createdAt: string; userId: string };
@@ -68,9 +69,24 @@ export default function Messages() {
     });
   }, [channels, viewer, activeTab]);
 
+  const getChannelImage = (c: Channel) => {
+    if (c.type === "GLOBAL" && c.name === "Geral") return "/images/groups/geral.png";
+    if (c.type === "CITY" && c.cityCode === "FORTALEZA") return "/images/groups/fortaleza.png";
+    if (c.type === "CITY" && c.cityCode === "BRASILIA") return "/images/groups/brasilia.png";
+    return null;
+  };
+
+
+  const getChannelDescription = (c: Channel) => {
+    if (c.type === "GLOBAL") return "Chat com todos os integrantes";
+    if (c.cityCode === "BRASILIA") return "Chat com integrantes de Brasília";
+    if (c.cityCode === "FORTALEZA") return "Chat com integrantes de Fortaleza";
+    return "Clique para entrar no chat";
+  };
+
   const tabs = [
     { id: "groups", label: "Grupos" },
-    { id: "individuals", label: "Indivíduos" },
+    { id: "individuals", label: "Individuais" },
     { id: "books", label: "Livros" },
   ] as const;
 
@@ -105,12 +121,18 @@ export default function Messages() {
               onClick={() => nav(`/mensagens/canal/${c.id}`)}
               className="w-full text-left px-4 py-4 flex items-center gap-4 hover:bg-white/50 transition"
             >
-              <div className="w-12 h-12 rounded-full bg-neutral-100 flex items-center justify-center font-black text-neutral-400 border border-black/5">
-                #
+              <div className="shrink-0">
+                {getChannelImage(c) ? (
+                  <img src={getChannelImage(c)!} className="w-12 h-12 rounded-2xl object-cover border border-black/5" alt={c.name} />
+                ) : (
+                  <div className="w-12 h-12 rounded-2xl bg-neutral-100 flex items-center justify-center font-black text-neutral-400 border border-black/5">
+                    #
+                  </div>
+                )}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="font-bold text-[15px]">{c.name}</div>
-                <div className="text-xs text-neutral-500 truncate">Clique para entrar no chat</div>
+                <div className="text-xs text-neutral-500 truncate">{getChannelDescription(c)}</div>
               </div>
             </button>
           ))}
@@ -121,8 +143,8 @@ export default function Messages() {
               onClick={() => nav(`/mensagens/dm/${u.id}`)}
               className="w-full text-left px-4 py-4 flex items-center gap-4 hover:bg-white/50 transition"
             >
-              <div className="w-12 h-12 rounded-full bg-sun-100 flex items-center justify-center font-black text-sun-600 border border-sun-200">
-                {u.name.slice(0, 1).toUpperCase()}
+              <div className="shrink-0">
+                <Avatar user={u} size={48} className="!rounded-full" />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="font-bold text-[15px]">{u.name}</div>
@@ -137,12 +159,17 @@ export default function Messages() {
               onClick={() => nav(`/mensagens/${b.id}`)}
               className="w-full text-left px-4 py-4 flex items-center gap-4 hover:bg-white/50 transition"
             >
-              <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center font-black text-blue-600 border border-blue-200">
-                {b.title.slice(0, 1).toUpperCase()}
-              </div>
+              {b.coverUrl ? (
+                <img src={b.coverUrl} className="w-12 h-[72px] object-cover rounded shadow-sm bg-neutral-100" alt={b.title} />
+              ) : (
+                <div className="w-12 h-[72px] rounded bg-blue-100 flex items-center justify-center font-black text-blue-600 border border-blue-200 shadow-sm">
+                  {b.title.slice(0, 1).toUpperCase()}
+                </div>
+              )}
               <div className="flex-1 min-w-0">
-                <div className="font-bold text-[15px]">{b.title}</div>
-                <div className="text-xs text-neutral-500 truncate">{b.author}</div>
+                <div className="font-bold text-[15px] leading-tight mb-0.5">{b.title}</div>
+                <div className="text-xs text-neutral-500 truncate mb-1">{b.author}</div>
+                <div className="text-[10px] uppercase font-bold text-blue-600 bg-blue-50 inline-block px-1.5 py-0.5 rounded">Grupo de Discussão</div>
               </div>
             </button>
           ))}
