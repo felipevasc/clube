@@ -398,6 +398,201 @@ export class GeminiService {
         }
     }
 
+    /**
+     * Generates an inspiration image from scratch based on a user prompt
+     * and the book's universe context (text-to-image, no input image needed).
+     */
+    async generateInspirationImage(params: {
+        userPrompt: string;
+        bookTitle: string;
+        bookAuthor: string;
+        bookSynopsis: string;
+        styleDescription?: string;
+        referenceImageUrls?: string[];
+    }): Promise<string> {
+        try {
+            // ---------------------------------------------------------
+            // STEP 1: Build a detailed visual generation prompt
+            // ---------------------------------------------------------
+            console.log(`[AI-Inspire] Step 1: Building visual prompt for "${params.bookTitle}" with user input: "${params.userPrompt.slice(0, 80)}..."`);
+
+            let visualPrompt = [
+                `Create an original illustration that belongs to the fictional universe of "${params.bookTitle}" by ${params.bookAuthor}.`,
+                `The image should depict: ${params.userPrompt}.`,
+                `The visual style, color palette, lighting, and atmosphere should feel diegetic — as if this scene was captured from inside the story world of "${params.bookTitle}".`,
+                params.bookSynopsis ? `Story context: ${params.bookSynopsis.slice(0, 250)}.` : "",
+                params.styleDescription ? `Additional style direction: ${params.styleDescription}.` : "",
+                "Use rich textures, cinematic composition, and cohesive color grading.",
+                "Do not add any text, logos, captions, watermarks, or typography.",
+                "The result should feel like a high-quality editorial photograph or illustration.",
+            ].filter(Boolean).join(" ");
+
+            // Try to enhance prompt with Gemini text model
+            const styleGoogleKeys = [process.env.GEMINI_API_KEY, process.env.GEMINI_API_KEY2]
+                .map((k) => (k || "").trim())
+                .filter(Boolean);
+            const geminiStyleModel = process.env.GEMINI_STYLE_MODEL?.trim() || "gemini-2.5-flash";
+
+            if (styleGoogleKeys.length > 0 && !this.disableGeminiTextStyle) {
+                const enhancePrompt = `
+                    I need you to write a detailed visual prompt for an AI image generator.
+                    
+                    CONTEXT:
+                    - Book: "${params.bookTitle}" by ${params.bookAuthor}
+                    - Synopsis: ${params.bookSynopsis.slice(0, 300)}
+                    ${params.styleDescription ? `- Style reference: ${params.styleDescription}` : ""}
+                    
+                    USER REQUEST: The user wants an image showing: "${params.userPrompt}"
+                    
+                    TASK:
+                    Write one detailed visual-description paragraph for an AI image generator.
+                    The image should feel like it exists INSIDE the universe of "${params.bookTitle}".
+                    Combine the user's request with the book's world seamlessly.
+                    Focus on:
+                    - Specific scene composition matching the user's request
+                    - Color palette and lighting consistent with the book's atmosphere
+                    - Textures, props, and environment details from the book's universe
+                    - Cinematic mood and emotional temperature
+                    - Make it feel diegetic, as if photographed inside the story world
+                    
+                    Do not add violence/NSFW. Output ONLY one paragraph, no bullets or extra notes.
+                `.trim();
+
+                for (let i = 0; i < styleGoogleKeys.length; i++) {
+                    try {
+                        const genAI = new GoogleGenerativeAI(styleGoogleKeys[i]);
+                        const textModel = genAI.getGenerativeModel({ model: geminiStyleModel });
+                        const result = await textModel.generateContent(enhancePrompt);
+                        const enhanced = result.response.text()?.trim();
+                        if (enhanced) {
+                            visualPrompt = enhanced;
+                            console.log(`[AI-Inspire] Step 1 Done. Enhanced prompt: "${visualPrompt.slice(0, 100)}..."`);
+                            break;
+                        }
+                    } catch (err: any) {
+                        console.warn(`[AI-Inspire] Step 1: Gemini enhancement failed on Key ${i + 1}: ${err.message || err}`);
+                    }
+                }
+            }
+
+            // ---------------------------------------------------------
+            // STEP 2: Generate the image (text-to-image)
+            // ---------------------------------------------------------
+            console.log("[AI-Inspire] Step 2: Generating image from prompt...");
+
+            const providerQueue = (process.env.AI_IMAGE_PROVIDER_QUEUE || "gemini")
+                .split(",").map((v) => v.trim().toLowerCase())
+                .filter((v): v is "openai" | "gemini" => v === "openai" || v === "gemini");
+            if (providerQueue.length === 0) providerQueue.push("gemini");
+
+            const googleKeys = [process.env.GEMINI_API_KEY, process.env.GEMINI_API_KEY2].filter(k => !!k).map(k => k!.trim());
+            const openaiKey = process.env.OPENAI_API_KEY?.trim();
+            const geminiImageModel = process.env.GEMINI_IMAGE_MODEL?.trim() || "gemini-2.5-flash-image";
+            const openaiImageModel = process.env.OPENAI_IMAGE_MODEL?.trim() || "gpt-image-1.5";
+
+            // Fetch style reference images if available
+            const styleImages = (
+                await Promise.all((params.referenceImageUrls || []).map(url => this.fetchImage(url)))
+            ).filter((img): img is EncodedImage => !!img);
+
+            const safetySettings = [
+                { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_NONE },
+                { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_NONE },
+                { category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, threshold: HarmBlockThreshold.BLOCK_NONE },
+                { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_NONE },
+            ];
+
+            let lastError: any = null;
+
+            for (const provider of providerQueue) {
+                // --- GEMINI ---
+                if (provider === "gemini") {
+                    for (let i = 0; i < googleKeys.length; i++) {
+                        const keyLabel = `Key ${i + 1}`;
+                        console.log(`[AI-Inspire] Trying ${geminiImageModel} with ${keyLabel}...`);
+                        try {
+                            const genAI = new GoogleGenerativeAI(googleKeys[i]);
+                            const model = genAI.getGenerativeModel({ model: geminiImageModel });
+                            const parts: any[] = [{ text: visualPrompt }];
+                            for (const si of styleImages) {
+                                parts.push({ inlineData: { mimeType: si.mimeType, data: si.data } });
+                            }
+
+                            const result = await model.generateContent({
+                                contents: [{ role: "user", parts }],
+                                safetySettings
+                            });
+
+                            const candidates = result.response.candidates;
+                            if (candidates?.[0]?.content?.parts) {
+                                for (const part of candidates[0].content.parts) {
+                                    if (part.inlineData) {
+                                        console.log(`[AI-Inspire] SUCCESS with ${geminiImageModel} on ${keyLabel}!`);
+                                        return `data:image/png;base64,${part.inlineData.data}`;
+                                    }
+                                }
+                            }
+                        } catch (err: any) {
+                            console.error(`[AI-Inspire] Error with ${geminiImageModel} (${keyLabel}):`, err.message || err);
+                            lastError = err;
+                            if (err?.status === 429) continue;
+                        }
+                    }
+                    continue;
+                }
+
+                // --- OPENAI ---
+                if (provider === "openai" && openaiKey) {
+                    console.log(`[AI-Inspire] Trying OpenAI ${openaiImageModel}...`);
+                    try {
+                        const form = new FormData();
+                        form.set("model", openaiImageModel);
+                        form.set("prompt", this.truncateUtf8(visualPrompt, 4000));
+                        form.set("n", "1");
+                        form.set("size", process.env.OPENAI_IMAGE_TOOL_SIZE?.trim() || "1024x1024");
+                        form.set("quality", process.env.OPENAI_IMAGE_TOOL_QUALITY?.trim() || "medium");
+                        form.set("response_format", "b64_json");
+
+                        const response = await fetch("https://api.openai.com/v1/images/generations", {
+                            method: "POST",
+                            headers: { "Authorization": `Bearer ${openaiKey}`, "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                model: openaiImageModel,
+                                prompt: this.truncateUtf8(visualPrompt, 4000),
+                                n: 1,
+                                size: process.env.OPENAI_IMAGE_TOOL_SIZE?.trim() || "1024x1024",
+                                quality: process.env.OPENAI_IMAGE_TOOL_QUALITY?.trim() || "medium",
+                                response_format: "b64_json"
+                            })
+                        });
+
+                        if (response.ok) {
+                            const data: any = await response.json();
+                            const b64 = data?.data?.[0]?.b64_json;
+                            if (b64) {
+                                console.log(`[AI-Inspire] SUCCESS with OpenAI ${openaiImageModel}!`);
+                                return `data:image/png;base64,${b64}`;
+                            }
+                        } else {
+                            const errText = await response.text().catch(() => "");
+                            console.error(`[AI-Inspire] OpenAI error ${response.status}: ${errText.slice(0, 200)}`);
+                            lastError = new Error(errText);
+                        }
+                    } catch (err: any) {
+                        console.error(`[AI-Inspire] OpenAI error:`, err.message || err);
+                        lastError = err;
+                    }
+                }
+            }
+
+            console.error("[AI-Inspire] All providers failed to generate image.");
+            throw lastError || new Error("Failed to generate inspiration image");
+        } catch (error) {
+            console.error("[AI-Inspire] Error:", error);
+            throw error;
+        }
+    }
+
     private async tryOpenAIImageEditsReference(params: {
         openaiKey: string;
         model: string;

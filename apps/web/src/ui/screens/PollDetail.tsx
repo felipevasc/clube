@@ -5,7 +5,7 @@ import Card from "../components/Card";
 import PrimaryButton from "../components/PrimaryButton";
 
 import { LuBookOpen } from "react-icons/lu";
-import BookReader from "../components/BookReader";
+import BookReader, { type RelatedData } from "../components/BookReader";
 
 type PollVoter = { id: string; name?: string };
 
@@ -127,6 +127,7 @@ export default function PollDetail() {
   const [canUserVote, setCanUserVote] = useState(true);
   const [currentUser, setCurrentUser] = useState<{ id: string; isAdmin: boolean; cities: string[] } | null>(null);
   const [viewingBook, setViewingBook] = useState<{ book: NonNullable<PollOption['book']>; initialRect: DOMRect | null } | null>(null);
+  const [bookRelatedData, setBookRelatedData] = useState<RelatedData | null>(null);
 
   const fetchPoll = async () => {
     if (!pollId) return;
@@ -365,6 +366,7 @@ export default function PollDetail() {
                           if (opt.book) {
                             const rect = e.currentTarget.parentElement?.firstElementChild?.getBoundingClientRect();
                             setViewingBook({ book: opt.book, initialRect: rect || null });
+                            api<RelatedData>(`/books/${opt.book.id}/related`).then(setBookRelatedData).catch(() => { });
                           }
                         }}
                         className="w-10 h-10 rounded-2xl bg-white border border-black/5 flex items-center justify-center text-neutral-400 hover:text-sun-600 hover:bg-sun-50 hover:border-sun-100 transition-all shadow-sm shrink-0"
@@ -442,8 +444,8 @@ export default function PollDetail() {
       <BookReader
         book={viewingBook?.book || null}
         initialRect={viewingBook?.initialRect || null}
-        onClose={() => setViewingBook(null)}
-
+        onClose={() => { setViewingBook(null); setBookRelatedData(null); }}
+        relatedData={bookRelatedData}
       />
     </div>
   );

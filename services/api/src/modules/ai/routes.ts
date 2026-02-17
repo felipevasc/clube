@@ -96,4 +96,62 @@ export function registerRoutes(app: Express) {
             res.status(500).json({ error: error.message || "Failed to transform image" });
         }
     });
+
+    app.post("/ai/generate-image", async (req, res) => {
+        const userId = getUserId(req);
+        if (!userId) return res.status(401).json({ error: "Unauthorized" });
+
+        const { prompt, clubBookId } = req.body;
+        if (!prompt || !clubBookId) {
+            return res.status(400).json({ error: "prompt and clubBookId are required" });
+        }
+
+        try {
+            const clubBook = await prisma.clubBook.findUnique({
+                where: { id: clubBookId }
+            });
+            if (!clubBook) return res.status(404).json({ error: "Club book not found" });
+
+            const book = await prisma.book.findUnique({
+                where: { id: clubBook.bookId },
+                include: { styleImages: true }
+            });
+            if (!book) return res.status(404).json({ error: "Internal book reference not found" });
+
+            const baseUrl = `${req.protocol}://${req.get("host")}`;
+            const fullStyleImageUrls = book.styleImages.map(si =>
+                si.url.startsWith("/") ? `${baseUrl}${si.url}` : si.url
+            );
+
+            const dataUri = await aiService.generateInspirationImage({
+                userPrompt: prompt,
+                bookTitle: book.title,
+                bookAuthor: book.author,
+                bookSynopsis: book.synopsis,
+                styleDescription: book.aiStyleDescription,
+                referenceImageUrls: fullStyleImageUrls
+            });
+
+            // Save the generated image to disk
+            if (dataUri.startsWith("data:image/")) {
+                const [header, base64Data] = dataUri.split(",");
+                const mime = header.split(":")[1].split(";")[0];
+                const ext = mime.split("/")[1] || "png";
+                const buffer = Buffer.from(base64Data, "base64");
+
+                const key = `ai_gen_${crypto.randomBytes(12).toString("hex")}.${ext}`;
+                const dst = path.join(UPLOAD_DIR, key);
+                await fsp.writeFile(dst, buffer);
+
+                return res.json({
+                    url: `/api/media/${encodeURIComponent(key)}`
+                });
+            }
+
+            res.json({ url: dataUri });
+        } catch (error: any) {
+            console.error("AI Generate Image Route Error:", error);
+            res.status(500).json({ error: error.message || "Failed to generate image" });
+        }
+    });
 }

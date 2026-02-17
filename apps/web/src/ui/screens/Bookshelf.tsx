@@ -3,7 +3,7 @@ import Book3D from "../components/Book3D";
 import { api } from "../../lib/api";
 import BookshelfAddModal from "./BookshelfAddModal";
 import ClubBookAddModal from "./ClubBookAddModal";
-import BookReader from "../components/BookReader";
+import BookReader, { type RelatedData } from "../components/BookReader";
 import ConfirmModal from "../components/ConfirmModal";
 
 type Book = {
@@ -177,6 +177,7 @@ export default function Bookshelf() {
   const [addClubBookCity, setAddClubBookCity] = useState<string | null>(null);
   const [selectedBook, setSelectedBook] = useState<{ book: Book | ClubBook; initialRect: DOMRect | null } | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<{ book: Book | ClubBook; type: "book" | "club-book" } | null>(null);
+  const [relatedData, setRelatedData] = useState<RelatedData | null>(null);
 
   useEffect(() => {
     loadData();
@@ -277,10 +278,11 @@ export default function Bookshelf() {
       <BookReader
         book={selectedBook?.book || null}
         initialRect={selectedBook?.initialRect || null}
-        onClose={() => setSelectedBook(null)}
+        onClose={() => { setSelectedBook(null); setRelatedData(null); }}
         currentUserId={currentUser?.id}
         isAdmin={currentUser?.isAdmin}
         onDelete={selectedBook?.book ? (() => handleDelete(selectedBook.book, lidosFortaleza.find(b => b.bookId === selectedBook.book.id) || lidosBrasilia.find(b => b.bookId === selectedBook.book.id) ? "club-book" : "book")) : undefined}
+        relatedData={relatedData}
       />
 
       <BookshelfAddModal
@@ -310,7 +312,11 @@ export default function Bookshelf() {
                 title="Fortaleza"
                 books={lidosFortaleza}
                 onAdd={() => setAddClubBookCity("FORTALEZA")}
-                onSelectBook={(book, rect) => setSelectedBook({ book, initialRect: rect })}
+                onSelectBook={(book, rect) => {
+                  setSelectedBook({ book, initialRect: rect });
+                  const bookId = book.bookId || book.id;
+                  api<RelatedData>(`/books/${bookId}/related`).then(setRelatedData).catch(() => { });
+                }}
                 addVariant="mint"
               />
 
@@ -318,7 +324,11 @@ export default function Bookshelf() {
                 title="Brasília"
                 books={lidosBrasilia}
                 onAdd={() => setAddClubBookCity("BRASILIA")}
-                onSelectBook={(book, rect) => setSelectedBook({ book, initialRect: rect })}
+                onSelectBook={(book, rect) => {
+                  setSelectedBook({ book, initialRect: rect });
+                  const bookId = book.bookId || book.id;
+                  api<RelatedData>(`/books/${bookId}/related`).then(setRelatedData).catch(() => { });
+                }}
                 addVariant="azure"
               />
 
@@ -326,7 +336,11 @@ export default function Bookshelf() {
                 title="Romance"
                 books={indRomance}
                 onAdd={() => setAddContext({ genre: "ROMANCE" })}
-                onSelectBook={(book, rect) => setSelectedBook({ book, initialRect: rect })}
+                onSelectBook={(book, rect) => {
+                  setSelectedBook({ book, initialRect: rect });
+                  const bookId = book.id;
+                  api<RelatedData>(`/books/${bookId}/related`).then(setRelatedData).catch(() => { });
+                }}
                 addVariant="rose"
               />
 
@@ -334,7 +348,11 @@ export default function Bookshelf() {
                 title="Suspense"
                 books={indSuspense}
                 onAdd={() => setAddContext({ genre: "SUSPENSE" })}
-                onSelectBook={(book, rect) => setSelectedBook({ book, initialRect: rect })}
+                onSelectBook={(book, rect) => {
+                  setSelectedBook({ book, initialRect: rect });
+                  const bookId = book.id;
+                  api<RelatedData>(`/books/${bookId}/related`).then(setRelatedData).catch(() => { });
+                }}
                 addVariant="yellow"
               />
             </div>
