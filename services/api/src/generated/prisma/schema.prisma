@@ -7,25 +7,26 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = "file:./dev.db"
+  url      = env("DATABASE_URL")
 }
 
 // --- USERS ---
 
 model User {
-  id                String     @id
+  id                String           @id
   name              String
   bio               String
   avatarUrl         String
-  coverUrl          String     @default("")
-  isAdmin           Boolean    @default(false)
-  passwordHash      String     @default("")
+  coverUrl          String           @default("")
+  isAdmin           Boolean          @default(false)
+  passwordHash      String           @default("")
   passwordResetCode String?
-  createdAt         DateTime   @default(now())
-  updatedAt         DateTime   @updatedAt
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
   cities            UserCity[]
-  createdBooks      Book[]     @relation("BookCreator")
-  createdClubBooks  ClubBook[] @relation("ClubBookCreator")
+  createdBooks      Book[]           @relation("BookCreator")
+  createdClubBooks  ClubBook[]       @relation("ClubBookCreator")
+  clubEventPhotos   ClubEventPhoto[]
 }
 
 model Invitation {
@@ -407,6 +408,7 @@ model ClubEventPhoto {
   createdAt DateTime @default(now())
 
   event ClubEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user  User      @relation(fields: [userId], references: [id])
 
   @@index([eventId])
   @@index([userId])

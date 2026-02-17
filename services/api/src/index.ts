@@ -107,11 +107,25 @@ registerUploadRoutes(apiRouter as any);
 registerEventRoutes(apiRouter as any);
 registerAiRoutes(apiRouter as any);
 
-// Mount at /api
+// Mount API under /api
 app.use("/api", apiRouter);
 
-// Also mount at / for convenience/compatibility if accessed directly without proxy
-app.use("/", apiRouter);
+// Optional legacy mode: expose API routes also at root (disabled by default in production deploys).
+if (String(process.env.ENABLE_LEGACY_ROOT_API || "").toLowerCase() === "true") {
+    app.use("/", apiRouter);
+}
+
+// Serve frontend (Render single-service deployment)
+const webDistDir = path.resolve(process.env.WEB_DIST_DIR || path.resolve(process.cwd(), "../../apps/web/dist"));
+if (fs.existsSync(webDistDir)) {
+    app.use(express.static(webDistDir));
+    app.get("*", (req, res, next) => {
+        if (req.path.startsWith("/api") || req.path === "/health") return next();
+        res.sendFile(path.join(webDistDir, "index.html"));
+    });
+} else {
+    console.warn(`[web] dist not found at ${webDistDir}; serving API only`);
+}
 
 // Global error handler
 app.use((err: any, req: any, res: any, next: any) => {
