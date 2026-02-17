@@ -124,8 +124,19 @@ exports.Prisma.UserScalarFieldEnum = {
   bio: 'bio',
   avatarUrl: 'avatarUrl',
   coverUrl: 'coverUrl',
+  isAdmin: 'isAdmin',
+  passwordHash: 'passwordHash',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.InvitationScalarFieldEnum = {
+  id: 'id',
+  city: 'city',
+  createdBy: 'createdBy',
+  isUsed: 'isUsed',
+  usedBy: 'usedBy',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.UserCityScalarFieldEnum = {
@@ -140,8 +151,21 @@ exports.Prisma.BookScalarFieldEnum = {
   author: 'author',
   coverUrl: 'coverUrl',
   synopsis: 'synopsis',
-  genre: 'genre',
+  aiStyleDescription: 'aiStyleDescription',
+  createdByUserId: 'createdByUserId',
+  indicationComment: 'indicationComment',
   createdAt: 'createdAt'
+};
+
+exports.Prisma.BookStyleImageScalarFieldEnum = {
+  id: 'id',
+  bookId: 'bookId',
+  url: 'url'
+};
+
+exports.Prisma.CategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name'
 };
 
 exports.Prisma.GroupScalarFieldEnum = {
@@ -195,6 +219,7 @@ exports.Prisma.ClubBookScalarFieldEnum = {
   year: 'year',
   isActive: 'isActive',
   createdByUserId: 'createdByUserId',
+  indicationComment: 'indicationComment',
   createdAt: 'createdAt',
   activatedAt: 'activatedAt'
 };
@@ -302,6 +327,44 @@ exports.Prisma.PollVoteScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.ClubEventScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  city: 'city',
+  location: 'location',
+  addressStreet: 'addressStreet',
+  addressNumber: 'addressNumber',
+  addressDistrict: 'addressDistrict',
+  addressCity: 'addressCity',
+  addressState: 'addressState',
+  addressZip: 'addressZip',
+  latitude: 'latitude',
+  longitude: 'longitude',
+  startAt: 'startAt',
+  endAt: 'endAt',
+  createdById: 'createdById',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ClubEventParticipantScalarFieldEnum = {
+  id: 'id',
+  eventId: 'eventId',
+  userId: 'userId',
+  status: 'status',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ClubEventPhotoScalarFieldEnum = {
+  id: 'id',
+  eventId: 'eventId',
+  userId: 'userId',
+  url: 'url',
+  caption: 'caption',
+  type: 'type',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -315,8 +378,11 @@ exports.Prisma.NullsOrder = {
 
 exports.Prisma.ModelName = {
   User: 'User',
+  Invitation: 'Invitation',
   UserCity: 'UserCity',
   Book: 'Book',
+  BookStyleImage: 'BookStyleImage',
+  Category: 'Category',
   Group: 'Group',
   Membership: 'Membership',
   JoinRequest: 'JoinRequest',
@@ -334,7 +400,10 @@ exports.Prisma.ModelName = {
   Comment: 'Comment',
   Poll: 'Poll',
   PollOption: 'PollOption',
-  PollVote: 'PollVote'
+  PollVote: 'PollVote',
+  ClubEvent: 'ClubEvent',
+  ClubEventParticipant: 'ClubEventParticipant',
+  ClubEventPhoto: 'ClubEventPhoto'
 };
 
 /**

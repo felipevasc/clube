@@ -14,11 +14,17 @@ export default function Book3D({
   href,
   className,
   style,
+  ribbonText,
+  ribbonColor,
+  ribbonTextColor,
 }: {
   book: Book3DModel;
   href?: string;
   className?: string;
   style?: CSSProperties;
+  ribbonText?: string;
+  ribbonColor?: string;
+  ribbonTextColor?: string;
 }) {
   const accent = bookAccentHex(book.title);
   const initial = bookInitial(book.title);
@@ -30,7 +36,7 @@ export default function Book3D({
 
   const mergedStyle = {
     ["--book-accent" as any]: accent,
-    transform: `rotateZ(${rotateDeg}deg)`,
+    ["--random-rot" as any]: `${rotateDeg}deg`,
     ...(style || {}),
   } as CSSProperties;
   const cls = `book-3d ${className || ""}`.trim();
@@ -50,6 +56,21 @@ export default function Book3D({
           </div>
         )}
       </div>
+      {ribbonText && (
+        <div className="book-3d__ribbon-container">
+          <div
+            className="book-3d__ribbon"
+            style={{
+              backgroundColor: ribbonColor || "#ef4444",
+              color: ribbonTextColor || "#1a1a1a"
+            }}
+          >
+            {ribbonText.slice(0, 3).toUpperCase().split("").map((char, i) => (
+              <span key={i}>{char}</span>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 

@@ -37,6 +37,11 @@ function eventTargets(): string[] {
         .filter(Boolean);
 }
 
+async function assertAdmin(username: string): Promise<boolean> {
+    const u = await prisma.user.findUnique({ where: { id: username }, select: { isAdmin: true } });
+    return !!u?.isAdmin;
+}
+
 async function assertOwner(username: string, groupId: string): Promise<boolean> {
     const g = await prisma.group.findUnique({ where: { id: groupId } });
     return !!g && g.ownerId === username;
@@ -76,19 +81,7 @@ export function registerRoutes(app: Express) {
         }
     })();
 
-    // Express 4 does not automatically handle async errors. Wrap handlers so any
-    // thrown/rejected error goes to the error middleware instead of crashing the process.
-    const ah = (fn: any) => (req: any, res: any, next: any) => Promise.resolve(fn(req, res, next)).catch(next);
-    for (const m of ["get", "post", "put", "delete", "patch"] as const) {
-        const orig = (app as any)[m].bind(app);
-        (app as any)[m] = (...args: any[]) => {
-            // Preserve Express getter behavior: app.get('env') etc.
-            if (args.length === 1) return orig(args[0]);
-            const [path, ...handlers] = args;
-            const wrapped = handlers.map((h) => (typeof h === "function" ? ah(h) : h));
-            return orig(path, ...wrapped);
-        };
-    }
+
 
     app.get("/groups", async (_req, res) => {
         const username = getUsername(_req);
@@ -459,11 +452,17 @@ export function registerRoutes(app: Express) {
         const city = req.query.city ? String(req.query.city) : undefined;
         const clubBooks = await prisma.clubBook.findMany({
             where: city ? { city } : undefined,
+            include: {
+                createdByUser: { select: { id: true, name: true, avatarUrl: true } },
+                book: {
+                    include: { categories: true }
+                }
+            },
             orderBy: { createdAt: "desc" },
             take: 60,
         });
         res.json({
-            clubBooks: clubBooks.map((b) => ({
+            clubBooks: clubBooks.map((b: any) => ({
                 id: b.id,
                 bookId: b.bookId,
                 title: b.title,
@@ -475,6 +474,10 @@ export function registerRoutes(app: Express) {
                 year: b.year,
                 createdByUserId: b.createdByUserId,
                 createdAt: b.createdAt,
+                createdByUser: b.createdByUser,
+                indicationComment: b.indicationComment,
+                synopsis: b.book?.synopsis || "", // Add synopsis from related book
+                genre: b.book?.categories?.[0]?.name || "", // Add genre from categories
             })),
         });
     });
@@ -518,6 +521,9 @@ export function registerRoutes(app: Express) {
 
         const active = await prisma.clubBook.findFirst({
             where: { city, month, year },
+            include: {
+                createdByUser: { select: { id: true, name: true, avatarUrl: true } }
+            },
             orderBy: { createdAt: "desc" },
         });
 
@@ -535,6 +541,8 @@ export function registerRoutes(app: Express) {
                 year: active.year,
                 createdByUserId: active.createdByUserId,
                 createdAt: active.createdAt,
+                createdByUser: active.createdByUser,
+                indicationComment: active.indicationComment,
             },
         });
     });
@@ -544,18 +552,23 @@ export function registerRoutes(app: Express) {
         if (!username) return res.status(401).json({ error: "missing x-username" });
         const input = ClubBookCreateSchema.parse(req.body);
 
+        // Optional: Check if user is allowed to add club books (e.g. admin or specific role)
+        // For now allowing any user
+
         const clubBook = await prisma.clubBook.create({
             data: {
                 bookId: input.bookId,
                 title: input.title,
                 author: input.author,
-                coverUrl: input.coverUrl,
+                coverUrl: input.coverUrl || "",
                 colorKey: input.colorKey,
                 city: input.city,
                 month: input.month,
                 year: input.year,
                 createdByUserId: username,
-            },
+                indicationComment: input.indicationComment || "",
+                isActive: false // Default to false, active is set by logic or admin
+            }
         });
 
         const env = makeEventEnvelope({
@@ -565,20 +578,27 @@ export function registerRoutes(app: Express) {
         });
         await publishEvent(env, eventTargets());
 
-        res.status(201).json({
-            clubBook: {
-                id: clubBook.id,
-                bookId: clubBook.bookId,
-                title: clubBook.title,
-                author: clubBook.author,
-                colorKey: clubBook.colorKey,
-                city: clubBook.city,
-                month: clubBook.month,
-                year: clubBook.year,
-                createdByUserId: clubBook.createdByUserId,
-                createdAt: clubBook.createdAt,
-            },
-        });
+        // Auto-activate if current month/year matches? Or just let it be.
+
+        res.status(201).json({ clubBook });
+    });
+
+    app.delete("/club-books/:id", async (req, res) => {
+        const username = getUsername(req);
+        if (!username) return res.status(401).json({ error: "missing x-username" });
+
+        const user = await prisma.user.findUnique({ where: { id: username } });
+        if (!user?.isAdmin) return res.status(403).json({ error: "admin only" });
+
+        const id = String(req.params.id);
+
+        try {
+            await prisma.clubBook.delete({ where: { id } });
+            res.json({ ok: true });
+        } catch (e: any) {
+            if (String(e?.code || "") === "P2025") return res.status(404).json({ error: "club book not found" });
+            throw e;
+        }
     });
 
     app.get("/club-books/:id/messages", async (req, res) => {
@@ -838,5 +858,54 @@ export function registerRoutes(app: Express) {
                 createdAt: artifact.createdAt,
             },
         });
+    });
+
+    // Message Deletion
+    app.delete("/club-books/messages/:id", async (req, res) => {
+        const username = getUsername(req);
+        if (!username) return res.status(401).json({ error: "missing x-username" });
+        const id = req.params.id;
+
+        const msg = await prisma.clubBookMessage.findUnique({ where: { id } });
+        if (!msg) return res.status(404).json({ error: "message not found" });
+
+        const isAdmin = await assertAdmin(username);
+        if (!isAdmin && msg.userId !== username) return res.status(403).json({ error: "forbidden" });
+
+        await prisma.clubBookMessage.delete({ where: { id } });
+        res.status(204).send();
+    });
+
+    app.delete("/channels/messages/:id", async (req, res) => {
+        const username = getUsername(req);
+        if (!username) return res.status(401).json({ error: "missing x-username" });
+        const id = req.params.id;
+
+        const msg = await prisma.channelMessage.findUnique({ where: { id } });
+        if (!msg) return res.status(404).json({ error: "message not found" });
+
+        const isAdmin = await assertAdmin(username);
+        if (!isAdmin && msg.userId !== username) return res.status(403).json({ error: "forbidden" });
+
+        await prisma.channelMessage.delete({ where: { id } });
+        res.status(204).send();
+    });
+
+    app.delete("/direct-messages/:id", async (req, res) => {
+        const username = getUsername(req);
+        if (!username) return res.status(401).json({ error: "missing x-username" });
+        const id = req.params.id;
+
+        const msg = await prisma.directMessage.findUnique({ where: { id } });
+        if (!msg) return res.status(404).json({ error: "message not found" });
+
+        // For DM, only the sender or an admin can delete their own view? 
+        // Typically DM deletion is individual, but here we delete the record.
+        // So only sender or admin.
+        const isAdmin = await assertAdmin(username);
+        if (!isAdmin && msg.fromUserId !== username) return res.status(403).json({ error: "forbidden" });
+
+        await prisma.directMessage.delete({ where: { id } });
+        res.status(204).send();
     });
 }

@@ -4,6 +4,7 @@ import { api } from "../../lib/api";
 import BookshelfAddModal from "./BookshelfAddModal";
 import ClubBookAddModal from "./ClubBookAddModal";
 import BookReader from "../components/BookReader";
+import ConfirmModal from "../components/ConfirmModal";
 
 type Book = {
   id: string;
@@ -23,18 +24,25 @@ type ClubBook = {
   city: string;
   month: number;
   year: number;
+  genre?: string;
+  synopsis?: string;
+  indicationComment?: string;
+  createdAt: string;
+  createdByUser?: { id: string; name: string; avatarUrl?: string };
 };
 
 function HorizontalShelf({
   title,
   books,
   onAdd,
-  onSelectBook
+  onSelectBook,
+  addVariant = "yellow"
 }: {
   title: string;
   books: any[];
   onAdd: () => void;
-  onSelectBook: (book: any) => void;
+  onSelectBook: (book: any, rect: DOMRect) => void;
+  addVariant?: "yellow" | "rose" | "mint" | "azure";
 }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -61,51 +69,68 @@ function HorizontalShelf({
   };
 
   return (
-    <div className="relative">
-      <div className="shelf relative overflow-visible !pb-10">
+    <div className="shelf-wrapper">
+      <div className="shelf-row">
         {/* Subtle Engraved Title at the top-center of the inner shelf back-wall */}
-        <div className="absolute top-2 left-0 right-0 flex justify-center pointer-events-none select-none z-0">
-          <h3 className="text-[14px] sm:text-xs font-black uppercase tracking-[0.3em] text-black/40 pointer-events-none"
-            style={{
-              // Improved "Baixo Relevo" (Engraved) effect: 
-              // Darker shadow on top/left, subtle highlight on bottom/right
-              textShadow: '-1.5px -1.5px 2px rgba(0,0,0,0.5), 0.5px 0.5px 0.5px rgba(255,255,255,0.08)',
-              opacity: 0.65
-            }}>
+        <div className="shelf-title-container">
+          <h3 className="shelf-title">
             {title}
           </h3>
         </div>
 
         <div
           ref={scrollRef}
-          className="relative overflow-x-auto no-scrollbar cursor-grab active:cursor-grabbing pb-4 z-10"
+          className="shelf-scroll-container"
           onMouseDown={onMouseDown}
           onMouseUp={onMouseUp}
           onMouseLeave={onMouseLeave}
           onMouseMove={onMouseMove}
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          <div className="shelf-books !justify-start min-w-max">
+          <div className="shelf-books-row">
             {/* Add Book Placeholder */}
-            <AddBook3D onClick={onAdd} />
+            <AddBook3D onClick={onAdd} variant={addVariant} />
 
-            {books.map((b) => (
-              <div
-                key={b.id}
-                className="shrink-0"
-                onClick={(e) => {
-                  if (!isDragging) {
-                    e.preventDefault();
-                    onSelectBook(b);
-                  }
-                }}
-              >
-                <Book3D book={b} href="#" />
-              </div>
-            ))}
+            {books.map((b) => {
+              const isClubBook = 'month' in b;
+              const months = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
+              const ribbonText = isClubBook ? months[(b.month - 1) % 12] : undefined;
+
+              const isSuspense = String(b.genre || "").toUpperCase().includes("SUSPENSE") ||
+                title.toUpperCase().includes("SUSPENSE");
+
+              // Colors based on genre: Suspense (Yellow), Romance/Others (Pink)
+              const ribbonColor = isClubBook
+                ? (isSuspense ? '#fff9db' : '#fff0f6') // Light yellow vs Light pink
+                : undefined;
+
+              const ribbonTextColor = isClubBook
+                ? (isSuspense ? '#856404' : '#a61e4d') // Dark amber vs Dark ruby
+                : undefined;
+
+              return (
+                <div
+                  key={b.id}
+                  className="shelf-book-wrapper"
+                  onClick={(e) => {
+                    if (!isDragging) {
+                      e.preventDefault();
+                      onSelectBook(b, e.currentTarget.getBoundingClientRect());
+                    }
+                  }}
+                >
+                  <Book3D
+                    book={b}
+                    href="#"
+                    ribbonText={ribbonText}
+                    ribbonColor={ribbonColor}
+                    ribbonTextColor={ribbonTextColor}
+                  />
+                </div>
+              );
+            })}
 
             {/* End Padding */}
-            <div className="w-16 h-10 shrink-0" />
+            <div className="shelf-end-spacer" />
           </div>
         </div>
       </div>
@@ -113,14 +138,15 @@ function HorizontalShelf({
   );
 }
 
-function AddBook3D({ onClick }: { onClick: () => void }) {
+function AddBook3D({ onClick, variant = "yellow" }: { onClick: () => void; variant?: "yellow" | "rose" | "mint" | "azure" }) {
+  const variantClass = variant !== "yellow" ? `book-3d--add--${variant}` : "";
+
   return (
     <button
       type="button"
       onClick={onClick}
-      className="book-3d book-3d--add"
+      className={`book-3d book-3d--add book-add-rotation ${variantClass}`}
       aria-label="Adicionar livro"
-      style={{ transform: "rotateZ(-1deg)" }}
     >
       <div className="book-3d__book" aria-hidden>
         <div className="book-3d__front">
@@ -143,49 +169,119 @@ export default function Bookshelf() {
   const [lidosBrasilia, setLidosBrasilia] = useState<ClubBook[]>([]);
   const [indRomance, setIndRomance] = useState<Book[]>([]);
   const [indSuspense, setIndSuspense] = useState<Book[]>([]);
+  const [currentUser, setCurrentUser] = useState<{ id: string; isAdmin: boolean } | null>(null);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [addContext, setAddContext] = useState<{ genre?: string; city?: string } | null>(null);
   const [addClubBookCity, setAddClubBookCity] = useState<string | null>(null);
-  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
+  const [selectedBook, setSelectedBook] = useState<{ book: Book | ClubBook; initialRect: DOMRect | null } | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<{ book: Book | ClubBook; type: "book" | "club-book" } | null>(null);
 
-  const fetchAll = async () => {
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  async function loadData() {
     setLoading(true);
     setError("");
     try {
-      const [fortalRes, brasRes, romanceRes, suspenseRes] = await Promise.all([
+      const [fortalRes, brasRes, romanceRes, suspenseRes, meRes] = await Promise.all([
         api<{ clubBooks: ClubBook[] }>("/club-books?city=FORTALEZA"),
         api<{ clubBooks: ClubBook[] }>("/club-books?city=BRASILIA"),
-        api<{ books: Book[] }>("/books?genre=ROMANCE"),
-        api<{ books: Book[] }>("/books?genre=SUSPENSE"),
+        api<{ books: Book[] }>("/books?category=Romance"),
+        api<{ books: Book[] }>("/books?category=Suspense"),
+        api<{ user: { id: string; isAdmin: boolean } }>("/me").catch(() => ({ user: { id: "", isAdmin: false } }))
       ]);
 
-      setLidosFortaleza(fortalRes.clubBooks || []);
-      setLidosBrasilia(brasRes.clubBooks || []);
-      setIndRomance(romanceRes.books || []);
-      setIndSuspense(suspenseRes.books || []);
+      const sortByDate = (a: ClubBook, b: ClubBook) => {
+        if (b.year !== a.year) return b.year - a.year;
+        return b.month - a.month;
+      };
+
+      setLidosFortaleza(fortalRes.clubBooks.sort(sortByDate));
+      setLidosBrasilia(brasRes.clubBooks.sort(sortByDate));
+      setIndRomance(romanceRes.books);
+      setIndSuspense(suspenseRes.books);
+      setCurrentUser(meRes.user);
     } catch (err) {
       console.error(err);
-      setError("Não foi possível carregar a estante.");
+      setError("Erro ao carregar dados.");
     } finally {
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    fetchAll();
-  }, []);
+  }
 
   const handleBookAdded = () => {
-    fetchAll();
+    loadData();
     setAddContext(null);
     setAddClubBookCity(null);
   };
 
+  const deleteBook = async (book: Book | ClubBook, type: "book" | "club-book") => {
+    try {
+      if (type === "club-book") {
+        let idToDelete = "";
+        if ("bookId" in book) {
+          idToDelete = book.id;
+        } else {
+          const found = [...lidosFortaleza, ...lidosBrasilia].find(cb => cb.bookId === book.id);
+          if (found) idToDelete = found.id;
+        }
+
+        if (idToDelete) {
+          await api(`/club-books/${idToDelete}`, { method: "DELETE" });
+        }
+      } else {
+        await api(`/books/${book.id}`, { method: "DELETE" });
+      }
+      setConfirmDelete(null);
+      loadData();
+      setSelectedBook(null);
+    } catch (e: any) {
+      console.error(e);
+      alert("Erro ao excluir: " + (e.message || "Erro desconhecido"));
+    }
+  };
+
+  const handleDelete = (book: Book, type: "book" | "club-book") => {
+    setConfirmDelete({ book, type });
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#fdfbf7] flex items-center justify-center">
+        <div className="bookshelf-loading-pill">
+          Organizando prateleiras...
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-[#fdfbf7] flex flex-col items-center justify-center p-6 text-center">
+        <div className="text-red-500 mb-4">{error}</div>
+        <button
+          onClick={loadData}
+          className="px-6 py-2 bg-neutral-200 rounded-full text-neutral-600 hover:bg-neutral-300 transition"
+        >
+          Tentar Novamente
+        </button>
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-12 pb-20">
-      <BookReader book={selectedBook} onClose={() => setSelectedBook(null)} />
+    <div className="bookshelf-page-wrapper">
+      <BookReader
+        book={selectedBook?.book || null}
+        initialRect={selectedBook?.initialRect || null}
+        onClose={() => setSelectedBook(null)}
+        currentUserId={currentUser?.id}
+        isAdmin={currentUser?.isAdmin}
+        onDelete={selectedBook?.book ? (() => handleDelete(selectedBook.book, lidosFortaleza.find(b => b.bookId === selectedBook.book.id) || lidosBrasilia.find(b => b.bookId === selectedBook.book.id) ? "club-book" : "book")) : undefined}
+      />
 
       <BookshelfAddModal
         isOpen={!!addContext}
@@ -201,69 +297,60 @@ export default function Bookshelf() {
         onBookAdded={handleBookAdded}
       />
 
-      <div className="perspective-shelf px-2 mt-4">
+      <div className="bookshelf-perspective-wrapper">
         <div className="bookshelf-scene">
-          {error && (
-            <div className="absolute top-20 inset-x-4 z-50 rounded-3xl border border-red-200/70 bg-red-50/70 px-4 py-3 text-sm text-red-700">
-              <div className="font-black">Erro</div>
-              <div className="mt-1">{error}</div>
-              <button onClick={fetchAll} className="mt-3 w-full rounded-2xl px-4 py-2 text-sm font-black bg-white/70 border border-black/10 hover:bg-white transition">
-                Tentar novamente
-              </button>
-            </div>
-          )}
-
-          <div className="bookshelf !bg-transparent !border-0 !shadow-none !p-0">
-            <div className="bookshelf min-h-[500px] py-10 px-0 flex flex-col gap-2 relative">
-              {/* Refined Engraved Header inside the top padding area */}
-              <div className="absolute top-2 left-0 right-0 flex justify-center pointer-events-none select-none z-10">
-                <h2 className="text-xl sm:text-2xl font-black uppercase tracking-[0.6em] text-black/30"
-                  style={{
-                    textShadow: '-1px -1px 2px rgba(0,0,0,0.5), 0.5px 0.5px 1px rgba(255,255,255,0.1)',
-                    opacity: 0.6
-                  }}>
-                  Estante
+          <div className="bookshelf-clean-wrapper">
+            <div className="bookshelf-container">
+              <div className="margaridas-header-container">
+                <h2 className="margaridas-header">
+                  ESTANTE
                 </h2>
               </div>
               <HorizontalShelf
-                title="Livros Lidos Fortaleza"
+                title="Fortaleza"
                 books={lidosFortaleza}
                 onAdd={() => setAddClubBookCity("FORTALEZA")}
-                onSelectBook={setSelectedBook}
+                onSelectBook={(book, rect) => setSelectedBook({ book, initialRect: rect })}
+                addVariant="mint"
               />
 
               <HorizontalShelf
-                title="Livros Lidos Brasília"
+                title="Brasília"
                 books={lidosBrasilia}
                 onAdd={() => setAddClubBookCity("BRASILIA")}
-                onSelectBook={setSelectedBook}
+                onSelectBook={(book, rect) => setSelectedBook({ book, initialRect: rect })}
+                addVariant="azure"
               />
 
               <HorizontalShelf
-                title="Indicações Romance"
+                title="Romance"
                 books={indRomance}
                 onAdd={() => setAddContext({ genre: "ROMANCE" })}
-                onSelectBook={setSelectedBook}
+                onSelectBook={(book, rect) => setSelectedBook({ book, initialRect: rect })}
+                addVariant="rose"
               />
 
               <HorizontalShelf
-                title="Indicações Suspense"
+                title="Suspense"
                 books={indSuspense}
                 onAdd={() => setAddContext({ genre: "SUSPENSE" })}
-                onSelectBook={setSelectedBook}
+                onSelectBook={(book, rect) => setSelectedBook({ book, initialRect: rect })}
+                addVariant="yellow"
               />
             </div>
           </div>
         </div>
       </div>
 
-      {loading && (
-        <div className="fixed inset-x-0 bottom-8 flex justify-center pointer-events-none">
-          <div className="bg-white/90 backdrop-blur px-4 py-2 rounded-full shadow-lg border border-black/5 text-xs font-black animate-pulse">
-            Organizando prateleiras...
-          </div>
-        </div>
-      )}
+      <ConfirmModal
+        isOpen={!!confirmDelete}
+        title="Excluir Livro"
+        message={`Tem certeza que deseja excluir "${confirmDelete?.book?.title}"? Esta ação não pode ser desfeita.`}
+        confirmLabel="Excluir"
+        isDestructive
+        onConfirm={() => confirmDelete && deleteBook(confirmDelete.book, confirmDelete.type)}
+        onCancel={() => setConfirmDelete(null)}
+      />
     </div>
   );
 }

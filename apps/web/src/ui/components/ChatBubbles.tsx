@@ -1,5 +1,7 @@
-import { Fragment, useMemo } from "react";
+import { Fragment, useMemo, useState } from "react";
 import Avatar from "./Avatar";
+import { LuTrash2 } from "react-icons/lu";
+import ConfirmModal from "./ConfirmModal";
 
 export type ChatMsg = { id: string; userId: string; text: string; createdAt: string };
 export type ChatUser = { id: string; name: string; avatarUrl?: string };
@@ -73,6 +75,8 @@ export default function ChatBubbles({
   messages,
   usersById,
   viewerId,
+  viewerIsAdmin,
+  onDelete,
   isGroup,
   accentHex,
   className = "",
@@ -80,10 +84,13 @@ export default function ChatBubbles({
   messages: ChatMsg[];
   usersById: Record<string, ChatUser>;
   viewerId: string;
+  viewerIsAdmin?: boolean;
+  onDelete?: (msgId: string) => void;
   isGroup?: boolean;
   accentHex?: string;
   className?: string;
 }) {
+  const [confirmDeleteId, setConfirmDeleteId] = useState("");
   const rows = useMemo(() => (Array.isArray(messages) ? messages : []), [messages]);
   const accent = /^#[0-9a-fA-F]{6}$/.test(String(accentHex || "")) ? String(accentHex) : "#ffbf0f";
 
@@ -137,7 +144,7 @@ export default function ChatBubbles({
             ) : null}
 
             <div className={`flex ${me ? "justify-end" : "justify-start"} mb-1 ${firstInGroup && idx > 0 ? "mt-4" : ""}`}>
-              <div className={`max-w-[78%] flex items-start gap-3 ${me ? "flex-row-reverse" : ""}`}>
+              <div className={`max-w-[78%] flex items-start gap-3 group ${me ? "flex-row-reverse" : ""}`}>
                 {!me && firstInGroup ? (
                   <div className="shrink-0 w-[24px]">
                     <Avatar user={u} size={24} className="shadow-sm" />
@@ -162,9 +169,21 @@ export default function ChatBubbles({
                     {m.text}
                   </div>
 
-                  <div className="absolute bottom-1 right-2 text-[10px] text-neutral-500 tabular-nums select-none leading-none">
-                    {fmtTime(m.createdAt)}
-                    {me && <span className="ml-1 text-blue-500">✓</span>}
+                  <div className="absolute bottom-1 right-2 flex items-center gap-1.5 text-[10px] text-neutral-500 tabular-nums select-none leading-none">
+                    {(me || viewerIsAdmin) && onDelete && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setConfirmDeleteId(m.id);
+                        }}
+                        className="hover:text-red-500 transition-colors p-0.5 opacity-0 group-hover:opacity-100"
+                        title="Remover"
+                      >
+                        <LuTrash2 size={12} />
+                      </button>
+                    )}
+                    <span>{fmtTime(m.createdAt)}</span>
+                    {me && <span className="text-blue-500 font-bold">✓</span>}
                   </div>
                 </div>
               </div>
@@ -172,6 +191,19 @@ export default function ChatBubbles({
           </Fragment>
         );
       })}
+
+      <ConfirmModal
+        isOpen={!!confirmDeleteId}
+        title="Remover Mensagem"
+        message="Deseja mesmo remover esta mensagem? Esta ação não pode ser desfeita."
+        confirmLabel="Remover"
+        isDestructive
+        onConfirm={() => {
+          if (onDelete && confirmDeleteId) onDelete(confirmDeleteId);
+          setConfirmDeleteId("");
+        }}
+        onCancel={() => setConfirmDeleteId("")}
+      />
     </div>
   );
 }

@@ -19,6 +19,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
+ * Model Invitation
+ * 
+ */
+export type Invitation = $Result.DefaultSelection<Prisma.$InvitationPayload>
+/**
  * Model UserCity
  * 
  */
@@ -28,6 +33,16 @@ export type UserCity = $Result.DefaultSelection<Prisma.$UserCityPayload>
  * 
  */
 export type Book = $Result.DefaultSelection<Prisma.$BookPayload>
+/**
+ * Model BookStyleImage
+ * 
+ */
+export type BookStyleImage = $Result.DefaultSelection<Prisma.$BookStyleImagePayload>
+/**
+ * Model Category
+ * 
+ */
+export type Category = $Result.DefaultSelection<Prisma.$CategoryPayload>
 /**
  * Model Group
  * 
@@ -118,6 +133,21 @@ export type PollOption = $Result.DefaultSelection<Prisma.$PollOptionPayload>
  * 
  */
 export type PollVote = $Result.DefaultSelection<Prisma.$PollVotePayload>
+/**
+ * Model ClubEvent
+ * 
+ */
+export type ClubEvent = $Result.DefaultSelection<Prisma.$ClubEventPayload>
+/**
+ * Model ClubEventParticipant
+ * 
+ */
+export type ClubEventParticipant = $Result.DefaultSelection<Prisma.$ClubEventParticipantPayload>
+/**
+ * Model ClubEventPhoto
+ * 
+ */
+export type ClubEventPhoto = $Result.DefaultSelection<Prisma.$ClubEventPhotoPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -248,6 +278,16 @@ export class PrismaClient<
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.invitation`: Exposes CRUD operations for the **Invitation** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Invitations
+    * const invitations = await prisma.invitation.findMany()
+    * ```
+    */
+  get invitation(): Prisma.InvitationDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.userCity`: Exposes CRUD operations for the **UserCity** model.
     * Example usage:
     * ```ts
@@ -266,6 +306,26 @@ export class PrismaClient<
     * ```
     */
   get book(): Prisma.BookDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.bookStyleImage`: Exposes CRUD operations for the **BookStyleImage** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more BookStyleImages
+    * const bookStyleImages = await prisma.bookStyleImage.findMany()
+    * ```
+    */
+  get bookStyleImage(): Prisma.BookStyleImageDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.category`: Exposes CRUD operations for the **Category** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Categories
+    * const categories = await prisma.category.findMany()
+    * ```
+    */
+  get category(): Prisma.CategoryDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.group`: Exposes CRUD operations for the **Group** model.
@@ -446,6 +506,36 @@ export class PrismaClient<
     * ```
     */
   get pollVote(): Prisma.PollVoteDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.clubEvent`: Exposes CRUD operations for the **ClubEvent** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ClubEvents
+    * const clubEvents = await prisma.clubEvent.findMany()
+    * ```
+    */
+  get clubEvent(): Prisma.ClubEventDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.clubEventParticipant`: Exposes CRUD operations for the **ClubEventParticipant** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ClubEventParticipants
+    * const clubEventParticipants = await prisma.clubEventParticipant.findMany()
+    * ```
+    */
+  get clubEventParticipant(): Prisma.ClubEventParticipantDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.clubEventPhoto`: Exposes CRUD operations for the **ClubEventPhoto** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ClubEventPhotos
+    * const clubEventPhotos = await prisma.clubEventPhoto.findMany()
+    * ```
+    */
+  get clubEventPhoto(): Prisma.ClubEventPhotoDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -888,8 +978,11 @@ export namespace Prisma {
 
   export const ModelName: {
     User: 'User',
+    Invitation: 'Invitation',
     UserCity: 'UserCity',
     Book: 'Book',
+    BookStyleImage: 'BookStyleImage',
+    Category: 'Category',
     Group: 'Group',
     Membership: 'Membership',
     JoinRequest: 'JoinRequest',
@@ -907,7 +1000,10 @@ export namespace Prisma {
     Comment: 'Comment',
     Poll: 'Poll',
     PollOption: 'PollOption',
-    PollVote: 'PollVote'
+    PollVote: 'PollVote',
+    ClubEvent: 'ClubEvent',
+    ClubEventParticipant: 'ClubEventParticipant',
+    ClubEventPhoto: 'ClubEventPhoto'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -926,7 +1022,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "userCity" | "book" | "group" | "membership" | "joinRequest" | "groupInvite" | "groupBookOfMonthSelection" | "clubBook" | "clubBookMessage" | "clubBookArtifact" | "channel" | "channelMessage" | "directMessage" | "post" | "postImage" | "like" | "comment" | "poll" | "pollOption" | "pollVote"
+      modelProps: "user" | "invitation" | "userCity" | "book" | "bookStyleImage" | "category" | "group" | "membership" | "joinRequest" | "groupInvite" | "groupBookOfMonthSelection" | "clubBook" | "clubBookMessage" | "clubBookArtifact" | "channel" | "channelMessage" | "directMessage" | "post" | "postImage" | "like" | "comment" | "poll" | "pollOption" | "pollVote" | "clubEvent" | "clubEventParticipant" | "clubEventPhoto"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1001,6 +1097,80 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      Invitation: {
+        payload: Prisma.$InvitationPayload<ExtArgs>
+        fields: Prisma.InvitationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.InvitationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InvitationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.InvitationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InvitationPayload>
+          }
+          findFirst: {
+            args: Prisma.InvitationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InvitationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.InvitationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InvitationPayload>
+          }
+          findMany: {
+            args: Prisma.InvitationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InvitationPayload>[]
+          }
+          create: {
+            args: Prisma.InvitationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InvitationPayload>
+          }
+          createMany: {
+            args: Prisma.InvitationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.InvitationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InvitationPayload>[]
+          }
+          delete: {
+            args: Prisma.InvitationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InvitationPayload>
+          }
+          update: {
+            args: Prisma.InvitationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InvitationPayload>
+          }
+          deleteMany: {
+            args: Prisma.InvitationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.InvitationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.InvitationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InvitationPayload>[]
+          }
+          upsert: {
+            args: Prisma.InvitationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InvitationPayload>
+          }
+          aggregate: {
+            args: Prisma.InvitationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateInvitation>
+          }
+          groupBy: {
+            args: Prisma.InvitationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<InvitationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.InvitationCountArgs<ExtArgs>
+            result: $Utils.Optional<InvitationCountAggregateOutputType> | number
           }
         }
       }
@@ -1149,6 +1319,154 @@ export namespace Prisma {
           count: {
             args: Prisma.BookCountArgs<ExtArgs>
             result: $Utils.Optional<BookCountAggregateOutputType> | number
+          }
+        }
+      }
+      BookStyleImage: {
+        payload: Prisma.$BookStyleImagePayload<ExtArgs>
+        fields: Prisma.BookStyleImageFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BookStyleImageFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookStyleImagePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BookStyleImageFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookStyleImagePayload>
+          }
+          findFirst: {
+            args: Prisma.BookStyleImageFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookStyleImagePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BookStyleImageFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookStyleImagePayload>
+          }
+          findMany: {
+            args: Prisma.BookStyleImageFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookStyleImagePayload>[]
+          }
+          create: {
+            args: Prisma.BookStyleImageCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookStyleImagePayload>
+          }
+          createMany: {
+            args: Prisma.BookStyleImageCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BookStyleImageCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookStyleImagePayload>[]
+          }
+          delete: {
+            args: Prisma.BookStyleImageDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookStyleImagePayload>
+          }
+          update: {
+            args: Prisma.BookStyleImageUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookStyleImagePayload>
+          }
+          deleteMany: {
+            args: Prisma.BookStyleImageDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BookStyleImageUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.BookStyleImageUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookStyleImagePayload>[]
+          }
+          upsert: {
+            args: Prisma.BookStyleImageUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookStyleImagePayload>
+          }
+          aggregate: {
+            args: Prisma.BookStyleImageAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBookStyleImage>
+          }
+          groupBy: {
+            args: Prisma.BookStyleImageGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BookStyleImageGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BookStyleImageCountArgs<ExtArgs>
+            result: $Utils.Optional<BookStyleImageCountAggregateOutputType> | number
+          }
+        }
+      }
+      Category: {
+        payload: Prisma.$CategoryPayload<ExtArgs>
+        fields: Prisma.CategoryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CategoryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CategoryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoryPayload>
+          }
+          findFirst: {
+            args: Prisma.CategoryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CategoryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoryPayload>
+          }
+          findMany: {
+            args: Prisma.CategoryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoryPayload>[]
+          }
+          create: {
+            args: Prisma.CategoryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoryPayload>
+          }
+          createMany: {
+            args: Prisma.CategoryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CategoryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoryPayload>[]
+          }
+          delete: {
+            args: Prisma.CategoryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoryPayload>
+          }
+          update: {
+            args: Prisma.CategoryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoryPayload>
+          }
+          deleteMany: {
+            args: Prisma.CategoryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CategoryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CategoryUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoryPayload>[]
+          }
+          upsert: {
+            args: Prisma.CategoryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoryPayload>
+          }
+          aggregate: {
+            args: Prisma.CategoryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCategory>
+          }
+          groupBy: {
+            args: Prisma.CategoryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CategoryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CategoryCountArgs<ExtArgs>
+            result: $Utils.Optional<CategoryCountAggregateOutputType> | number
           }
         }
       }
@@ -2484,6 +2802,228 @@ export namespace Prisma {
           }
         }
       }
+      ClubEvent: {
+        payload: Prisma.$ClubEventPayload<ExtArgs>
+        fields: Prisma.ClubEventFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ClubEventFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ClubEventFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventPayload>
+          }
+          findFirst: {
+            args: Prisma.ClubEventFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ClubEventFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventPayload>
+          }
+          findMany: {
+            args: Prisma.ClubEventFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventPayload>[]
+          }
+          create: {
+            args: Prisma.ClubEventCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventPayload>
+          }
+          createMany: {
+            args: Prisma.ClubEventCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ClubEventCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventPayload>[]
+          }
+          delete: {
+            args: Prisma.ClubEventDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventPayload>
+          }
+          update: {
+            args: Prisma.ClubEventUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventPayload>
+          }
+          deleteMany: {
+            args: Prisma.ClubEventDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ClubEventUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ClubEventUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventPayload>[]
+          }
+          upsert: {
+            args: Prisma.ClubEventUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventPayload>
+          }
+          aggregate: {
+            args: Prisma.ClubEventAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateClubEvent>
+          }
+          groupBy: {
+            args: Prisma.ClubEventGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ClubEventGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ClubEventCountArgs<ExtArgs>
+            result: $Utils.Optional<ClubEventCountAggregateOutputType> | number
+          }
+        }
+      }
+      ClubEventParticipant: {
+        payload: Prisma.$ClubEventParticipantPayload<ExtArgs>
+        fields: Prisma.ClubEventParticipantFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ClubEventParticipantFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventParticipantPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ClubEventParticipantFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventParticipantPayload>
+          }
+          findFirst: {
+            args: Prisma.ClubEventParticipantFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventParticipantPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ClubEventParticipantFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventParticipantPayload>
+          }
+          findMany: {
+            args: Prisma.ClubEventParticipantFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventParticipantPayload>[]
+          }
+          create: {
+            args: Prisma.ClubEventParticipantCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventParticipantPayload>
+          }
+          createMany: {
+            args: Prisma.ClubEventParticipantCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ClubEventParticipantCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventParticipantPayload>[]
+          }
+          delete: {
+            args: Prisma.ClubEventParticipantDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventParticipantPayload>
+          }
+          update: {
+            args: Prisma.ClubEventParticipantUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventParticipantPayload>
+          }
+          deleteMany: {
+            args: Prisma.ClubEventParticipantDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ClubEventParticipantUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ClubEventParticipantUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventParticipantPayload>[]
+          }
+          upsert: {
+            args: Prisma.ClubEventParticipantUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventParticipantPayload>
+          }
+          aggregate: {
+            args: Prisma.ClubEventParticipantAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateClubEventParticipant>
+          }
+          groupBy: {
+            args: Prisma.ClubEventParticipantGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ClubEventParticipantGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ClubEventParticipantCountArgs<ExtArgs>
+            result: $Utils.Optional<ClubEventParticipantCountAggregateOutputType> | number
+          }
+        }
+      }
+      ClubEventPhoto: {
+        payload: Prisma.$ClubEventPhotoPayload<ExtArgs>
+        fields: Prisma.ClubEventPhotoFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ClubEventPhotoFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventPhotoPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ClubEventPhotoFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventPhotoPayload>
+          }
+          findFirst: {
+            args: Prisma.ClubEventPhotoFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventPhotoPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ClubEventPhotoFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventPhotoPayload>
+          }
+          findMany: {
+            args: Prisma.ClubEventPhotoFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventPhotoPayload>[]
+          }
+          create: {
+            args: Prisma.ClubEventPhotoCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventPhotoPayload>
+          }
+          createMany: {
+            args: Prisma.ClubEventPhotoCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ClubEventPhotoCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventPhotoPayload>[]
+          }
+          delete: {
+            args: Prisma.ClubEventPhotoDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventPhotoPayload>
+          }
+          update: {
+            args: Prisma.ClubEventPhotoUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventPhotoPayload>
+          }
+          deleteMany: {
+            args: Prisma.ClubEventPhotoDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ClubEventPhotoUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ClubEventPhotoUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventPhotoPayload>[]
+          }
+          upsert: {
+            args: Prisma.ClubEventPhotoUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClubEventPhotoPayload>
+          }
+          aggregate: {
+            args: Prisma.ClubEventPhotoAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateClubEventPhoto>
+          }
+          groupBy: {
+            args: Prisma.ClubEventPhotoGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ClubEventPhotoGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ClubEventPhotoCountArgs<ExtArgs>
+            result: $Utils.Optional<ClubEventPhotoCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2581,8 +3121,11 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     user?: UserOmit
+    invitation?: InvitationOmit
     userCity?: UserCityOmit
     book?: BookOmit
+    bookStyleImage?: BookStyleImageOmit
+    category?: CategoryOmit
     group?: GroupOmit
     membership?: MembershipOmit
     joinRequest?: JoinRequestOmit
@@ -2601,6 +3144,9 @@ export namespace Prisma {
     poll?: PollOmit
     pollOption?: PollOptionOmit
     pollVote?: PollVoteOmit
+    clubEvent?: ClubEventOmit
+    clubEventParticipant?: ClubEventParticipantOmit
+    clubEventPhoto?: ClubEventPhotoOmit
   }
 
   /* Types for Logging */
@@ -2682,10 +3228,14 @@ export namespace Prisma {
 
   export type UserCountOutputType = {
     cities: number
+    createdBooks: number
+    createdClubBooks: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     cities?: boolean | UserCountOutputTypeCountCitiesArgs
+    createdBooks?: boolean | UserCountOutputTypeCountCreatedBooksArgs
+    createdClubBooks?: boolean | UserCountOutputTypeCountCreatedClubBooksArgs
   }
 
   // Custom InputTypes
@@ -2704,6 +3254,100 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountCitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: UserCityWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCreatedBooksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BookWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCreatedClubBooksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClubBookWhereInput
+  }
+
+
+  /**
+   * Count Type BookCountOutputType
+   */
+
+  export type BookCountOutputType = {
+    categories: number
+    styleImages: number
+    clubBooks: number
+  }
+
+  export type BookCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    categories?: boolean | BookCountOutputTypeCountCategoriesArgs
+    styleImages?: boolean | BookCountOutputTypeCountStyleImagesArgs
+    clubBooks?: boolean | BookCountOutputTypeCountClubBooksArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * BookCountOutputType without action
+   */
+  export type BookCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookCountOutputType
+     */
+    select?: BookCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * BookCountOutputType without action
+   */
+  export type BookCountOutputTypeCountCategoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CategoryWhereInput
+  }
+
+  /**
+   * BookCountOutputType without action
+   */
+  export type BookCountOutputTypeCountStyleImagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BookStyleImageWhereInput
+  }
+
+  /**
+   * BookCountOutputType without action
+   */
+  export type BookCountOutputTypeCountClubBooksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClubBookWhereInput
+  }
+
+
+  /**
+   * Count Type CategoryCountOutputType
+   */
+
+  export type CategoryCountOutputType = {
+    books: number
+  }
+
+  export type CategoryCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    books?: boolean | CategoryCountOutputTypeCountBooksArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * CategoryCountOutputType without action
+   */
+  export type CategoryCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CategoryCountOutputType
+     */
+    select?: CategoryCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CategoryCountOutputType without action
+   */
+  export type CategoryCountOutputTypeCountBooksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BookWhereInput
   }
 
 
@@ -2957,6 +3601,46 @@ export namespace Prisma {
 
 
   /**
+   * Count Type ClubEventCountOutputType
+   */
+
+  export type ClubEventCountOutputType = {
+    participants: number
+    photos: number
+  }
+
+  export type ClubEventCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    participants?: boolean | ClubEventCountOutputTypeCountParticipantsArgs
+    photos?: boolean | ClubEventCountOutputTypeCountPhotosArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ClubEventCountOutputType without action
+   */
+  export type ClubEventCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEventCountOutputType
+     */
+    select?: ClubEventCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ClubEventCountOutputType without action
+   */
+  export type ClubEventCountOutputTypeCountParticipantsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClubEventParticipantWhereInput
+  }
+
+  /**
+   * ClubEventCountOutputType without action
+   */
+  export type ClubEventCountOutputTypeCountPhotosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClubEventPhotoWhereInput
+  }
+
+
+  /**
    * Models
    */
 
@@ -2976,6 +3660,8 @@ export namespace Prisma {
     bio: string | null
     avatarUrl: string | null
     coverUrl: string | null
+    isAdmin: boolean | null
+    passwordHash: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2986,6 +3672,8 @@ export namespace Prisma {
     bio: string | null
     avatarUrl: string | null
     coverUrl: string | null
+    isAdmin: boolean | null
+    passwordHash: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2996,6 +3684,8 @@ export namespace Prisma {
     bio: number
     avatarUrl: number
     coverUrl: number
+    isAdmin: number
+    passwordHash: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -3008,6 +3698,8 @@ export namespace Prisma {
     bio?: true
     avatarUrl?: true
     coverUrl?: true
+    isAdmin?: true
+    passwordHash?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3018,6 +3710,8 @@ export namespace Prisma {
     bio?: true
     avatarUrl?: true
     coverUrl?: true
+    isAdmin?: true
+    passwordHash?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3028,6 +3722,8 @@ export namespace Prisma {
     bio?: true
     avatarUrl?: true
     coverUrl?: true
+    isAdmin?: true
+    passwordHash?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -3111,6 +3807,8 @@ export namespace Prisma {
     bio: string
     avatarUrl: string
     coverUrl: string
+    isAdmin: boolean
+    passwordHash: string
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
@@ -3138,9 +3836,13 @@ export namespace Prisma {
     bio?: boolean
     avatarUrl?: boolean
     coverUrl?: boolean
+    isAdmin?: boolean
+    passwordHash?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     cities?: boolean | User$citiesArgs<ExtArgs>
+    createdBooks?: boolean | User$createdBooksArgs<ExtArgs>
+    createdClubBooks?: boolean | User$createdClubBooksArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -3150,6 +3852,8 @@ export namespace Prisma {
     bio?: boolean
     avatarUrl?: boolean
     coverUrl?: boolean
+    isAdmin?: boolean
+    passwordHash?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -3160,6 +3864,8 @@ export namespace Prisma {
     bio?: boolean
     avatarUrl?: boolean
     coverUrl?: boolean
+    isAdmin?: boolean
+    passwordHash?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -3170,13 +3876,17 @@ export namespace Prisma {
     bio?: boolean
     avatarUrl?: boolean
     coverUrl?: boolean
+    isAdmin?: boolean
+    passwordHash?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "bio" | "avatarUrl" | "coverUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "bio" | "avatarUrl" | "coverUrl" | "isAdmin" | "passwordHash" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     cities?: boolean | User$citiesArgs<ExtArgs>
+    createdBooks?: boolean | User$createdBooksArgs<ExtArgs>
+    createdClubBooks?: boolean | User$createdClubBooksArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -3186,6 +3896,8 @@ export namespace Prisma {
     name: "User"
     objects: {
       cities: Prisma.$UserCityPayload<ExtArgs>[]
+      createdBooks: Prisma.$BookPayload<ExtArgs>[]
+      createdClubBooks: Prisma.$ClubBookPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3193,6 +3905,8 @@ export namespace Prisma {
       bio: string
       avatarUrl: string
       coverUrl: string
+      isAdmin: boolean
+      passwordHash: string
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["user"]>
@@ -3590,6 +4304,8 @@ export namespace Prisma {
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     cities<T extends User$citiesArgs<ExtArgs> = {}>(args?: Subset<T, User$citiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserCityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    createdBooks<T extends User$createdBooksArgs<ExtArgs> = {}>(args?: Subset<T, User$createdBooksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    createdClubBooks<T extends User$createdClubBooksArgs<ExtArgs> = {}>(args?: Subset<T, User$createdClubBooksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClubBookPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3624,6 +4340,8 @@ export namespace Prisma {
     readonly bio: FieldRef<"User", 'String'>
     readonly avatarUrl: FieldRef<"User", 'String'>
     readonly coverUrl: FieldRef<"User", 'String'>
+    readonly isAdmin: FieldRef<"User", 'Boolean'>
+    readonly passwordHash: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
   }
@@ -4036,6 +4754,54 @@ export namespace Prisma {
   }
 
   /**
+   * User.createdBooks
+   */
+  export type User$createdBooksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Book
+     */
+    select?: BookSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Book
+     */
+    omit?: BookOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookInclude<ExtArgs> | null
+    where?: BookWhereInput
+    orderBy?: BookOrderByWithRelationInput | BookOrderByWithRelationInput[]
+    cursor?: BookWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BookScalarFieldEnum | BookScalarFieldEnum[]
+  }
+
+  /**
+   * User.createdClubBooks
+   */
+  export type User$createdClubBooksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubBook
+     */
+    select?: ClubBookSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubBook
+     */
+    omit?: ClubBookOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubBookInclude<ExtArgs> | null
+    where?: ClubBookWhereInput
+    orderBy?: ClubBookOrderByWithRelationInput | ClubBookOrderByWithRelationInput[]
+    cursor?: ClubBookWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ClubBookScalarFieldEnum | ClubBookScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4051,6 +4817,1012 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Invitation
+   */
+
+  export type AggregateInvitation = {
+    _count: InvitationCountAggregateOutputType | null
+    _min: InvitationMinAggregateOutputType | null
+    _max: InvitationMaxAggregateOutputType | null
+  }
+
+  export type InvitationMinAggregateOutputType = {
+    id: string | null
+    city: string | null
+    createdBy: string | null
+    isUsed: boolean | null
+    usedBy: string | null
+    createdAt: Date | null
+  }
+
+  export type InvitationMaxAggregateOutputType = {
+    id: string | null
+    city: string | null
+    createdBy: string | null
+    isUsed: boolean | null
+    usedBy: string | null
+    createdAt: Date | null
+  }
+
+  export type InvitationCountAggregateOutputType = {
+    id: number
+    city: number
+    createdBy: number
+    isUsed: number
+    usedBy: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type InvitationMinAggregateInputType = {
+    id?: true
+    city?: true
+    createdBy?: true
+    isUsed?: true
+    usedBy?: true
+    createdAt?: true
+  }
+
+  export type InvitationMaxAggregateInputType = {
+    id?: true
+    city?: true
+    createdBy?: true
+    isUsed?: true
+    usedBy?: true
+    createdAt?: true
+  }
+
+  export type InvitationCountAggregateInputType = {
+    id?: true
+    city?: true
+    createdBy?: true
+    isUsed?: true
+    usedBy?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type InvitationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Invitation to aggregate.
+     */
+    where?: InvitationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Invitations to fetch.
+     */
+    orderBy?: InvitationOrderByWithRelationInput | InvitationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: InvitationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Invitations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Invitations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Invitations
+    **/
+    _count?: true | InvitationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: InvitationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: InvitationMaxAggregateInputType
+  }
+
+  export type GetInvitationAggregateType<T extends InvitationAggregateArgs> = {
+        [P in keyof T & keyof AggregateInvitation]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateInvitation[P]>
+      : GetScalarType<T[P], AggregateInvitation[P]>
+  }
+
+
+
+
+  export type InvitationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InvitationWhereInput
+    orderBy?: InvitationOrderByWithAggregationInput | InvitationOrderByWithAggregationInput[]
+    by: InvitationScalarFieldEnum[] | InvitationScalarFieldEnum
+    having?: InvitationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: InvitationCountAggregateInputType | true
+    _min?: InvitationMinAggregateInputType
+    _max?: InvitationMaxAggregateInputType
+  }
+
+  export type InvitationGroupByOutputType = {
+    id: string
+    city: string
+    createdBy: string
+    isUsed: boolean
+    usedBy: string | null
+    createdAt: Date
+    _count: InvitationCountAggregateOutputType | null
+    _min: InvitationMinAggregateOutputType | null
+    _max: InvitationMaxAggregateOutputType | null
+  }
+
+  type GetInvitationGroupByPayload<T extends InvitationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<InvitationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof InvitationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], InvitationGroupByOutputType[P]>
+            : GetScalarType<T[P], InvitationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type InvitationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    city?: boolean
+    createdBy?: boolean
+    isUsed?: boolean
+    usedBy?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["invitation"]>
+
+  export type InvitationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    city?: boolean
+    createdBy?: boolean
+    isUsed?: boolean
+    usedBy?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["invitation"]>
+
+  export type InvitationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    city?: boolean
+    createdBy?: boolean
+    isUsed?: boolean
+    usedBy?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["invitation"]>
+
+  export type InvitationSelectScalar = {
+    id?: boolean
+    city?: boolean
+    createdBy?: boolean
+    isUsed?: boolean
+    usedBy?: boolean
+    createdAt?: boolean
+  }
+
+  export type InvitationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "city" | "createdBy" | "isUsed" | "usedBy" | "createdAt", ExtArgs["result"]["invitation"]>
+
+  export type $InvitationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Invitation"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      city: string
+      createdBy: string
+      isUsed: boolean
+      usedBy: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["invitation"]>
+    composites: {}
+  }
+
+  type InvitationGetPayload<S extends boolean | null | undefined | InvitationDefaultArgs> = $Result.GetResult<Prisma.$InvitationPayload, S>
+
+  type InvitationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<InvitationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: InvitationCountAggregateInputType | true
+    }
+
+  export interface InvitationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Invitation'], meta: { name: 'Invitation' } }
+    /**
+     * Find zero or one Invitation that matches the filter.
+     * @param {InvitationFindUniqueArgs} args - Arguments to find a Invitation
+     * @example
+     * // Get one Invitation
+     * const invitation = await prisma.invitation.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends InvitationFindUniqueArgs>(args: SelectSubset<T, InvitationFindUniqueArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Invitation that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {InvitationFindUniqueOrThrowArgs} args - Arguments to find a Invitation
+     * @example
+     * // Get one Invitation
+     * const invitation = await prisma.invitation.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends InvitationFindUniqueOrThrowArgs>(args: SelectSubset<T, InvitationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Invitation that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InvitationFindFirstArgs} args - Arguments to find a Invitation
+     * @example
+     * // Get one Invitation
+     * const invitation = await prisma.invitation.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends InvitationFindFirstArgs>(args?: SelectSubset<T, InvitationFindFirstArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Invitation that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InvitationFindFirstOrThrowArgs} args - Arguments to find a Invitation
+     * @example
+     * // Get one Invitation
+     * const invitation = await prisma.invitation.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends InvitationFindFirstOrThrowArgs>(args?: SelectSubset<T, InvitationFindFirstOrThrowArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Invitations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InvitationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Invitations
+     * const invitations = await prisma.invitation.findMany()
+     * 
+     * // Get first 10 Invitations
+     * const invitations = await prisma.invitation.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const invitationWithIdOnly = await prisma.invitation.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends InvitationFindManyArgs>(args?: SelectSubset<T, InvitationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Invitation.
+     * @param {InvitationCreateArgs} args - Arguments to create a Invitation.
+     * @example
+     * // Create one Invitation
+     * const Invitation = await prisma.invitation.create({
+     *   data: {
+     *     // ... data to create a Invitation
+     *   }
+     * })
+     * 
+     */
+    create<T extends InvitationCreateArgs>(args: SelectSubset<T, InvitationCreateArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Invitations.
+     * @param {InvitationCreateManyArgs} args - Arguments to create many Invitations.
+     * @example
+     * // Create many Invitations
+     * const invitation = await prisma.invitation.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends InvitationCreateManyArgs>(args?: SelectSubset<T, InvitationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Invitations and returns the data saved in the database.
+     * @param {InvitationCreateManyAndReturnArgs} args - Arguments to create many Invitations.
+     * @example
+     * // Create many Invitations
+     * const invitation = await prisma.invitation.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Invitations and only return the `id`
+     * const invitationWithIdOnly = await prisma.invitation.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends InvitationCreateManyAndReturnArgs>(args?: SelectSubset<T, InvitationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Invitation.
+     * @param {InvitationDeleteArgs} args - Arguments to delete one Invitation.
+     * @example
+     * // Delete one Invitation
+     * const Invitation = await prisma.invitation.delete({
+     *   where: {
+     *     // ... filter to delete one Invitation
+     *   }
+     * })
+     * 
+     */
+    delete<T extends InvitationDeleteArgs>(args: SelectSubset<T, InvitationDeleteArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Invitation.
+     * @param {InvitationUpdateArgs} args - Arguments to update one Invitation.
+     * @example
+     * // Update one Invitation
+     * const invitation = await prisma.invitation.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends InvitationUpdateArgs>(args: SelectSubset<T, InvitationUpdateArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Invitations.
+     * @param {InvitationDeleteManyArgs} args - Arguments to filter Invitations to delete.
+     * @example
+     * // Delete a few Invitations
+     * const { count } = await prisma.invitation.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends InvitationDeleteManyArgs>(args?: SelectSubset<T, InvitationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Invitations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InvitationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Invitations
+     * const invitation = await prisma.invitation.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends InvitationUpdateManyArgs>(args: SelectSubset<T, InvitationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Invitations and returns the data updated in the database.
+     * @param {InvitationUpdateManyAndReturnArgs} args - Arguments to update many Invitations.
+     * @example
+     * // Update many Invitations
+     * const invitation = await prisma.invitation.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Invitations and only return the `id`
+     * const invitationWithIdOnly = await prisma.invitation.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends InvitationUpdateManyAndReturnArgs>(args: SelectSubset<T, InvitationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Invitation.
+     * @param {InvitationUpsertArgs} args - Arguments to update or create a Invitation.
+     * @example
+     * // Update or create a Invitation
+     * const invitation = await prisma.invitation.upsert({
+     *   create: {
+     *     // ... data to create a Invitation
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Invitation we want to update
+     *   }
+     * })
+     */
+    upsert<T extends InvitationUpsertArgs>(args: SelectSubset<T, InvitationUpsertArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Invitations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InvitationCountArgs} args - Arguments to filter Invitations to count.
+     * @example
+     * // Count the number of Invitations
+     * const count = await prisma.invitation.count({
+     *   where: {
+     *     // ... the filter for the Invitations we want to count
+     *   }
+     * })
+    **/
+    count<T extends InvitationCountArgs>(
+      args?: Subset<T, InvitationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], InvitationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Invitation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InvitationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends InvitationAggregateArgs>(args: Subset<T, InvitationAggregateArgs>): Prisma.PrismaPromise<GetInvitationAggregateType<T>>
+
+    /**
+     * Group by Invitation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InvitationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends InvitationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: InvitationGroupByArgs['orderBy'] }
+        : { orderBy?: InvitationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, InvitationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetInvitationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Invitation model
+   */
+  readonly fields: InvitationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Invitation.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__InvitationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Invitation model
+   */
+  interface InvitationFieldRefs {
+    readonly id: FieldRef<"Invitation", 'String'>
+    readonly city: FieldRef<"Invitation", 'String'>
+    readonly createdBy: FieldRef<"Invitation", 'String'>
+    readonly isUsed: FieldRef<"Invitation", 'Boolean'>
+    readonly usedBy: FieldRef<"Invitation", 'String'>
+    readonly createdAt: FieldRef<"Invitation", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Invitation findUnique
+   */
+  export type InvitationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invitation
+     */
+    select?: InvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Invitation
+     */
+    omit?: InvitationOmit<ExtArgs> | null
+    /**
+     * Filter, which Invitation to fetch.
+     */
+    where: InvitationWhereUniqueInput
+  }
+
+  /**
+   * Invitation findUniqueOrThrow
+   */
+  export type InvitationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invitation
+     */
+    select?: InvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Invitation
+     */
+    omit?: InvitationOmit<ExtArgs> | null
+    /**
+     * Filter, which Invitation to fetch.
+     */
+    where: InvitationWhereUniqueInput
+  }
+
+  /**
+   * Invitation findFirst
+   */
+  export type InvitationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invitation
+     */
+    select?: InvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Invitation
+     */
+    omit?: InvitationOmit<ExtArgs> | null
+    /**
+     * Filter, which Invitation to fetch.
+     */
+    where?: InvitationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Invitations to fetch.
+     */
+    orderBy?: InvitationOrderByWithRelationInput | InvitationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Invitations.
+     */
+    cursor?: InvitationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Invitations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Invitations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Invitations.
+     */
+    distinct?: InvitationScalarFieldEnum | InvitationScalarFieldEnum[]
+  }
+
+  /**
+   * Invitation findFirstOrThrow
+   */
+  export type InvitationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invitation
+     */
+    select?: InvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Invitation
+     */
+    omit?: InvitationOmit<ExtArgs> | null
+    /**
+     * Filter, which Invitation to fetch.
+     */
+    where?: InvitationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Invitations to fetch.
+     */
+    orderBy?: InvitationOrderByWithRelationInput | InvitationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Invitations.
+     */
+    cursor?: InvitationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Invitations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Invitations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Invitations.
+     */
+    distinct?: InvitationScalarFieldEnum | InvitationScalarFieldEnum[]
+  }
+
+  /**
+   * Invitation findMany
+   */
+  export type InvitationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invitation
+     */
+    select?: InvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Invitation
+     */
+    omit?: InvitationOmit<ExtArgs> | null
+    /**
+     * Filter, which Invitations to fetch.
+     */
+    where?: InvitationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Invitations to fetch.
+     */
+    orderBy?: InvitationOrderByWithRelationInput | InvitationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Invitations.
+     */
+    cursor?: InvitationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Invitations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Invitations.
+     */
+    skip?: number
+    distinct?: InvitationScalarFieldEnum | InvitationScalarFieldEnum[]
+  }
+
+  /**
+   * Invitation create
+   */
+  export type InvitationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invitation
+     */
+    select?: InvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Invitation
+     */
+    omit?: InvitationOmit<ExtArgs> | null
+    /**
+     * The data needed to create a Invitation.
+     */
+    data: XOR<InvitationCreateInput, InvitationUncheckedCreateInput>
+  }
+
+  /**
+   * Invitation createMany
+   */
+  export type InvitationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Invitations.
+     */
+    data: InvitationCreateManyInput | InvitationCreateManyInput[]
+  }
+
+  /**
+   * Invitation createManyAndReturn
+   */
+  export type InvitationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invitation
+     */
+    select?: InvitationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Invitation
+     */
+    omit?: InvitationOmit<ExtArgs> | null
+    /**
+     * The data used to create many Invitations.
+     */
+    data: InvitationCreateManyInput | InvitationCreateManyInput[]
+  }
+
+  /**
+   * Invitation update
+   */
+  export type InvitationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invitation
+     */
+    select?: InvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Invitation
+     */
+    omit?: InvitationOmit<ExtArgs> | null
+    /**
+     * The data needed to update a Invitation.
+     */
+    data: XOR<InvitationUpdateInput, InvitationUncheckedUpdateInput>
+    /**
+     * Choose, which Invitation to update.
+     */
+    where: InvitationWhereUniqueInput
+  }
+
+  /**
+   * Invitation updateMany
+   */
+  export type InvitationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Invitations.
+     */
+    data: XOR<InvitationUpdateManyMutationInput, InvitationUncheckedUpdateManyInput>
+    /**
+     * Filter which Invitations to update
+     */
+    where?: InvitationWhereInput
+    /**
+     * Limit how many Invitations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Invitation updateManyAndReturn
+   */
+  export type InvitationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invitation
+     */
+    select?: InvitationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Invitation
+     */
+    omit?: InvitationOmit<ExtArgs> | null
+    /**
+     * The data used to update Invitations.
+     */
+    data: XOR<InvitationUpdateManyMutationInput, InvitationUncheckedUpdateManyInput>
+    /**
+     * Filter which Invitations to update
+     */
+    where?: InvitationWhereInput
+    /**
+     * Limit how many Invitations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Invitation upsert
+   */
+  export type InvitationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invitation
+     */
+    select?: InvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Invitation
+     */
+    omit?: InvitationOmit<ExtArgs> | null
+    /**
+     * The filter to search for the Invitation to update in case it exists.
+     */
+    where: InvitationWhereUniqueInput
+    /**
+     * In case the Invitation found by the `where` argument doesn't exist, create a new Invitation with this data.
+     */
+    create: XOR<InvitationCreateInput, InvitationUncheckedCreateInput>
+    /**
+     * In case the Invitation was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<InvitationUpdateInput, InvitationUncheckedUpdateInput>
+  }
+
+  /**
+   * Invitation delete
+   */
+  export type InvitationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invitation
+     */
+    select?: InvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Invitation
+     */
+    omit?: InvitationOmit<ExtArgs> | null
+    /**
+     * Filter which Invitation to delete.
+     */
+    where: InvitationWhereUniqueInput
+  }
+
+  /**
+   * Invitation deleteMany
+   */
+  export type InvitationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Invitations to delete
+     */
+    where?: InvitationWhereInput
+    /**
+     * Limit how many Invitations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Invitation without action
+   */
+  export type InvitationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invitation
+     */
+    select?: InvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Invitation
+     */
+    omit?: InvitationOmit<ExtArgs> | null
   }
 
 
@@ -5100,7 +6872,9 @@ export namespace Prisma {
     author: string | null
     coverUrl: string | null
     synopsis: string | null
-    genre: string | null
+    aiStyleDescription: string | null
+    createdByUserId: string | null
+    indicationComment: string | null
     createdAt: Date | null
   }
 
@@ -5110,7 +6884,9 @@ export namespace Prisma {
     author: string | null
     coverUrl: string | null
     synopsis: string | null
-    genre: string | null
+    aiStyleDescription: string | null
+    createdByUserId: string | null
+    indicationComment: string | null
     createdAt: Date | null
   }
 
@@ -5120,7 +6896,9 @@ export namespace Prisma {
     author: number
     coverUrl: number
     synopsis: number
-    genre: number
+    aiStyleDescription: number
+    createdByUserId: number
+    indicationComment: number
     createdAt: number
     _all: number
   }
@@ -5132,7 +6910,9 @@ export namespace Prisma {
     author?: true
     coverUrl?: true
     synopsis?: true
-    genre?: true
+    aiStyleDescription?: true
+    createdByUserId?: true
+    indicationComment?: true
     createdAt?: true
   }
 
@@ -5142,7 +6922,9 @@ export namespace Prisma {
     author?: true
     coverUrl?: true
     synopsis?: true
-    genre?: true
+    aiStyleDescription?: true
+    createdByUserId?: true
+    indicationComment?: true
     createdAt?: true
   }
 
@@ -5152,7 +6934,9 @@ export namespace Prisma {
     author?: true
     coverUrl?: true
     synopsis?: true
-    genre?: true
+    aiStyleDescription?: true
+    createdByUserId?: true
+    indicationComment?: true
     createdAt?: true
     _all?: true
   }
@@ -5235,7 +7019,9 @@ export namespace Prisma {
     author: string
     coverUrl: string
     synopsis: string
-    genre: string | null
+    aiStyleDescription: string
+    createdByUserId: string | null
+    indicationComment: string
     createdAt: Date
     _count: BookCountAggregateOutputType | null
     _min: BookMinAggregateOutputType | null
@@ -5262,8 +7048,15 @@ export namespace Prisma {
     author?: boolean
     coverUrl?: boolean
     synopsis?: boolean
-    genre?: boolean
+    aiStyleDescription?: boolean
+    createdByUserId?: boolean
+    indicationComment?: boolean
     createdAt?: boolean
+    categories?: boolean | Book$categoriesArgs<ExtArgs>
+    styleImages?: boolean | Book$styleImagesArgs<ExtArgs>
+    createdByUser?: boolean | Book$createdByUserArgs<ExtArgs>
+    clubBooks?: boolean | Book$clubBooksArgs<ExtArgs>
+    _count?: boolean | BookCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["book"]>
 
   export type BookSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -5272,8 +7065,11 @@ export namespace Prisma {
     author?: boolean
     coverUrl?: boolean
     synopsis?: boolean
-    genre?: boolean
+    aiStyleDescription?: boolean
+    createdByUserId?: boolean
+    indicationComment?: boolean
     createdAt?: boolean
+    createdByUser?: boolean | Book$createdByUserArgs<ExtArgs>
   }, ExtArgs["result"]["book"]>
 
   export type BookSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -5282,8 +7078,11 @@ export namespace Prisma {
     author?: boolean
     coverUrl?: boolean
     synopsis?: boolean
-    genre?: boolean
+    aiStyleDescription?: boolean
+    createdByUserId?: boolean
+    indicationComment?: boolean
     createdAt?: boolean
+    createdByUser?: boolean | Book$createdByUserArgs<ExtArgs>
   }, ExtArgs["result"]["book"]>
 
   export type BookSelectScalar = {
@@ -5292,22 +7091,44 @@ export namespace Prisma {
     author?: boolean
     coverUrl?: boolean
     synopsis?: boolean
-    genre?: boolean
+    aiStyleDescription?: boolean
+    createdByUserId?: boolean
+    indicationComment?: boolean
     createdAt?: boolean
   }
 
-  export type BookOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "author" | "coverUrl" | "synopsis" | "genre" | "createdAt", ExtArgs["result"]["book"]>
+  export type BookOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "author" | "coverUrl" | "synopsis" | "aiStyleDescription" | "createdByUserId" | "indicationComment" | "createdAt", ExtArgs["result"]["book"]>
+  export type BookInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    categories?: boolean | Book$categoriesArgs<ExtArgs>
+    styleImages?: boolean | Book$styleImagesArgs<ExtArgs>
+    createdByUser?: boolean | Book$createdByUserArgs<ExtArgs>
+    clubBooks?: boolean | Book$clubBooksArgs<ExtArgs>
+    _count?: boolean | BookCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type BookIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    createdByUser?: boolean | Book$createdByUserArgs<ExtArgs>
+  }
+  export type BookIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    createdByUser?: boolean | Book$createdByUserArgs<ExtArgs>
+  }
 
   export type $BookPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Book"
-    objects: {}
+    objects: {
+      categories: Prisma.$CategoryPayload<ExtArgs>[]
+      styleImages: Prisma.$BookStyleImagePayload<ExtArgs>[]
+      createdByUser: Prisma.$UserPayload<ExtArgs> | null
+      clubBooks: Prisma.$ClubBookPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       title: string
       author: string
       coverUrl: string
       synopsis: string
-      genre: string | null
+      aiStyleDescription: string
+      createdByUserId: string | null
+      indicationComment: string
       createdAt: Date
     }, ExtArgs["result"]["book"]>
     composites: {}
@@ -5703,6 +7524,10 @@ export namespace Prisma {
    */
   export interface Prisma__BookClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    categories<T extends Book$categoriesArgs<ExtArgs> = {}>(args?: Subset<T, Book$categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    styleImages<T extends Book$styleImagesArgs<ExtArgs> = {}>(args?: Subset<T, Book$styleImagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookStyleImagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    createdByUser<T extends Book$createdByUserArgs<ExtArgs> = {}>(args?: Subset<T, Book$createdByUserArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    clubBooks<T extends Book$clubBooksArgs<ExtArgs> = {}>(args?: Subset<T, Book$clubBooksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClubBookPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5737,7 +7562,9 @@ export namespace Prisma {
     readonly author: FieldRef<"Book", 'String'>
     readonly coverUrl: FieldRef<"Book", 'String'>
     readonly synopsis: FieldRef<"Book", 'String'>
-    readonly genre: FieldRef<"Book", 'String'>
+    readonly aiStyleDescription: FieldRef<"Book", 'String'>
+    readonly createdByUserId: FieldRef<"Book", 'String'>
+    readonly indicationComment: FieldRef<"Book", 'String'>
     readonly createdAt: FieldRef<"Book", 'DateTime'>
   }
     
@@ -5755,6 +7582,10 @@ export namespace Prisma {
      * Omit specific fields from the Book
      */
     omit?: BookOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookInclude<ExtArgs> | null
     /**
      * Filter, which Book to fetch.
      */
@@ -5774,6 +7605,10 @@ export namespace Prisma {
      */
     omit?: BookOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookInclude<ExtArgs> | null
+    /**
      * Filter, which Book to fetch.
      */
     where: BookWhereUniqueInput
@@ -5791,6 +7626,10 @@ export namespace Prisma {
      * Omit specific fields from the Book
      */
     omit?: BookOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookInclude<ExtArgs> | null
     /**
      * Filter, which Book to fetch.
      */
@@ -5840,6 +7679,10 @@ export namespace Prisma {
      */
     omit?: BookOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookInclude<ExtArgs> | null
+    /**
      * Filter, which Book to fetch.
      */
     where?: BookWhereInput
@@ -5888,6 +7731,10 @@ export namespace Prisma {
      */
     omit?: BookOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookInclude<ExtArgs> | null
+    /**
      * Filter, which Books to fetch.
      */
     where?: BookWhereInput
@@ -5931,6 +7778,10 @@ export namespace Prisma {
      */
     omit?: BookOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookInclude<ExtArgs> | null
+    /**
      * The data needed to create a Book.
      */
     data: XOR<BookCreateInput, BookUncheckedCreateInput>
@@ -5962,6 +7813,10 @@ export namespace Prisma {
      * The data used to create many Books.
      */
     data: BookCreateManyInput | BookCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -5976,6 +7831,10 @@ export namespace Prisma {
      * Omit specific fields from the Book
      */
     omit?: BookOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookInclude<ExtArgs> | null
     /**
      * The data needed to update a Book.
      */
@@ -6028,6 +7887,10 @@ export namespace Prisma {
      * Limit how many Books to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -6042,6 +7905,10 @@ export namespace Prisma {
      * Omit specific fields from the Book
      */
     omit?: BookOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookInclude<ExtArgs> | null
     /**
      * The filter to search for the Book to update in case it exists.
      */
@@ -6069,6 +7936,10 @@ export namespace Prisma {
      */
     omit?: BookOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookInclude<ExtArgs> | null
+    /**
      * Filter which Book to delete.
      */
     where: BookWhereUniqueInput
@@ -6089,6 +7960,97 @@ export namespace Prisma {
   }
 
   /**
+   * Book.categories
+   */
+  export type Book$categoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Category
+     */
+    select?: CategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Category
+     */
+    omit?: CategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoryInclude<ExtArgs> | null
+    where?: CategoryWhereInput
+    orderBy?: CategoryOrderByWithRelationInput | CategoryOrderByWithRelationInput[]
+    cursor?: CategoryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CategoryScalarFieldEnum | CategoryScalarFieldEnum[]
+  }
+
+  /**
+   * Book.styleImages
+   */
+  export type Book$styleImagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookStyleImage
+     */
+    select?: BookStyleImageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookStyleImage
+     */
+    omit?: BookStyleImageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookStyleImageInclude<ExtArgs> | null
+    where?: BookStyleImageWhereInput
+    orderBy?: BookStyleImageOrderByWithRelationInput | BookStyleImageOrderByWithRelationInput[]
+    cursor?: BookStyleImageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BookStyleImageScalarFieldEnum | BookStyleImageScalarFieldEnum[]
+  }
+
+  /**
+   * Book.createdByUser
+   */
+  export type Book$createdByUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * Book.clubBooks
+   */
+  export type Book$clubBooksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubBook
+     */
+    select?: ClubBookSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubBook
+     */
+    omit?: ClubBookOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubBookInclude<ExtArgs> | null
+    where?: ClubBookWhereInput
+    orderBy?: ClubBookOrderByWithRelationInput | ClubBookOrderByWithRelationInput[]
+    cursor?: ClubBookWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ClubBookScalarFieldEnum | ClubBookScalarFieldEnum[]
+  }
+
+  /**
    * Book without action
    */
   export type BookDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6100,6 +8062,2069 @@ export namespace Prisma {
      * Omit specific fields from the Book
      */
     omit?: BookOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model BookStyleImage
+   */
+
+  export type AggregateBookStyleImage = {
+    _count: BookStyleImageCountAggregateOutputType | null
+    _min: BookStyleImageMinAggregateOutputType | null
+    _max: BookStyleImageMaxAggregateOutputType | null
+  }
+
+  export type BookStyleImageMinAggregateOutputType = {
+    id: string | null
+    bookId: string | null
+    url: string | null
+  }
+
+  export type BookStyleImageMaxAggregateOutputType = {
+    id: string | null
+    bookId: string | null
+    url: string | null
+  }
+
+  export type BookStyleImageCountAggregateOutputType = {
+    id: number
+    bookId: number
+    url: number
+    _all: number
+  }
+
+
+  export type BookStyleImageMinAggregateInputType = {
+    id?: true
+    bookId?: true
+    url?: true
+  }
+
+  export type BookStyleImageMaxAggregateInputType = {
+    id?: true
+    bookId?: true
+    url?: true
+  }
+
+  export type BookStyleImageCountAggregateInputType = {
+    id?: true
+    bookId?: true
+    url?: true
+    _all?: true
+  }
+
+  export type BookStyleImageAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BookStyleImage to aggregate.
+     */
+    where?: BookStyleImageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BookStyleImages to fetch.
+     */
+    orderBy?: BookStyleImageOrderByWithRelationInput | BookStyleImageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BookStyleImageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BookStyleImages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BookStyleImages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned BookStyleImages
+    **/
+    _count?: true | BookStyleImageCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BookStyleImageMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BookStyleImageMaxAggregateInputType
+  }
+
+  export type GetBookStyleImageAggregateType<T extends BookStyleImageAggregateArgs> = {
+        [P in keyof T & keyof AggregateBookStyleImage]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBookStyleImage[P]>
+      : GetScalarType<T[P], AggregateBookStyleImage[P]>
+  }
+
+
+
+
+  export type BookStyleImageGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BookStyleImageWhereInput
+    orderBy?: BookStyleImageOrderByWithAggregationInput | BookStyleImageOrderByWithAggregationInput[]
+    by: BookStyleImageScalarFieldEnum[] | BookStyleImageScalarFieldEnum
+    having?: BookStyleImageScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BookStyleImageCountAggregateInputType | true
+    _min?: BookStyleImageMinAggregateInputType
+    _max?: BookStyleImageMaxAggregateInputType
+  }
+
+  export type BookStyleImageGroupByOutputType = {
+    id: string
+    bookId: string
+    url: string
+    _count: BookStyleImageCountAggregateOutputType | null
+    _min: BookStyleImageMinAggregateOutputType | null
+    _max: BookStyleImageMaxAggregateOutputType | null
+  }
+
+  type GetBookStyleImageGroupByPayload<T extends BookStyleImageGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BookStyleImageGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BookStyleImageGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BookStyleImageGroupByOutputType[P]>
+            : GetScalarType<T[P], BookStyleImageGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BookStyleImageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    bookId?: boolean
+    url?: boolean
+    book?: boolean | BookDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["bookStyleImage"]>
+
+  export type BookStyleImageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    bookId?: boolean
+    url?: boolean
+    book?: boolean | BookDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["bookStyleImage"]>
+
+  export type BookStyleImageSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    bookId?: boolean
+    url?: boolean
+    book?: boolean | BookDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["bookStyleImage"]>
+
+  export type BookStyleImageSelectScalar = {
+    id?: boolean
+    bookId?: boolean
+    url?: boolean
+  }
+
+  export type BookStyleImageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bookId" | "url", ExtArgs["result"]["bookStyleImage"]>
+  export type BookStyleImageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    book?: boolean | BookDefaultArgs<ExtArgs>
+  }
+  export type BookStyleImageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    book?: boolean | BookDefaultArgs<ExtArgs>
+  }
+  export type BookStyleImageIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    book?: boolean | BookDefaultArgs<ExtArgs>
+  }
+
+  export type $BookStyleImagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "BookStyleImage"
+    objects: {
+      book: Prisma.$BookPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      bookId: string
+      url: string
+    }, ExtArgs["result"]["bookStyleImage"]>
+    composites: {}
+  }
+
+  type BookStyleImageGetPayload<S extends boolean | null | undefined | BookStyleImageDefaultArgs> = $Result.GetResult<Prisma.$BookStyleImagePayload, S>
+
+  type BookStyleImageCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BookStyleImageFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BookStyleImageCountAggregateInputType | true
+    }
+
+  export interface BookStyleImageDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BookStyleImage'], meta: { name: 'BookStyleImage' } }
+    /**
+     * Find zero or one BookStyleImage that matches the filter.
+     * @param {BookStyleImageFindUniqueArgs} args - Arguments to find a BookStyleImage
+     * @example
+     * // Get one BookStyleImage
+     * const bookStyleImage = await prisma.bookStyleImage.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BookStyleImageFindUniqueArgs>(args: SelectSubset<T, BookStyleImageFindUniqueArgs<ExtArgs>>): Prisma__BookStyleImageClient<$Result.GetResult<Prisma.$BookStyleImagePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one BookStyleImage that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BookStyleImageFindUniqueOrThrowArgs} args - Arguments to find a BookStyleImage
+     * @example
+     * // Get one BookStyleImage
+     * const bookStyleImage = await prisma.bookStyleImage.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BookStyleImageFindUniqueOrThrowArgs>(args: SelectSubset<T, BookStyleImageFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BookStyleImageClient<$Result.GetResult<Prisma.$BookStyleImagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BookStyleImage that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookStyleImageFindFirstArgs} args - Arguments to find a BookStyleImage
+     * @example
+     * // Get one BookStyleImage
+     * const bookStyleImage = await prisma.bookStyleImage.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BookStyleImageFindFirstArgs>(args?: SelectSubset<T, BookStyleImageFindFirstArgs<ExtArgs>>): Prisma__BookStyleImageClient<$Result.GetResult<Prisma.$BookStyleImagePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BookStyleImage that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookStyleImageFindFirstOrThrowArgs} args - Arguments to find a BookStyleImage
+     * @example
+     * // Get one BookStyleImage
+     * const bookStyleImage = await prisma.bookStyleImage.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BookStyleImageFindFirstOrThrowArgs>(args?: SelectSubset<T, BookStyleImageFindFirstOrThrowArgs<ExtArgs>>): Prisma__BookStyleImageClient<$Result.GetResult<Prisma.$BookStyleImagePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more BookStyleImages that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookStyleImageFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all BookStyleImages
+     * const bookStyleImages = await prisma.bookStyleImage.findMany()
+     * 
+     * // Get first 10 BookStyleImages
+     * const bookStyleImages = await prisma.bookStyleImage.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const bookStyleImageWithIdOnly = await prisma.bookStyleImage.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BookStyleImageFindManyArgs>(args?: SelectSubset<T, BookStyleImageFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookStyleImagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a BookStyleImage.
+     * @param {BookStyleImageCreateArgs} args - Arguments to create a BookStyleImage.
+     * @example
+     * // Create one BookStyleImage
+     * const BookStyleImage = await prisma.bookStyleImage.create({
+     *   data: {
+     *     // ... data to create a BookStyleImage
+     *   }
+     * })
+     * 
+     */
+    create<T extends BookStyleImageCreateArgs>(args: SelectSubset<T, BookStyleImageCreateArgs<ExtArgs>>): Prisma__BookStyleImageClient<$Result.GetResult<Prisma.$BookStyleImagePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many BookStyleImages.
+     * @param {BookStyleImageCreateManyArgs} args - Arguments to create many BookStyleImages.
+     * @example
+     * // Create many BookStyleImages
+     * const bookStyleImage = await prisma.bookStyleImage.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BookStyleImageCreateManyArgs>(args?: SelectSubset<T, BookStyleImageCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many BookStyleImages and returns the data saved in the database.
+     * @param {BookStyleImageCreateManyAndReturnArgs} args - Arguments to create many BookStyleImages.
+     * @example
+     * // Create many BookStyleImages
+     * const bookStyleImage = await prisma.bookStyleImage.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many BookStyleImages and only return the `id`
+     * const bookStyleImageWithIdOnly = await prisma.bookStyleImage.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BookStyleImageCreateManyAndReturnArgs>(args?: SelectSubset<T, BookStyleImageCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookStyleImagePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a BookStyleImage.
+     * @param {BookStyleImageDeleteArgs} args - Arguments to delete one BookStyleImage.
+     * @example
+     * // Delete one BookStyleImage
+     * const BookStyleImage = await prisma.bookStyleImage.delete({
+     *   where: {
+     *     // ... filter to delete one BookStyleImage
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BookStyleImageDeleteArgs>(args: SelectSubset<T, BookStyleImageDeleteArgs<ExtArgs>>): Prisma__BookStyleImageClient<$Result.GetResult<Prisma.$BookStyleImagePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one BookStyleImage.
+     * @param {BookStyleImageUpdateArgs} args - Arguments to update one BookStyleImage.
+     * @example
+     * // Update one BookStyleImage
+     * const bookStyleImage = await prisma.bookStyleImage.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BookStyleImageUpdateArgs>(args: SelectSubset<T, BookStyleImageUpdateArgs<ExtArgs>>): Prisma__BookStyleImageClient<$Result.GetResult<Prisma.$BookStyleImagePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more BookStyleImages.
+     * @param {BookStyleImageDeleteManyArgs} args - Arguments to filter BookStyleImages to delete.
+     * @example
+     * // Delete a few BookStyleImages
+     * const { count } = await prisma.bookStyleImage.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BookStyleImageDeleteManyArgs>(args?: SelectSubset<T, BookStyleImageDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BookStyleImages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookStyleImageUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many BookStyleImages
+     * const bookStyleImage = await prisma.bookStyleImage.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BookStyleImageUpdateManyArgs>(args: SelectSubset<T, BookStyleImageUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BookStyleImages and returns the data updated in the database.
+     * @param {BookStyleImageUpdateManyAndReturnArgs} args - Arguments to update many BookStyleImages.
+     * @example
+     * // Update many BookStyleImages
+     * const bookStyleImage = await prisma.bookStyleImage.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more BookStyleImages and only return the `id`
+     * const bookStyleImageWithIdOnly = await prisma.bookStyleImage.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends BookStyleImageUpdateManyAndReturnArgs>(args: SelectSubset<T, BookStyleImageUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookStyleImagePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one BookStyleImage.
+     * @param {BookStyleImageUpsertArgs} args - Arguments to update or create a BookStyleImage.
+     * @example
+     * // Update or create a BookStyleImage
+     * const bookStyleImage = await prisma.bookStyleImage.upsert({
+     *   create: {
+     *     // ... data to create a BookStyleImage
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the BookStyleImage we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BookStyleImageUpsertArgs>(args: SelectSubset<T, BookStyleImageUpsertArgs<ExtArgs>>): Prisma__BookStyleImageClient<$Result.GetResult<Prisma.$BookStyleImagePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of BookStyleImages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookStyleImageCountArgs} args - Arguments to filter BookStyleImages to count.
+     * @example
+     * // Count the number of BookStyleImages
+     * const count = await prisma.bookStyleImage.count({
+     *   where: {
+     *     // ... the filter for the BookStyleImages we want to count
+     *   }
+     * })
+    **/
+    count<T extends BookStyleImageCountArgs>(
+      args?: Subset<T, BookStyleImageCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BookStyleImageCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a BookStyleImage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookStyleImageAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BookStyleImageAggregateArgs>(args: Subset<T, BookStyleImageAggregateArgs>): Prisma.PrismaPromise<GetBookStyleImageAggregateType<T>>
+
+    /**
+     * Group by BookStyleImage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookStyleImageGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BookStyleImageGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BookStyleImageGroupByArgs['orderBy'] }
+        : { orderBy?: BookStyleImageGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BookStyleImageGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBookStyleImageGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the BookStyleImage model
+   */
+  readonly fields: BookStyleImageFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for BookStyleImage.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BookStyleImageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    book<T extends BookDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BookDefaultArgs<ExtArgs>>): Prisma__BookClient<$Result.GetResult<Prisma.$BookPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the BookStyleImage model
+   */
+  interface BookStyleImageFieldRefs {
+    readonly id: FieldRef<"BookStyleImage", 'String'>
+    readonly bookId: FieldRef<"BookStyleImage", 'String'>
+    readonly url: FieldRef<"BookStyleImage", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * BookStyleImage findUnique
+   */
+  export type BookStyleImageFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookStyleImage
+     */
+    select?: BookStyleImageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookStyleImage
+     */
+    omit?: BookStyleImageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookStyleImageInclude<ExtArgs> | null
+    /**
+     * Filter, which BookStyleImage to fetch.
+     */
+    where: BookStyleImageWhereUniqueInput
+  }
+
+  /**
+   * BookStyleImage findUniqueOrThrow
+   */
+  export type BookStyleImageFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookStyleImage
+     */
+    select?: BookStyleImageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookStyleImage
+     */
+    omit?: BookStyleImageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookStyleImageInclude<ExtArgs> | null
+    /**
+     * Filter, which BookStyleImage to fetch.
+     */
+    where: BookStyleImageWhereUniqueInput
+  }
+
+  /**
+   * BookStyleImage findFirst
+   */
+  export type BookStyleImageFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookStyleImage
+     */
+    select?: BookStyleImageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookStyleImage
+     */
+    omit?: BookStyleImageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookStyleImageInclude<ExtArgs> | null
+    /**
+     * Filter, which BookStyleImage to fetch.
+     */
+    where?: BookStyleImageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BookStyleImages to fetch.
+     */
+    orderBy?: BookStyleImageOrderByWithRelationInput | BookStyleImageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BookStyleImages.
+     */
+    cursor?: BookStyleImageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BookStyleImages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BookStyleImages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BookStyleImages.
+     */
+    distinct?: BookStyleImageScalarFieldEnum | BookStyleImageScalarFieldEnum[]
+  }
+
+  /**
+   * BookStyleImage findFirstOrThrow
+   */
+  export type BookStyleImageFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookStyleImage
+     */
+    select?: BookStyleImageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookStyleImage
+     */
+    omit?: BookStyleImageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookStyleImageInclude<ExtArgs> | null
+    /**
+     * Filter, which BookStyleImage to fetch.
+     */
+    where?: BookStyleImageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BookStyleImages to fetch.
+     */
+    orderBy?: BookStyleImageOrderByWithRelationInput | BookStyleImageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BookStyleImages.
+     */
+    cursor?: BookStyleImageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BookStyleImages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BookStyleImages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BookStyleImages.
+     */
+    distinct?: BookStyleImageScalarFieldEnum | BookStyleImageScalarFieldEnum[]
+  }
+
+  /**
+   * BookStyleImage findMany
+   */
+  export type BookStyleImageFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookStyleImage
+     */
+    select?: BookStyleImageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookStyleImage
+     */
+    omit?: BookStyleImageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookStyleImageInclude<ExtArgs> | null
+    /**
+     * Filter, which BookStyleImages to fetch.
+     */
+    where?: BookStyleImageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BookStyleImages to fetch.
+     */
+    orderBy?: BookStyleImageOrderByWithRelationInput | BookStyleImageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing BookStyleImages.
+     */
+    cursor?: BookStyleImageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BookStyleImages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BookStyleImages.
+     */
+    skip?: number
+    distinct?: BookStyleImageScalarFieldEnum | BookStyleImageScalarFieldEnum[]
+  }
+
+  /**
+   * BookStyleImage create
+   */
+  export type BookStyleImageCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookStyleImage
+     */
+    select?: BookStyleImageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookStyleImage
+     */
+    omit?: BookStyleImageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookStyleImageInclude<ExtArgs> | null
+    /**
+     * The data needed to create a BookStyleImage.
+     */
+    data: XOR<BookStyleImageCreateInput, BookStyleImageUncheckedCreateInput>
+  }
+
+  /**
+   * BookStyleImage createMany
+   */
+  export type BookStyleImageCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many BookStyleImages.
+     */
+    data: BookStyleImageCreateManyInput | BookStyleImageCreateManyInput[]
+  }
+
+  /**
+   * BookStyleImage createManyAndReturn
+   */
+  export type BookStyleImageCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookStyleImage
+     */
+    select?: BookStyleImageSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookStyleImage
+     */
+    omit?: BookStyleImageOmit<ExtArgs> | null
+    /**
+     * The data used to create many BookStyleImages.
+     */
+    data: BookStyleImageCreateManyInput | BookStyleImageCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookStyleImageIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BookStyleImage update
+   */
+  export type BookStyleImageUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookStyleImage
+     */
+    select?: BookStyleImageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookStyleImage
+     */
+    omit?: BookStyleImageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookStyleImageInclude<ExtArgs> | null
+    /**
+     * The data needed to update a BookStyleImage.
+     */
+    data: XOR<BookStyleImageUpdateInput, BookStyleImageUncheckedUpdateInput>
+    /**
+     * Choose, which BookStyleImage to update.
+     */
+    where: BookStyleImageWhereUniqueInput
+  }
+
+  /**
+   * BookStyleImage updateMany
+   */
+  export type BookStyleImageUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update BookStyleImages.
+     */
+    data: XOR<BookStyleImageUpdateManyMutationInput, BookStyleImageUncheckedUpdateManyInput>
+    /**
+     * Filter which BookStyleImages to update
+     */
+    where?: BookStyleImageWhereInput
+    /**
+     * Limit how many BookStyleImages to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * BookStyleImage updateManyAndReturn
+   */
+  export type BookStyleImageUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookStyleImage
+     */
+    select?: BookStyleImageSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookStyleImage
+     */
+    omit?: BookStyleImageOmit<ExtArgs> | null
+    /**
+     * The data used to update BookStyleImages.
+     */
+    data: XOR<BookStyleImageUpdateManyMutationInput, BookStyleImageUncheckedUpdateManyInput>
+    /**
+     * Filter which BookStyleImages to update
+     */
+    where?: BookStyleImageWhereInput
+    /**
+     * Limit how many BookStyleImages to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookStyleImageIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BookStyleImage upsert
+   */
+  export type BookStyleImageUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookStyleImage
+     */
+    select?: BookStyleImageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookStyleImage
+     */
+    omit?: BookStyleImageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookStyleImageInclude<ExtArgs> | null
+    /**
+     * The filter to search for the BookStyleImage to update in case it exists.
+     */
+    where: BookStyleImageWhereUniqueInput
+    /**
+     * In case the BookStyleImage found by the `where` argument doesn't exist, create a new BookStyleImage with this data.
+     */
+    create: XOR<BookStyleImageCreateInput, BookStyleImageUncheckedCreateInput>
+    /**
+     * In case the BookStyleImage was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BookStyleImageUpdateInput, BookStyleImageUncheckedUpdateInput>
+  }
+
+  /**
+   * BookStyleImage delete
+   */
+  export type BookStyleImageDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookStyleImage
+     */
+    select?: BookStyleImageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookStyleImage
+     */
+    omit?: BookStyleImageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookStyleImageInclude<ExtArgs> | null
+    /**
+     * Filter which BookStyleImage to delete.
+     */
+    where: BookStyleImageWhereUniqueInput
+  }
+
+  /**
+   * BookStyleImage deleteMany
+   */
+  export type BookStyleImageDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BookStyleImages to delete
+     */
+    where?: BookStyleImageWhereInput
+    /**
+     * Limit how many BookStyleImages to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * BookStyleImage without action
+   */
+  export type BookStyleImageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookStyleImage
+     */
+    select?: BookStyleImageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookStyleImage
+     */
+    omit?: BookStyleImageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookStyleImageInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Category
+   */
+
+  export type AggregateCategory = {
+    _count: CategoryCountAggregateOutputType | null
+    _min: CategoryMinAggregateOutputType | null
+    _max: CategoryMaxAggregateOutputType | null
+  }
+
+  export type CategoryMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+  }
+
+  export type CategoryMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+  }
+
+  export type CategoryCountAggregateOutputType = {
+    id: number
+    name: number
+    _all: number
+  }
+
+
+  export type CategoryMinAggregateInputType = {
+    id?: true
+    name?: true
+  }
+
+  export type CategoryMaxAggregateInputType = {
+    id?: true
+    name?: true
+  }
+
+  export type CategoryCountAggregateInputType = {
+    id?: true
+    name?: true
+    _all?: true
+  }
+
+  export type CategoryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Category to aggregate.
+     */
+    where?: CategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Categories to fetch.
+     */
+    orderBy?: CategoryOrderByWithRelationInput | CategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Categories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Categories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Categories
+    **/
+    _count?: true | CategoryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CategoryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CategoryMaxAggregateInputType
+  }
+
+  export type GetCategoryAggregateType<T extends CategoryAggregateArgs> = {
+        [P in keyof T & keyof AggregateCategory]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCategory[P]>
+      : GetScalarType<T[P], AggregateCategory[P]>
+  }
+
+
+
+
+  export type CategoryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CategoryWhereInput
+    orderBy?: CategoryOrderByWithAggregationInput | CategoryOrderByWithAggregationInput[]
+    by: CategoryScalarFieldEnum[] | CategoryScalarFieldEnum
+    having?: CategoryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CategoryCountAggregateInputType | true
+    _min?: CategoryMinAggregateInputType
+    _max?: CategoryMaxAggregateInputType
+  }
+
+  export type CategoryGroupByOutputType = {
+    id: string
+    name: string
+    _count: CategoryCountAggregateOutputType | null
+    _min: CategoryMinAggregateOutputType | null
+    _max: CategoryMaxAggregateOutputType | null
+  }
+
+  type GetCategoryGroupByPayload<T extends CategoryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CategoryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CategoryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CategoryGroupByOutputType[P]>
+            : GetScalarType<T[P], CategoryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CategorySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    books?: boolean | Category$booksArgs<ExtArgs>
+    _count?: boolean | CategoryCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["category"]>
+
+  export type CategorySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+  }, ExtArgs["result"]["category"]>
+
+  export type CategorySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+  }, ExtArgs["result"]["category"]>
+
+  export type CategorySelectScalar = {
+    id?: boolean
+    name?: boolean
+  }
+
+  export type CategoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name", ExtArgs["result"]["category"]>
+  export type CategoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    books?: boolean | Category$booksArgs<ExtArgs>
+    _count?: boolean | CategoryCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type CategoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type CategoryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $CategoryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Category"
+    objects: {
+      books: Prisma.$BookPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+    }, ExtArgs["result"]["category"]>
+    composites: {}
+  }
+
+  type CategoryGetPayload<S extends boolean | null | undefined | CategoryDefaultArgs> = $Result.GetResult<Prisma.$CategoryPayload, S>
+
+  type CategoryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CategoryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CategoryCountAggregateInputType | true
+    }
+
+  export interface CategoryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Category'], meta: { name: 'Category' } }
+    /**
+     * Find zero or one Category that matches the filter.
+     * @param {CategoryFindUniqueArgs} args - Arguments to find a Category
+     * @example
+     * // Get one Category
+     * const category = await prisma.category.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CategoryFindUniqueArgs>(args: SelectSubset<T, CategoryFindUniqueArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Category that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CategoryFindUniqueOrThrowArgs} args - Arguments to find a Category
+     * @example
+     * // Get one Category
+     * const category = await prisma.category.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CategoryFindUniqueOrThrowArgs>(args: SelectSubset<T, CategoryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Category that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CategoryFindFirstArgs} args - Arguments to find a Category
+     * @example
+     * // Get one Category
+     * const category = await prisma.category.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CategoryFindFirstArgs>(args?: SelectSubset<T, CategoryFindFirstArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Category that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CategoryFindFirstOrThrowArgs} args - Arguments to find a Category
+     * @example
+     * // Get one Category
+     * const category = await prisma.category.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CategoryFindFirstOrThrowArgs>(args?: SelectSubset<T, CategoryFindFirstOrThrowArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Categories that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CategoryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Categories
+     * const categories = await prisma.category.findMany()
+     * 
+     * // Get first 10 Categories
+     * const categories = await prisma.category.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const categoryWithIdOnly = await prisma.category.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CategoryFindManyArgs>(args?: SelectSubset<T, CategoryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Category.
+     * @param {CategoryCreateArgs} args - Arguments to create a Category.
+     * @example
+     * // Create one Category
+     * const Category = await prisma.category.create({
+     *   data: {
+     *     // ... data to create a Category
+     *   }
+     * })
+     * 
+     */
+    create<T extends CategoryCreateArgs>(args: SelectSubset<T, CategoryCreateArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Categories.
+     * @param {CategoryCreateManyArgs} args - Arguments to create many Categories.
+     * @example
+     * // Create many Categories
+     * const category = await prisma.category.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CategoryCreateManyArgs>(args?: SelectSubset<T, CategoryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Categories and returns the data saved in the database.
+     * @param {CategoryCreateManyAndReturnArgs} args - Arguments to create many Categories.
+     * @example
+     * // Create many Categories
+     * const category = await prisma.category.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Categories and only return the `id`
+     * const categoryWithIdOnly = await prisma.category.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CategoryCreateManyAndReturnArgs>(args?: SelectSubset<T, CategoryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Category.
+     * @param {CategoryDeleteArgs} args - Arguments to delete one Category.
+     * @example
+     * // Delete one Category
+     * const Category = await prisma.category.delete({
+     *   where: {
+     *     // ... filter to delete one Category
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CategoryDeleteArgs>(args: SelectSubset<T, CategoryDeleteArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Category.
+     * @param {CategoryUpdateArgs} args - Arguments to update one Category.
+     * @example
+     * // Update one Category
+     * const category = await prisma.category.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CategoryUpdateArgs>(args: SelectSubset<T, CategoryUpdateArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Categories.
+     * @param {CategoryDeleteManyArgs} args - Arguments to filter Categories to delete.
+     * @example
+     * // Delete a few Categories
+     * const { count } = await prisma.category.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CategoryDeleteManyArgs>(args?: SelectSubset<T, CategoryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Categories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CategoryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Categories
+     * const category = await prisma.category.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CategoryUpdateManyArgs>(args: SelectSubset<T, CategoryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Categories and returns the data updated in the database.
+     * @param {CategoryUpdateManyAndReturnArgs} args - Arguments to update many Categories.
+     * @example
+     * // Update many Categories
+     * const category = await prisma.category.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Categories and only return the `id`
+     * const categoryWithIdOnly = await prisma.category.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CategoryUpdateManyAndReturnArgs>(args: SelectSubset<T, CategoryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Category.
+     * @param {CategoryUpsertArgs} args - Arguments to update or create a Category.
+     * @example
+     * // Update or create a Category
+     * const category = await prisma.category.upsert({
+     *   create: {
+     *     // ... data to create a Category
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Category we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CategoryUpsertArgs>(args: SelectSubset<T, CategoryUpsertArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Categories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CategoryCountArgs} args - Arguments to filter Categories to count.
+     * @example
+     * // Count the number of Categories
+     * const count = await prisma.category.count({
+     *   where: {
+     *     // ... the filter for the Categories we want to count
+     *   }
+     * })
+    **/
+    count<T extends CategoryCountArgs>(
+      args?: Subset<T, CategoryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CategoryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Category.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CategoryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CategoryAggregateArgs>(args: Subset<T, CategoryAggregateArgs>): Prisma.PrismaPromise<GetCategoryAggregateType<T>>
+
+    /**
+     * Group by Category.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CategoryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CategoryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CategoryGroupByArgs['orderBy'] }
+        : { orderBy?: CategoryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CategoryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCategoryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Category model
+   */
+  readonly fields: CategoryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Category.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CategoryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    books<T extends Category$booksArgs<ExtArgs> = {}>(args?: Subset<T, Category$booksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Category model
+   */
+  interface CategoryFieldRefs {
+    readonly id: FieldRef<"Category", 'String'>
+    readonly name: FieldRef<"Category", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Category findUnique
+   */
+  export type CategoryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Category
+     */
+    select?: CategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Category
+     */
+    omit?: CategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which Category to fetch.
+     */
+    where: CategoryWhereUniqueInput
+  }
+
+  /**
+   * Category findUniqueOrThrow
+   */
+  export type CategoryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Category
+     */
+    select?: CategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Category
+     */
+    omit?: CategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which Category to fetch.
+     */
+    where: CategoryWhereUniqueInput
+  }
+
+  /**
+   * Category findFirst
+   */
+  export type CategoryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Category
+     */
+    select?: CategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Category
+     */
+    omit?: CategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which Category to fetch.
+     */
+    where?: CategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Categories to fetch.
+     */
+    orderBy?: CategoryOrderByWithRelationInput | CategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Categories.
+     */
+    cursor?: CategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Categories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Categories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Categories.
+     */
+    distinct?: CategoryScalarFieldEnum | CategoryScalarFieldEnum[]
+  }
+
+  /**
+   * Category findFirstOrThrow
+   */
+  export type CategoryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Category
+     */
+    select?: CategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Category
+     */
+    omit?: CategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which Category to fetch.
+     */
+    where?: CategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Categories to fetch.
+     */
+    orderBy?: CategoryOrderByWithRelationInput | CategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Categories.
+     */
+    cursor?: CategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Categories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Categories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Categories.
+     */
+    distinct?: CategoryScalarFieldEnum | CategoryScalarFieldEnum[]
+  }
+
+  /**
+   * Category findMany
+   */
+  export type CategoryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Category
+     */
+    select?: CategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Category
+     */
+    omit?: CategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which Categories to fetch.
+     */
+    where?: CategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Categories to fetch.
+     */
+    orderBy?: CategoryOrderByWithRelationInput | CategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Categories.
+     */
+    cursor?: CategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Categories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Categories.
+     */
+    skip?: number
+    distinct?: CategoryScalarFieldEnum | CategoryScalarFieldEnum[]
+  }
+
+  /**
+   * Category create
+   */
+  export type CategoryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Category
+     */
+    select?: CategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Category
+     */
+    omit?: CategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Category.
+     */
+    data: XOR<CategoryCreateInput, CategoryUncheckedCreateInput>
+  }
+
+  /**
+   * Category createMany
+   */
+  export type CategoryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Categories.
+     */
+    data: CategoryCreateManyInput | CategoryCreateManyInput[]
+  }
+
+  /**
+   * Category createManyAndReturn
+   */
+  export type CategoryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Category
+     */
+    select?: CategorySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Category
+     */
+    omit?: CategoryOmit<ExtArgs> | null
+    /**
+     * The data used to create many Categories.
+     */
+    data: CategoryCreateManyInput | CategoryCreateManyInput[]
+  }
+
+  /**
+   * Category update
+   */
+  export type CategoryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Category
+     */
+    select?: CategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Category
+     */
+    omit?: CategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Category.
+     */
+    data: XOR<CategoryUpdateInput, CategoryUncheckedUpdateInput>
+    /**
+     * Choose, which Category to update.
+     */
+    where: CategoryWhereUniqueInput
+  }
+
+  /**
+   * Category updateMany
+   */
+  export type CategoryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Categories.
+     */
+    data: XOR<CategoryUpdateManyMutationInput, CategoryUncheckedUpdateManyInput>
+    /**
+     * Filter which Categories to update
+     */
+    where?: CategoryWhereInput
+    /**
+     * Limit how many Categories to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Category updateManyAndReturn
+   */
+  export type CategoryUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Category
+     */
+    select?: CategorySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Category
+     */
+    omit?: CategoryOmit<ExtArgs> | null
+    /**
+     * The data used to update Categories.
+     */
+    data: XOR<CategoryUpdateManyMutationInput, CategoryUncheckedUpdateManyInput>
+    /**
+     * Filter which Categories to update
+     */
+    where?: CategoryWhereInput
+    /**
+     * Limit how many Categories to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Category upsert
+   */
+  export type CategoryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Category
+     */
+    select?: CategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Category
+     */
+    omit?: CategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Category to update in case it exists.
+     */
+    where: CategoryWhereUniqueInput
+    /**
+     * In case the Category found by the `where` argument doesn't exist, create a new Category with this data.
+     */
+    create: XOR<CategoryCreateInput, CategoryUncheckedCreateInput>
+    /**
+     * In case the Category was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CategoryUpdateInput, CategoryUncheckedUpdateInput>
+  }
+
+  /**
+   * Category delete
+   */
+  export type CategoryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Category
+     */
+    select?: CategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Category
+     */
+    omit?: CategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoryInclude<ExtArgs> | null
+    /**
+     * Filter which Category to delete.
+     */
+    where: CategoryWhereUniqueInput
+  }
+
+  /**
+   * Category deleteMany
+   */
+  export type CategoryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Categories to delete
+     */
+    where?: CategoryWhereInput
+    /**
+     * Limit how many Categories to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Category.books
+   */
+  export type Category$booksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Book
+     */
+    select?: BookSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Book
+     */
+    omit?: BookOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookInclude<ExtArgs> | null
+    where?: BookWhereInput
+    orderBy?: BookOrderByWithRelationInput | BookOrderByWithRelationInput[]
+    cursor?: BookWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BookScalarFieldEnum | BookScalarFieldEnum[]
+  }
+
+  /**
+   * Category without action
+   */
+  export type CategoryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Category
+     */
+    select?: CategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Category
+     */
+    omit?: CategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoryInclude<ExtArgs> | null
   }
 
 
@@ -11500,6 +15525,7 @@ export namespace Prisma {
     year: number | null
     isActive: boolean | null
     createdByUserId: string | null
+    indicationComment: string | null
     createdAt: Date | null
     activatedAt: Date | null
   }
@@ -11516,6 +15542,7 @@ export namespace Prisma {
     year: number | null
     isActive: boolean | null
     createdByUserId: string | null
+    indicationComment: string | null
     createdAt: Date | null
     activatedAt: Date | null
   }
@@ -11532,6 +15559,7 @@ export namespace Prisma {
     year: number
     isActive: number
     createdByUserId: number
+    indicationComment: number
     createdAt: number
     activatedAt: number
     _all: number
@@ -11560,6 +15588,7 @@ export namespace Prisma {
     year?: true
     isActive?: true
     createdByUserId?: true
+    indicationComment?: true
     createdAt?: true
     activatedAt?: true
   }
@@ -11576,6 +15605,7 @@ export namespace Prisma {
     year?: true
     isActive?: true
     createdByUserId?: true
+    indicationComment?: true
     createdAt?: true
     activatedAt?: true
   }
@@ -11592,6 +15622,7 @@ export namespace Prisma {
     year?: true
     isActive?: true
     createdByUserId?: true
+    indicationComment?: true
     createdAt?: true
     activatedAt?: true
     _all?: true
@@ -11695,6 +15726,7 @@ export namespace Prisma {
     year: number
     isActive: boolean
     createdByUserId: string
+    indicationComment: string
     createdAt: Date
     activatedAt: Date | null
     _count: ClubBookCountAggregateOutputType | null
@@ -11730,8 +15762,11 @@ export namespace Prisma {
     year?: boolean
     isActive?: boolean
     createdByUserId?: boolean
+    indicationComment?: boolean
     createdAt?: boolean
     activatedAt?: boolean
+    createdByUser?: boolean | UserDefaultArgs<ExtArgs>
+    book?: boolean | BookDefaultArgs<ExtArgs>
     messages?: boolean | ClubBook$messagesArgs<ExtArgs>
     artifacts?: boolean | ClubBook$artifactsArgs<ExtArgs>
     _count?: boolean | ClubBookCountOutputTypeDefaultArgs<ExtArgs>
@@ -11749,8 +15784,11 @@ export namespace Prisma {
     year?: boolean
     isActive?: boolean
     createdByUserId?: boolean
+    indicationComment?: boolean
     createdAt?: boolean
     activatedAt?: boolean
+    createdByUser?: boolean | UserDefaultArgs<ExtArgs>
+    book?: boolean | BookDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["clubBook"]>
 
   export type ClubBookSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -11765,8 +15803,11 @@ export namespace Prisma {
     year?: boolean
     isActive?: boolean
     createdByUserId?: boolean
+    indicationComment?: boolean
     createdAt?: boolean
     activatedAt?: boolean
+    createdByUser?: boolean | UserDefaultArgs<ExtArgs>
+    book?: boolean | BookDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["clubBook"]>
 
   export type ClubBookSelectScalar = {
@@ -11781,22 +15822,33 @@ export namespace Prisma {
     year?: boolean
     isActive?: boolean
     createdByUserId?: boolean
+    indicationComment?: boolean
     createdAt?: boolean
     activatedAt?: boolean
   }
 
-  export type ClubBookOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bookId" | "title" | "author" | "coverUrl" | "colorKey" | "city" | "month" | "year" | "isActive" | "createdByUserId" | "createdAt" | "activatedAt", ExtArgs["result"]["clubBook"]>
+  export type ClubBookOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bookId" | "title" | "author" | "coverUrl" | "colorKey" | "city" | "month" | "year" | "isActive" | "createdByUserId" | "indicationComment" | "createdAt" | "activatedAt", ExtArgs["result"]["clubBook"]>
   export type ClubBookInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    createdByUser?: boolean | UserDefaultArgs<ExtArgs>
+    book?: boolean | BookDefaultArgs<ExtArgs>
     messages?: boolean | ClubBook$messagesArgs<ExtArgs>
     artifacts?: boolean | ClubBook$artifactsArgs<ExtArgs>
     _count?: boolean | ClubBookCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type ClubBookIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type ClubBookIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type ClubBookIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    createdByUser?: boolean | UserDefaultArgs<ExtArgs>
+    book?: boolean | BookDefaultArgs<ExtArgs>
+  }
+  export type ClubBookIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    createdByUser?: boolean | UserDefaultArgs<ExtArgs>
+    book?: boolean | BookDefaultArgs<ExtArgs>
+  }
 
   export type $ClubBookPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ClubBook"
     objects: {
+      createdByUser: Prisma.$UserPayload<ExtArgs>
+      book: Prisma.$BookPayload<ExtArgs>
       messages: Prisma.$ClubBookMessagePayload<ExtArgs>[]
       artifacts: Prisma.$ClubBookArtifactPayload<ExtArgs>[]
     }
@@ -11812,6 +15864,7 @@ export namespace Prisma {
       year: number
       isActive: boolean
       createdByUserId: string
+      indicationComment: string
       createdAt: Date
       activatedAt: Date | null
     }, ExtArgs["result"]["clubBook"]>
@@ -12208,6 +16261,8 @@ export namespace Prisma {
    */
   export interface Prisma__ClubBookClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    createdByUser<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    book<T extends BookDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BookDefaultArgs<ExtArgs>>): Prisma__BookClient<$Result.GetResult<Prisma.$BookPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     messages<T extends ClubBook$messagesArgs<ExtArgs> = {}>(args?: Subset<T, ClubBook$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClubBookMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     artifacts<T extends ClubBook$artifactsArgs<ExtArgs> = {}>(args?: Subset<T, ClubBook$artifactsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClubBookArtifactPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -12250,6 +16305,7 @@ export namespace Prisma {
     readonly year: FieldRef<"ClubBook", 'Int'>
     readonly isActive: FieldRef<"ClubBook", 'Boolean'>
     readonly createdByUserId: FieldRef<"ClubBook", 'String'>
+    readonly indicationComment: FieldRef<"ClubBook", 'String'>
     readonly createdAt: FieldRef<"ClubBook", 'DateTime'>
     readonly activatedAt: FieldRef<"ClubBook", 'DateTime'>
   }
@@ -12499,6 +16555,10 @@ export namespace Prisma {
      * The data used to create many ClubBooks.
      */
     data: ClubBookCreateManyInput | ClubBookCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubBookIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -12569,6 +16629,10 @@ export namespace Prisma {
      * Limit how many ClubBooks to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubBookIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -25665,6 +29729,3434 @@ export namespace Prisma {
 
 
   /**
+   * Model ClubEvent
+   */
+
+  export type AggregateClubEvent = {
+    _count: ClubEventCountAggregateOutputType | null
+    _avg: ClubEventAvgAggregateOutputType | null
+    _sum: ClubEventSumAggregateOutputType | null
+    _min: ClubEventMinAggregateOutputType | null
+    _max: ClubEventMaxAggregateOutputType | null
+  }
+
+  export type ClubEventAvgAggregateOutputType = {
+    latitude: number | null
+    longitude: number | null
+  }
+
+  export type ClubEventSumAggregateOutputType = {
+    latitude: number | null
+    longitude: number | null
+  }
+
+  export type ClubEventMinAggregateOutputType = {
+    id: string | null
+    title: string | null
+    description: string | null
+    city: string | null
+    location: string | null
+    addressStreet: string | null
+    addressNumber: string | null
+    addressDistrict: string | null
+    addressCity: string | null
+    addressState: string | null
+    addressZip: string | null
+    latitude: number | null
+    longitude: number | null
+    startAt: Date | null
+    endAt: Date | null
+    createdById: string | null
+    createdAt: Date | null
+  }
+
+  export type ClubEventMaxAggregateOutputType = {
+    id: string | null
+    title: string | null
+    description: string | null
+    city: string | null
+    location: string | null
+    addressStreet: string | null
+    addressNumber: string | null
+    addressDistrict: string | null
+    addressCity: string | null
+    addressState: string | null
+    addressZip: string | null
+    latitude: number | null
+    longitude: number | null
+    startAt: Date | null
+    endAt: Date | null
+    createdById: string | null
+    createdAt: Date | null
+  }
+
+  export type ClubEventCountAggregateOutputType = {
+    id: number
+    title: number
+    description: number
+    city: number
+    location: number
+    addressStreet: number
+    addressNumber: number
+    addressDistrict: number
+    addressCity: number
+    addressState: number
+    addressZip: number
+    latitude: number
+    longitude: number
+    startAt: number
+    endAt: number
+    createdById: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ClubEventAvgAggregateInputType = {
+    latitude?: true
+    longitude?: true
+  }
+
+  export type ClubEventSumAggregateInputType = {
+    latitude?: true
+    longitude?: true
+  }
+
+  export type ClubEventMinAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    city?: true
+    location?: true
+    addressStreet?: true
+    addressNumber?: true
+    addressDistrict?: true
+    addressCity?: true
+    addressState?: true
+    addressZip?: true
+    latitude?: true
+    longitude?: true
+    startAt?: true
+    endAt?: true
+    createdById?: true
+    createdAt?: true
+  }
+
+  export type ClubEventMaxAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    city?: true
+    location?: true
+    addressStreet?: true
+    addressNumber?: true
+    addressDistrict?: true
+    addressCity?: true
+    addressState?: true
+    addressZip?: true
+    latitude?: true
+    longitude?: true
+    startAt?: true
+    endAt?: true
+    createdById?: true
+    createdAt?: true
+  }
+
+  export type ClubEventCountAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    city?: true
+    location?: true
+    addressStreet?: true
+    addressNumber?: true
+    addressDistrict?: true
+    addressCity?: true
+    addressState?: true
+    addressZip?: true
+    latitude?: true
+    longitude?: true
+    startAt?: true
+    endAt?: true
+    createdById?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ClubEventAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ClubEvent to aggregate.
+     */
+    where?: ClubEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClubEvents to fetch.
+     */
+    orderBy?: ClubEventOrderByWithRelationInput | ClubEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ClubEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClubEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClubEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ClubEvents
+    **/
+    _count?: true | ClubEventCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ClubEventAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ClubEventSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ClubEventMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ClubEventMaxAggregateInputType
+  }
+
+  export type GetClubEventAggregateType<T extends ClubEventAggregateArgs> = {
+        [P in keyof T & keyof AggregateClubEvent]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateClubEvent[P]>
+      : GetScalarType<T[P], AggregateClubEvent[P]>
+  }
+
+
+
+
+  export type ClubEventGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClubEventWhereInput
+    orderBy?: ClubEventOrderByWithAggregationInput | ClubEventOrderByWithAggregationInput[]
+    by: ClubEventScalarFieldEnum[] | ClubEventScalarFieldEnum
+    having?: ClubEventScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ClubEventCountAggregateInputType | true
+    _avg?: ClubEventAvgAggregateInputType
+    _sum?: ClubEventSumAggregateInputType
+    _min?: ClubEventMinAggregateInputType
+    _max?: ClubEventMaxAggregateInputType
+  }
+
+  export type ClubEventGroupByOutputType = {
+    id: string
+    title: string
+    description: string
+    city: string
+    location: string
+    addressStreet: string | null
+    addressNumber: string | null
+    addressDistrict: string | null
+    addressCity: string | null
+    addressState: string | null
+    addressZip: string | null
+    latitude: number | null
+    longitude: number | null
+    startAt: Date
+    endAt: Date | null
+    createdById: string
+    createdAt: Date
+    _count: ClubEventCountAggregateOutputType | null
+    _avg: ClubEventAvgAggregateOutputType | null
+    _sum: ClubEventSumAggregateOutputType | null
+    _min: ClubEventMinAggregateOutputType | null
+    _max: ClubEventMaxAggregateOutputType | null
+  }
+
+  type GetClubEventGroupByPayload<T extends ClubEventGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ClubEventGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ClubEventGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ClubEventGroupByOutputType[P]>
+            : GetScalarType<T[P], ClubEventGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ClubEventSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    city?: boolean
+    location?: boolean
+    addressStreet?: boolean
+    addressNumber?: boolean
+    addressDistrict?: boolean
+    addressCity?: boolean
+    addressState?: boolean
+    addressZip?: boolean
+    latitude?: boolean
+    longitude?: boolean
+    startAt?: boolean
+    endAt?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    participants?: boolean | ClubEvent$participantsArgs<ExtArgs>
+    photos?: boolean | ClubEvent$photosArgs<ExtArgs>
+    _count?: boolean | ClubEventCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["clubEvent"]>
+
+  export type ClubEventSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    city?: boolean
+    location?: boolean
+    addressStreet?: boolean
+    addressNumber?: boolean
+    addressDistrict?: boolean
+    addressCity?: boolean
+    addressState?: boolean
+    addressZip?: boolean
+    latitude?: boolean
+    longitude?: boolean
+    startAt?: boolean
+    endAt?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["clubEvent"]>
+
+  export type ClubEventSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    city?: boolean
+    location?: boolean
+    addressStreet?: boolean
+    addressNumber?: boolean
+    addressDistrict?: boolean
+    addressCity?: boolean
+    addressState?: boolean
+    addressZip?: boolean
+    latitude?: boolean
+    longitude?: boolean
+    startAt?: boolean
+    endAt?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["clubEvent"]>
+
+  export type ClubEventSelectScalar = {
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    city?: boolean
+    location?: boolean
+    addressStreet?: boolean
+    addressNumber?: boolean
+    addressDistrict?: boolean
+    addressCity?: boolean
+    addressState?: boolean
+    addressZip?: boolean
+    latitude?: boolean
+    longitude?: boolean
+    startAt?: boolean
+    endAt?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+  }
+
+  export type ClubEventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "city" | "location" | "addressStreet" | "addressNumber" | "addressDistrict" | "addressCity" | "addressState" | "addressZip" | "latitude" | "longitude" | "startAt" | "endAt" | "createdById" | "createdAt", ExtArgs["result"]["clubEvent"]>
+  export type ClubEventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    participants?: boolean | ClubEvent$participantsArgs<ExtArgs>
+    photos?: boolean | ClubEvent$photosArgs<ExtArgs>
+    _count?: boolean | ClubEventCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ClubEventIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type ClubEventIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $ClubEventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ClubEvent"
+    objects: {
+      participants: Prisma.$ClubEventParticipantPayload<ExtArgs>[]
+      photos: Prisma.$ClubEventPhotoPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      title: string
+      description: string
+      city: string
+      location: string
+      addressStreet: string | null
+      addressNumber: string | null
+      addressDistrict: string | null
+      addressCity: string | null
+      addressState: string | null
+      addressZip: string | null
+      latitude: number | null
+      longitude: number | null
+      startAt: Date
+      endAt: Date | null
+      createdById: string
+      createdAt: Date
+    }, ExtArgs["result"]["clubEvent"]>
+    composites: {}
+  }
+
+  type ClubEventGetPayload<S extends boolean | null | undefined | ClubEventDefaultArgs> = $Result.GetResult<Prisma.$ClubEventPayload, S>
+
+  type ClubEventCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ClubEventFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ClubEventCountAggregateInputType | true
+    }
+
+  export interface ClubEventDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ClubEvent'], meta: { name: 'ClubEvent' } }
+    /**
+     * Find zero or one ClubEvent that matches the filter.
+     * @param {ClubEventFindUniqueArgs} args - Arguments to find a ClubEvent
+     * @example
+     * // Get one ClubEvent
+     * const clubEvent = await prisma.clubEvent.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ClubEventFindUniqueArgs>(args: SelectSubset<T, ClubEventFindUniqueArgs<ExtArgs>>): Prisma__ClubEventClient<$Result.GetResult<Prisma.$ClubEventPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ClubEvent that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ClubEventFindUniqueOrThrowArgs} args - Arguments to find a ClubEvent
+     * @example
+     * // Get one ClubEvent
+     * const clubEvent = await prisma.clubEvent.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ClubEventFindUniqueOrThrowArgs>(args: SelectSubset<T, ClubEventFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ClubEventClient<$Result.GetResult<Prisma.$ClubEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ClubEvent that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClubEventFindFirstArgs} args - Arguments to find a ClubEvent
+     * @example
+     * // Get one ClubEvent
+     * const clubEvent = await prisma.clubEvent.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ClubEventFindFirstArgs>(args?: SelectSubset<T, ClubEventFindFirstArgs<ExtArgs>>): Prisma__ClubEventClient<$Result.GetResult<Prisma.$ClubEventPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ClubEvent that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClubEventFindFirstOrThrowArgs} args - Arguments to find a ClubEvent
+     * @example
+     * // Get one ClubEvent
+     * const clubEvent = await prisma.clubEvent.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ClubEventFindFirstOrThrowArgs>(args?: SelectSubset<T, ClubEventFindFirstOrThrowArgs<ExtArgs>>): Prisma__ClubEventClient<$Result.GetResult<Prisma.$ClubEventPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ClubEvents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClubEventFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ClubEvents
+     * const clubEvents = await prisma.clubEvent.findMany()
+     * 
+     * // Get first 10 ClubEvents
+     * const clubEvents = await prisma.clubEvent.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const clubEventWithIdOnly = await prisma.clubEvent.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ClubEventFindManyArgs>(args?: SelectSubset<T, ClubEventFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClubEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ClubEvent.
+     * @param {ClubEventCreateArgs} args - Arguments to create a ClubEvent.
+     * @example
+     * // Create one ClubEvent
+     * const ClubEvent = await prisma.clubEvent.create({
+     *   data: {
+     *     // ... data to create a ClubEvent
+     *   }
+     * })
+     * 
+     */
+    create<T extends ClubEventCreateArgs>(args: SelectSubset<T, ClubEventCreateArgs<ExtArgs>>): Prisma__ClubEventClient<$Result.GetResult<Prisma.$ClubEventPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ClubEvents.
+     * @param {ClubEventCreateManyArgs} args - Arguments to create many ClubEvents.
+     * @example
+     * // Create many ClubEvents
+     * const clubEvent = await prisma.clubEvent.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ClubEventCreateManyArgs>(args?: SelectSubset<T, ClubEventCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ClubEvents and returns the data saved in the database.
+     * @param {ClubEventCreateManyAndReturnArgs} args - Arguments to create many ClubEvents.
+     * @example
+     * // Create many ClubEvents
+     * const clubEvent = await prisma.clubEvent.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ClubEvents and only return the `id`
+     * const clubEventWithIdOnly = await prisma.clubEvent.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ClubEventCreateManyAndReturnArgs>(args?: SelectSubset<T, ClubEventCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClubEventPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ClubEvent.
+     * @param {ClubEventDeleteArgs} args - Arguments to delete one ClubEvent.
+     * @example
+     * // Delete one ClubEvent
+     * const ClubEvent = await prisma.clubEvent.delete({
+     *   where: {
+     *     // ... filter to delete one ClubEvent
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ClubEventDeleteArgs>(args: SelectSubset<T, ClubEventDeleteArgs<ExtArgs>>): Prisma__ClubEventClient<$Result.GetResult<Prisma.$ClubEventPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ClubEvent.
+     * @param {ClubEventUpdateArgs} args - Arguments to update one ClubEvent.
+     * @example
+     * // Update one ClubEvent
+     * const clubEvent = await prisma.clubEvent.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ClubEventUpdateArgs>(args: SelectSubset<T, ClubEventUpdateArgs<ExtArgs>>): Prisma__ClubEventClient<$Result.GetResult<Prisma.$ClubEventPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ClubEvents.
+     * @param {ClubEventDeleteManyArgs} args - Arguments to filter ClubEvents to delete.
+     * @example
+     * // Delete a few ClubEvents
+     * const { count } = await prisma.clubEvent.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ClubEventDeleteManyArgs>(args?: SelectSubset<T, ClubEventDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ClubEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClubEventUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ClubEvents
+     * const clubEvent = await prisma.clubEvent.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ClubEventUpdateManyArgs>(args: SelectSubset<T, ClubEventUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ClubEvents and returns the data updated in the database.
+     * @param {ClubEventUpdateManyAndReturnArgs} args - Arguments to update many ClubEvents.
+     * @example
+     * // Update many ClubEvents
+     * const clubEvent = await prisma.clubEvent.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ClubEvents and only return the `id`
+     * const clubEventWithIdOnly = await prisma.clubEvent.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ClubEventUpdateManyAndReturnArgs>(args: SelectSubset<T, ClubEventUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClubEventPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ClubEvent.
+     * @param {ClubEventUpsertArgs} args - Arguments to update or create a ClubEvent.
+     * @example
+     * // Update or create a ClubEvent
+     * const clubEvent = await prisma.clubEvent.upsert({
+     *   create: {
+     *     // ... data to create a ClubEvent
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ClubEvent we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ClubEventUpsertArgs>(args: SelectSubset<T, ClubEventUpsertArgs<ExtArgs>>): Prisma__ClubEventClient<$Result.GetResult<Prisma.$ClubEventPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ClubEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClubEventCountArgs} args - Arguments to filter ClubEvents to count.
+     * @example
+     * // Count the number of ClubEvents
+     * const count = await prisma.clubEvent.count({
+     *   where: {
+     *     // ... the filter for the ClubEvents we want to count
+     *   }
+     * })
+    **/
+    count<T extends ClubEventCountArgs>(
+      args?: Subset<T, ClubEventCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ClubEventCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ClubEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClubEventAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ClubEventAggregateArgs>(args: Subset<T, ClubEventAggregateArgs>): Prisma.PrismaPromise<GetClubEventAggregateType<T>>
+
+    /**
+     * Group by ClubEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClubEventGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ClubEventGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ClubEventGroupByArgs['orderBy'] }
+        : { orderBy?: ClubEventGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ClubEventGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetClubEventGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ClubEvent model
+   */
+  readonly fields: ClubEventFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ClubEvent.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ClubEventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    participants<T extends ClubEvent$participantsArgs<ExtArgs> = {}>(args?: Subset<T, ClubEvent$participantsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClubEventParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    photos<T extends ClubEvent$photosArgs<ExtArgs> = {}>(args?: Subset<T, ClubEvent$photosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClubEventPhotoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ClubEvent model
+   */
+  interface ClubEventFieldRefs {
+    readonly id: FieldRef<"ClubEvent", 'String'>
+    readonly title: FieldRef<"ClubEvent", 'String'>
+    readonly description: FieldRef<"ClubEvent", 'String'>
+    readonly city: FieldRef<"ClubEvent", 'String'>
+    readonly location: FieldRef<"ClubEvent", 'String'>
+    readonly addressStreet: FieldRef<"ClubEvent", 'String'>
+    readonly addressNumber: FieldRef<"ClubEvent", 'String'>
+    readonly addressDistrict: FieldRef<"ClubEvent", 'String'>
+    readonly addressCity: FieldRef<"ClubEvent", 'String'>
+    readonly addressState: FieldRef<"ClubEvent", 'String'>
+    readonly addressZip: FieldRef<"ClubEvent", 'String'>
+    readonly latitude: FieldRef<"ClubEvent", 'Float'>
+    readonly longitude: FieldRef<"ClubEvent", 'Float'>
+    readonly startAt: FieldRef<"ClubEvent", 'DateTime'>
+    readonly endAt: FieldRef<"ClubEvent", 'DateTime'>
+    readonly createdById: FieldRef<"ClubEvent", 'String'>
+    readonly createdAt: FieldRef<"ClubEvent", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ClubEvent findUnique
+   */
+  export type ClubEventFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEvent
+     */
+    select?: ClubEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEvent
+     */
+    omit?: ClubEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventInclude<ExtArgs> | null
+    /**
+     * Filter, which ClubEvent to fetch.
+     */
+    where: ClubEventWhereUniqueInput
+  }
+
+  /**
+   * ClubEvent findUniqueOrThrow
+   */
+  export type ClubEventFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEvent
+     */
+    select?: ClubEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEvent
+     */
+    omit?: ClubEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventInclude<ExtArgs> | null
+    /**
+     * Filter, which ClubEvent to fetch.
+     */
+    where: ClubEventWhereUniqueInput
+  }
+
+  /**
+   * ClubEvent findFirst
+   */
+  export type ClubEventFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEvent
+     */
+    select?: ClubEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEvent
+     */
+    omit?: ClubEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventInclude<ExtArgs> | null
+    /**
+     * Filter, which ClubEvent to fetch.
+     */
+    where?: ClubEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClubEvents to fetch.
+     */
+    orderBy?: ClubEventOrderByWithRelationInput | ClubEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ClubEvents.
+     */
+    cursor?: ClubEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClubEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClubEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ClubEvents.
+     */
+    distinct?: ClubEventScalarFieldEnum | ClubEventScalarFieldEnum[]
+  }
+
+  /**
+   * ClubEvent findFirstOrThrow
+   */
+  export type ClubEventFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEvent
+     */
+    select?: ClubEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEvent
+     */
+    omit?: ClubEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventInclude<ExtArgs> | null
+    /**
+     * Filter, which ClubEvent to fetch.
+     */
+    where?: ClubEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClubEvents to fetch.
+     */
+    orderBy?: ClubEventOrderByWithRelationInput | ClubEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ClubEvents.
+     */
+    cursor?: ClubEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClubEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClubEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ClubEvents.
+     */
+    distinct?: ClubEventScalarFieldEnum | ClubEventScalarFieldEnum[]
+  }
+
+  /**
+   * ClubEvent findMany
+   */
+  export type ClubEventFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEvent
+     */
+    select?: ClubEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEvent
+     */
+    omit?: ClubEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventInclude<ExtArgs> | null
+    /**
+     * Filter, which ClubEvents to fetch.
+     */
+    where?: ClubEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClubEvents to fetch.
+     */
+    orderBy?: ClubEventOrderByWithRelationInput | ClubEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ClubEvents.
+     */
+    cursor?: ClubEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClubEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClubEvents.
+     */
+    skip?: number
+    distinct?: ClubEventScalarFieldEnum | ClubEventScalarFieldEnum[]
+  }
+
+  /**
+   * ClubEvent create
+   */
+  export type ClubEventCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEvent
+     */
+    select?: ClubEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEvent
+     */
+    omit?: ClubEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ClubEvent.
+     */
+    data: XOR<ClubEventCreateInput, ClubEventUncheckedCreateInput>
+  }
+
+  /**
+   * ClubEvent createMany
+   */
+  export type ClubEventCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ClubEvents.
+     */
+    data: ClubEventCreateManyInput | ClubEventCreateManyInput[]
+  }
+
+  /**
+   * ClubEvent createManyAndReturn
+   */
+  export type ClubEventCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEvent
+     */
+    select?: ClubEventSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEvent
+     */
+    omit?: ClubEventOmit<ExtArgs> | null
+    /**
+     * The data used to create many ClubEvents.
+     */
+    data: ClubEventCreateManyInput | ClubEventCreateManyInput[]
+  }
+
+  /**
+   * ClubEvent update
+   */
+  export type ClubEventUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEvent
+     */
+    select?: ClubEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEvent
+     */
+    omit?: ClubEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ClubEvent.
+     */
+    data: XOR<ClubEventUpdateInput, ClubEventUncheckedUpdateInput>
+    /**
+     * Choose, which ClubEvent to update.
+     */
+    where: ClubEventWhereUniqueInput
+  }
+
+  /**
+   * ClubEvent updateMany
+   */
+  export type ClubEventUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ClubEvents.
+     */
+    data: XOR<ClubEventUpdateManyMutationInput, ClubEventUncheckedUpdateManyInput>
+    /**
+     * Filter which ClubEvents to update
+     */
+    where?: ClubEventWhereInput
+    /**
+     * Limit how many ClubEvents to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ClubEvent updateManyAndReturn
+   */
+  export type ClubEventUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEvent
+     */
+    select?: ClubEventSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEvent
+     */
+    omit?: ClubEventOmit<ExtArgs> | null
+    /**
+     * The data used to update ClubEvents.
+     */
+    data: XOR<ClubEventUpdateManyMutationInput, ClubEventUncheckedUpdateManyInput>
+    /**
+     * Filter which ClubEvents to update
+     */
+    where?: ClubEventWhereInput
+    /**
+     * Limit how many ClubEvents to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ClubEvent upsert
+   */
+  export type ClubEventUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEvent
+     */
+    select?: ClubEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEvent
+     */
+    omit?: ClubEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ClubEvent to update in case it exists.
+     */
+    where: ClubEventWhereUniqueInput
+    /**
+     * In case the ClubEvent found by the `where` argument doesn't exist, create a new ClubEvent with this data.
+     */
+    create: XOR<ClubEventCreateInput, ClubEventUncheckedCreateInput>
+    /**
+     * In case the ClubEvent was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ClubEventUpdateInput, ClubEventUncheckedUpdateInput>
+  }
+
+  /**
+   * ClubEvent delete
+   */
+  export type ClubEventDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEvent
+     */
+    select?: ClubEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEvent
+     */
+    omit?: ClubEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventInclude<ExtArgs> | null
+    /**
+     * Filter which ClubEvent to delete.
+     */
+    where: ClubEventWhereUniqueInput
+  }
+
+  /**
+   * ClubEvent deleteMany
+   */
+  export type ClubEventDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ClubEvents to delete
+     */
+    where?: ClubEventWhereInput
+    /**
+     * Limit how many ClubEvents to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ClubEvent.participants
+   */
+  export type ClubEvent$participantsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEventParticipant
+     */
+    select?: ClubEventParticipantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEventParticipant
+     */
+    omit?: ClubEventParticipantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventParticipantInclude<ExtArgs> | null
+    where?: ClubEventParticipantWhereInput
+    orderBy?: ClubEventParticipantOrderByWithRelationInput | ClubEventParticipantOrderByWithRelationInput[]
+    cursor?: ClubEventParticipantWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ClubEventParticipantScalarFieldEnum | ClubEventParticipantScalarFieldEnum[]
+  }
+
+  /**
+   * ClubEvent.photos
+   */
+  export type ClubEvent$photosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEventPhoto
+     */
+    select?: ClubEventPhotoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEventPhoto
+     */
+    omit?: ClubEventPhotoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventPhotoInclude<ExtArgs> | null
+    where?: ClubEventPhotoWhereInput
+    orderBy?: ClubEventPhotoOrderByWithRelationInput | ClubEventPhotoOrderByWithRelationInput[]
+    cursor?: ClubEventPhotoWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ClubEventPhotoScalarFieldEnum | ClubEventPhotoScalarFieldEnum[]
+  }
+
+  /**
+   * ClubEvent without action
+   */
+  export type ClubEventDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEvent
+     */
+    select?: ClubEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEvent
+     */
+    omit?: ClubEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ClubEventParticipant
+   */
+
+  export type AggregateClubEventParticipant = {
+    _count: ClubEventParticipantCountAggregateOutputType | null
+    _min: ClubEventParticipantMinAggregateOutputType | null
+    _max: ClubEventParticipantMaxAggregateOutputType | null
+  }
+
+  export type ClubEventParticipantMinAggregateOutputType = {
+    id: string | null
+    eventId: string | null
+    userId: string | null
+    status: string | null
+    createdAt: Date | null
+  }
+
+  export type ClubEventParticipantMaxAggregateOutputType = {
+    id: string | null
+    eventId: string | null
+    userId: string | null
+    status: string | null
+    createdAt: Date | null
+  }
+
+  export type ClubEventParticipantCountAggregateOutputType = {
+    id: number
+    eventId: number
+    userId: number
+    status: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ClubEventParticipantMinAggregateInputType = {
+    id?: true
+    eventId?: true
+    userId?: true
+    status?: true
+    createdAt?: true
+  }
+
+  export type ClubEventParticipantMaxAggregateInputType = {
+    id?: true
+    eventId?: true
+    userId?: true
+    status?: true
+    createdAt?: true
+  }
+
+  export type ClubEventParticipantCountAggregateInputType = {
+    id?: true
+    eventId?: true
+    userId?: true
+    status?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ClubEventParticipantAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ClubEventParticipant to aggregate.
+     */
+    where?: ClubEventParticipantWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClubEventParticipants to fetch.
+     */
+    orderBy?: ClubEventParticipantOrderByWithRelationInput | ClubEventParticipantOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ClubEventParticipantWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClubEventParticipants from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClubEventParticipants.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ClubEventParticipants
+    **/
+    _count?: true | ClubEventParticipantCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ClubEventParticipantMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ClubEventParticipantMaxAggregateInputType
+  }
+
+  export type GetClubEventParticipantAggregateType<T extends ClubEventParticipantAggregateArgs> = {
+        [P in keyof T & keyof AggregateClubEventParticipant]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateClubEventParticipant[P]>
+      : GetScalarType<T[P], AggregateClubEventParticipant[P]>
+  }
+
+
+
+
+  export type ClubEventParticipantGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClubEventParticipantWhereInput
+    orderBy?: ClubEventParticipantOrderByWithAggregationInput | ClubEventParticipantOrderByWithAggregationInput[]
+    by: ClubEventParticipantScalarFieldEnum[] | ClubEventParticipantScalarFieldEnum
+    having?: ClubEventParticipantScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ClubEventParticipantCountAggregateInputType | true
+    _min?: ClubEventParticipantMinAggregateInputType
+    _max?: ClubEventParticipantMaxAggregateInputType
+  }
+
+  export type ClubEventParticipantGroupByOutputType = {
+    id: string
+    eventId: string
+    userId: string
+    status: string
+    createdAt: Date
+    _count: ClubEventParticipantCountAggregateOutputType | null
+    _min: ClubEventParticipantMinAggregateOutputType | null
+    _max: ClubEventParticipantMaxAggregateOutputType | null
+  }
+
+  type GetClubEventParticipantGroupByPayload<T extends ClubEventParticipantGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ClubEventParticipantGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ClubEventParticipantGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ClubEventParticipantGroupByOutputType[P]>
+            : GetScalarType<T[P], ClubEventParticipantGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ClubEventParticipantSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    eventId?: boolean
+    userId?: boolean
+    status?: boolean
+    createdAt?: boolean
+    event?: boolean | ClubEventDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["clubEventParticipant"]>
+
+  export type ClubEventParticipantSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    eventId?: boolean
+    userId?: boolean
+    status?: boolean
+    createdAt?: boolean
+    event?: boolean | ClubEventDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["clubEventParticipant"]>
+
+  export type ClubEventParticipantSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    eventId?: boolean
+    userId?: boolean
+    status?: boolean
+    createdAt?: boolean
+    event?: boolean | ClubEventDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["clubEventParticipant"]>
+
+  export type ClubEventParticipantSelectScalar = {
+    id?: boolean
+    eventId?: boolean
+    userId?: boolean
+    status?: boolean
+    createdAt?: boolean
+  }
+
+  export type ClubEventParticipantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventId" | "userId" | "status" | "createdAt", ExtArgs["result"]["clubEventParticipant"]>
+  export type ClubEventParticipantInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    event?: boolean | ClubEventDefaultArgs<ExtArgs>
+  }
+  export type ClubEventParticipantIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    event?: boolean | ClubEventDefaultArgs<ExtArgs>
+  }
+  export type ClubEventParticipantIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    event?: boolean | ClubEventDefaultArgs<ExtArgs>
+  }
+
+  export type $ClubEventParticipantPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ClubEventParticipant"
+    objects: {
+      event: Prisma.$ClubEventPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      eventId: string
+      userId: string
+      status: string
+      createdAt: Date
+    }, ExtArgs["result"]["clubEventParticipant"]>
+    composites: {}
+  }
+
+  type ClubEventParticipantGetPayload<S extends boolean | null | undefined | ClubEventParticipantDefaultArgs> = $Result.GetResult<Prisma.$ClubEventParticipantPayload, S>
+
+  type ClubEventParticipantCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ClubEventParticipantFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ClubEventParticipantCountAggregateInputType | true
+    }
+
+  export interface ClubEventParticipantDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ClubEventParticipant'], meta: { name: 'ClubEventParticipant' } }
+    /**
+     * Find zero or one ClubEventParticipant that matches the filter.
+     * @param {ClubEventParticipantFindUniqueArgs} args - Arguments to find a ClubEventParticipant
+     * @example
+     * // Get one ClubEventParticipant
+     * const clubEventParticipant = await prisma.clubEventParticipant.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ClubEventParticipantFindUniqueArgs>(args: SelectSubset<T, ClubEventParticipantFindUniqueArgs<ExtArgs>>): Prisma__ClubEventParticipantClient<$Result.GetResult<Prisma.$ClubEventParticipantPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ClubEventParticipant that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ClubEventParticipantFindUniqueOrThrowArgs} args - Arguments to find a ClubEventParticipant
+     * @example
+     * // Get one ClubEventParticipant
+     * const clubEventParticipant = await prisma.clubEventParticipant.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ClubEventParticipantFindUniqueOrThrowArgs>(args: SelectSubset<T, ClubEventParticipantFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ClubEventParticipantClient<$Result.GetResult<Prisma.$ClubEventParticipantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ClubEventParticipant that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClubEventParticipantFindFirstArgs} args - Arguments to find a ClubEventParticipant
+     * @example
+     * // Get one ClubEventParticipant
+     * const clubEventParticipant = await prisma.clubEventParticipant.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ClubEventParticipantFindFirstArgs>(args?: SelectSubset<T, ClubEventParticipantFindFirstArgs<ExtArgs>>): Prisma__ClubEventParticipantClient<$Result.GetResult<Prisma.$ClubEventParticipantPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ClubEventParticipant that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClubEventParticipantFindFirstOrThrowArgs} args - Arguments to find a ClubEventParticipant
+     * @example
+     * // Get one ClubEventParticipant
+     * const clubEventParticipant = await prisma.clubEventParticipant.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ClubEventParticipantFindFirstOrThrowArgs>(args?: SelectSubset<T, ClubEventParticipantFindFirstOrThrowArgs<ExtArgs>>): Prisma__ClubEventParticipantClient<$Result.GetResult<Prisma.$ClubEventParticipantPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ClubEventParticipants that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClubEventParticipantFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ClubEventParticipants
+     * const clubEventParticipants = await prisma.clubEventParticipant.findMany()
+     * 
+     * // Get first 10 ClubEventParticipants
+     * const clubEventParticipants = await prisma.clubEventParticipant.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const clubEventParticipantWithIdOnly = await prisma.clubEventParticipant.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ClubEventParticipantFindManyArgs>(args?: SelectSubset<T, ClubEventParticipantFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClubEventParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ClubEventParticipant.
+     * @param {ClubEventParticipantCreateArgs} args - Arguments to create a ClubEventParticipant.
+     * @example
+     * // Create one ClubEventParticipant
+     * const ClubEventParticipant = await prisma.clubEventParticipant.create({
+     *   data: {
+     *     // ... data to create a ClubEventParticipant
+     *   }
+     * })
+     * 
+     */
+    create<T extends ClubEventParticipantCreateArgs>(args: SelectSubset<T, ClubEventParticipantCreateArgs<ExtArgs>>): Prisma__ClubEventParticipantClient<$Result.GetResult<Prisma.$ClubEventParticipantPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ClubEventParticipants.
+     * @param {ClubEventParticipantCreateManyArgs} args - Arguments to create many ClubEventParticipants.
+     * @example
+     * // Create many ClubEventParticipants
+     * const clubEventParticipant = await prisma.clubEventParticipant.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ClubEventParticipantCreateManyArgs>(args?: SelectSubset<T, ClubEventParticipantCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ClubEventParticipants and returns the data saved in the database.
+     * @param {ClubEventParticipantCreateManyAndReturnArgs} args - Arguments to create many ClubEventParticipants.
+     * @example
+     * // Create many ClubEventParticipants
+     * const clubEventParticipant = await prisma.clubEventParticipant.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ClubEventParticipants and only return the `id`
+     * const clubEventParticipantWithIdOnly = await prisma.clubEventParticipant.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ClubEventParticipantCreateManyAndReturnArgs>(args?: SelectSubset<T, ClubEventParticipantCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClubEventParticipantPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ClubEventParticipant.
+     * @param {ClubEventParticipantDeleteArgs} args - Arguments to delete one ClubEventParticipant.
+     * @example
+     * // Delete one ClubEventParticipant
+     * const ClubEventParticipant = await prisma.clubEventParticipant.delete({
+     *   where: {
+     *     // ... filter to delete one ClubEventParticipant
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ClubEventParticipantDeleteArgs>(args: SelectSubset<T, ClubEventParticipantDeleteArgs<ExtArgs>>): Prisma__ClubEventParticipantClient<$Result.GetResult<Prisma.$ClubEventParticipantPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ClubEventParticipant.
+     * @param {ClubEventParticipantUpdateArgs} args - Arguments to update one ClubEventParticipant.
+     * @example
+     * // Update one ClubEventParticipant
+     * const clubEventParticipant = await prisma.clubEventParticipant.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ClubEventParticipantUpdateArgs>(args: SelectSubset<T, ClubEventParticipantUpdateArgs<ExtArgs>>): Prisma__ClubEventParticipantClient<$Result.GetResult<Prisma.$ClubEventParticipantPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ClubEventParticipants.
+     * @param {ClubEventParticipantDeleteManyArgs} args - Arguments to filter ClubEventParticipants to delete.
+     * @example
+     * // Delete a few ClubEventParticipants
+     * const { count } = await prisma.clubEventParticipant.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ClubEventParticipantDeleteManyArgs>(args?: SelectSubset<T, ClubEventParticipantDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ClubEventParticipants.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClubEventParticipantUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ClubEventParticipants
+     * const clubEventParticipant = await prisma.clubEventParticipant.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ClubEventParticipantUpdateManyArgs>(args: SelectSubset<T, ClubEventParticipantUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ClubEventParticipants and returns the data updated in the database.
+     * @param {ClubEventParticipantUpdateManyAndReturnArgs} args - Arguments to update many ClubEventParticipants.
+     * @example
+     * // Update many ClubEventParticipants
+     * const clubEventParticipant = await prisma.clubEventParticipant.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ClubEventParticipants and only return the `id`
+     * const clubEventParticipantWithIdOnly = await prisma.clubEventParticipant.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ClubEventParticipantUpdateManyAndReturnArgs>(args: SelectSubset<T, ClubEventParticipantUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClubEventParticipantPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ClubEventParticipant.
+     * @param {ClubEventParticipantUpsertArgs} args - Arguments to update or create a ClubEventParticipant.
+     * @example
+     * // Update or create a ClubEventParticipant
+     * const clubEventParticipant = await prisma.clubEventParticipant.upsert({
+     *   create: {
+     *     // ... data to create a ClubEventParticipant
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ClubEventParticipant we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ClubEventParticipantUpsertArgs>(args: SelectSubset<T, ClubEventParticipantUpsertArgs<ExtArgs>>): Prisma__ClubEventParticipantClient<$Result.GetResult<Prisma.$ClubEventParticipantPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ClubEventParticipants.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClubEventParticipantCountArgs} args - Arguments to filter ClubEventParticipants to count.
+     * @example
+     * // Count the number of ClubEventParticipants
+     * const count = await prisma.clubEventParticipant.count({
+     *   where: {
+     *     // ... the filter for the ClubEventParticipants we want to count
+     *   }
+     * })
+    **/
+    count<T extends ClubEventParticipantCountArgs>(
+      args?: Subset<T, ClubEventParticipantCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ClubEventParticipantCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ClubEventParticipant.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClubEventParticipantAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ClubEventParticipantAggregateArgs>(args: Subset<T, ClubEventParticipantAggregateArgs>): Prisma.PrismaPromise<GetClubEventParticipantAggregateType<T>>
+
+    /**
+     * Group by ClubEventParticipant.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClubEventParticipantGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ClubEventParticipantGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ClubEventParticipantGroupByArgs['orderBy'] }
+        : { orderBy?: ClubEventParticipantGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ClubEventParticipantGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetClubEventParticipantGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ClubEventParticipant model
+   */
+  readonly fields: ClubEventParticipantFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ClubEventParticipant.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ClubEventParticipantClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    event<T extends ClubEventDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClubEventDefaultArgs<ExtArgs>>): Prisma__ClubEventClient<$Result.GetResult<Prisma.$ClubEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ClubEventParticipant model
+   */
+  interface ClubEventParticipantFieldRefs {
+    readonly id: FieldRef<"ClubEventParticipant", 'String'>
+    readonly eventId: FieldRef<"ClubEventParticipant", 'String'>
+    readonly userId: FieldRef<"ClubEventParticipant", 'String'>
+    readonly status: FieldRef<"ClubEventParticipant", 'String'>
+    readonly createdAt: FieldRef<"ClubEventParticipant", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ClubEventParticipant findUnique
+   */
+  export type ClubEventParticipantFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEventParticipant
+     */
+    select?: ClubEventParticipantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEventParticipant
+     */
+    omit?: ClubEventParticipantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventParticipantInclude<ExtArgs> | null
+    /**
+     * Filter, which ClubEventParticipant to fetch.
+     */
+    where: ClubEventParticipantWhereUniqueInput
+  }
+
+  /**
+   * ClubEventParticipant findUniqueOrThrow
+   */
+  export type ClubEventParticipantFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEventParticipant
+     */
+    select?: ClubEventParticipantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEventParticipant
+     */
+    omit?: ClubEventParticipantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventParticipantInclude<ExtArgs> | null
+    /**
+     * Filter, which ClubEventParticipant to fetch.
+     */
+    where: ClubEventParticipantWhereUniqueInput
+  }
+
+  /**
+   * ClubEventParticipant findFirst
+   */
+  export type ClubEventParticipantFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEventParticipant
+     */
+    select?: ClubEventParticipantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEventParticipant
+     */
+    omit?: ClubEventParticipantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventParticipantInclude<ExtArgs> | null
+    /**
+     * Filter, which ClubEventParticipant to fetch.
+     */
+    where?: ClubEventParticipantWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClubEventParticipants to fetch.
+     */
+    orderBy?: ClubEventParticipantOrderByWithRelationInput | ClubEventParticipantOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ClubEventParticipants.
+     */
+    cursor?: ClubEventParticipantWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClubEventParticipants from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClubEventParticipants.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ClubEventParticipants.
+     */
+    distinct?: ClubEventParticipantScalarFieldEnum | ClubEventParticipantScalarFieldEnum[]
+  }
+
+  /**
+   * ClubEventParticipant findFirstOrThrow
+   */
+  export type ClubEventParticipantFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEventParticipant
+     */
+    select?: ClubEventParticipantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEventParticipant
+     */
+    omit?: ClubEventParticipantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventParticipantInclude<ExtArgs> | null
+    /**
+     * Filter, which ClubEventParticipant to fetch.
+     */
+    where?: ClubEventParticipantWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClubEventParticipants to fetch.
+     */
+    orderBy?: ClubEventParticipantOrderByWithRelationInput | ClubEventParticipantOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ClubEventParticipants.
+     */
+    cursor?: ClubEventParticipantWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClubEventParticipants from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClubEventParticipants.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ClubEventParticipants.
+     */
+    distinct?: ClubEventParticipantScalarFieldEnum | ClubEventParticipantScalarFieldEnum[]
+  }
+
+  /**
+   * ClubEventParticipant findMany
+   */
+  export type ClubEventParticipantFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEventParticipant
+     */
+    select?: ClubEventParticipantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEventParticipant
+     */
+    omit?: ClubEventParticipantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventParticipantInclude<ExtArgs> | null
+    /**
+     * Filter, which ClubEventParticipants to fetch.
+     */
+    where?: ClubEventParticipantWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClubEventParticipants to fetch.
+     */
+    orderBy?: ClubEventParticipantOrderByWithRelationInput | ClubEventParticipantOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ClubEventParticipants.
+     */
+    cursor?: ClubEventParticipantWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClubEventParticipants from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClubEventParticipants.
+     */
+    skip?: number
+    distinct?: ClubEventParticipantScalarFieldEnum | ClubEventParticipantScalarFieldEnum[]
+  }
+
+  /**
+   * ClubEventParticipant create
+   */
+  export type ClubEventParticipantCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEventParticipant
+     */
+    select?: ClubEventParticipantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEventParticipant
+     */
+    omit?: ClubEventParticipantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventParticipantInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ClubEventParticipant.
+     */
+    data: XOR<ClubEventParticipantCreateInput, ClubEventParticipantUncheckedCreateInput>
+  }
+
+  /**
+   * ClubEventParticipant createMany
+   */
+  export type ClubEventParticipantCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ClubEventParticipants.
+     */
+    data: ClubEventParticipantCreateManyInput | ClubEventParticipantCreateManyInput[]
+  }
+
+  /**
+   * ClubEventParticipant createManyAndReturn
+   */
+  export type ClubEventParticipantCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEventParticipant
+     */
+    select?: ClubEventParticipantSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEventParticipant
+     */
+    omit?: ClubEventParticipantOmit<ExtArgs> | null
+    /**
+     * The data used to create many ClubEventParticipants.
+     */
+    data: ClubEventParticipantCreateManyInput | ClubEventParticipantCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventParticipantIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ClubEventParticipant update
+   */
+  export type ClubEventParticipantUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEventParticipant
+     */
+    select?: ClubEventParticipantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEventParticipant
+     */
+    omit?: ClubEventParticipantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventParticipantInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ClubEventParticipant.
+     */
+    data: XOR<ClubEventParticipantUpdateInput, ClubEventParticipantUncheckedUpdateInput>
+    /**
+     * Choose, which ClubEventParticipant to update.
+     */
+    where: ClubEventParticipantWhereUniqueInput
+  }
+
+  /**
+   * ClubEventParticipant updateMany
+   */
+  export type ClubEventParticipantUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ClubEventParticipants.
+     */
+    data: XOR<ClubEventParticipantUpdateManyMutationInput, ClubEventParticipantUncheckedUpdateManyInput>
+    /**
+     * Filter which ClubEventParticipants to update
+     */
+    where?: ClubEventParticipantWhereInput
+    /**
+     * Limit how many ClubEventParticipants to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ClubEventParticipant updateManyAndReturn
+   */
+  export type ClubEventParticipantUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEventParticipant
+     */
+    select?: ClubEventParticipantSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEventParticipant
+     */
+    omit?: ClubEventParticipantOmit<ExtArgs> | null
+    /**
+     * The data used to update ClubEventParticipants.
+     */
+    data: XOR<ClubEventParticipantUpdateManyMutationInput, ClubEventParticipantUncheckedUpdateManyInput>
+    /**
+     * Filter which ClubEventParticipants to update
+     */
+    where?: ClubEventParticipantWhereInput
+    /**
+     * Limit how many ClubEventParticipants to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventParticipantIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ClubEventParticipant upsert
+   */
+  export type ClubEventParticipantUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEventParticipant
+     */
+    select?: ClubEventParticipantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEventParticipant
+     */
+    omit?: ClubEventParticipantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventParticipantInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ClubEventParticipant to update in case it exists.
+     */
+    where: ClubEventParticipantWhereUniqueInput
+    /**
+     * In case the ClubEventParticipant found by the `where` argument doesn't exist, create a new ClubEventParticipant with this data.
+     */
+    create: XOR<ClubEventParticipantCreateInput, ClubEventParticipantUncheckedCreateInput>
+    /**
+     * In case the ClubEventParticipant was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ClubEventParticipantUpdateInput, ClubEventParticipantUncheckedUpdateInput>
+  }
+
+  /**
+   * ClubEventParticipant delete
+   */
+  export type ClubEventParticipantDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEventParticipant
+     */
+    select?: ClubEventParticipantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEventParticipant
+     */
+    omit?: ClubEventParticipantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventParticipantInclude<ExtArgs> | null
+    /**
+     * Filter which ClubEventParticipant to delete.
+     */
+    where: ClubEventParticipantWhereUniqueInput
+  }
+
+  /**
+   * ClubEventParticipant deleteMany
+   */
+  export type ClubEventParticipantDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ClubEventParticipants to delete
+     */
+    where?: ClubEventParticipantWhereInput
+    /**
+     * Limit how many ClubEventParticipants to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ClubEventParticipant without action
+   */
+  export type ClubEventParticipantDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEventParticipant
+     */
+    select?: ClubEventParticipantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEventParticipant
+     */
+    omit?: ClubEventParticipantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventParticipantInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ClubEventPhoto
+   */
+
+  export type AggregateClubEventPhoto = {
+    _count: ClubEventPhotoCountAggregateOutputType | null
+    _min: ClubEventPhotoMinAggregateOutputType | null
+    _max: ClubEventPhotoMaxAggregateOutputType | null
+  }
+
+  export type ClubEventPhotoMinAggregateOutputType = {
+    id: string | null
+    eventId: string | null
+    userId: string | null
+    url: string | null
+    caption: string | null
+    type: string | null
+    createdAt: Date | null
+  }
+
+  export type ClubEventPhotoMaxAggregateOutputType = {
+    id: string | null
+    eventId: string | null
+    userId: string | null
+    url: string | null
+    caption: string | null
+    type: string | null
+    createdAt: Date | null
+  }
+
+  export type ClubEventPhotoCountAggregateOutputType = {
+    id: number
+    eventId: number
+    userId: number
+    url: number
+    caption: number
+    type: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ClubEventPhotoMinAggregateInputType = {
+    id?: true
+    eventId?: true
+    userId?: true
+    url?: true
+    caption?: true
+    type?: true
+    createdAt?: true
+  }
+
+  export type ClubEventPhotoMaxAggregateInputType = {
+    id?: true
+    eventId?: true
+    userId?: true
+    url?: true
+    caption?: true
+    type?: true
+    createdAt?: true
+  }
+
+  export type ClubEventPhotoCountAggregateInputType = {
+    id?: true
+    eventId?: true
+    userId?: true
+    url?: true
+    caption?: true
+    type?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ClubEventPhotoAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ClubEventPhoto to aggregate.
+     */
+    where?: ClubEventPhotoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClubEventPhotos to fetch.
+     */
+    orderBy?: ClubEventPhotoOrderByWithRelationInput | ClubEventPhotoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ClubEventPhotoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClubEventPhotos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClubEventPhotos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ClubEventPhotos
+    **/
+    _count?: true | ClubEventPhotoCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ClubEventPhotoMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ClubEventPhotoMaxAggregateInputType
+  }
+
+  export type GetClubEventPhotoAggregateType<T extends ClubEventPhotoAggregateArgs> = {
+        [P in keyof T & keyof AggregateClubEventPhoto]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateClubEventPhoto[P]>
+      : GetScalarType<T[P], AggregateClubEventPhoto[P]>
+  }
+
+
+
+
+  export type ClubEventPhotoGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClubEventPhotoWhereInput
+    orderBy?: ClubEventPhotoOrderByWithAggregationInput | ClubEventPhotoOrderByWithAggregationInput[]
+    by: ClubEventPhotoScalarFieldEnum[] | ClubEventPhotoScalarFieldEnum
+    having?: ClubEventPhotoScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ClubEventPhotoCountAggregateInputType | true
+    _min?: ClubEventPhotoMinAggregateInputType
+    _max?: ClubEventPhotoMaxAggregateInputType
+  }
+
+  export type ClubEventPhotoGroupByOutputType = {
+    id: string
+    eventId: string
+    userId: string
+    url: string
+    caption: string | null
+    type: string
+    createdAt: Date
+    _count: ClubEventPhotoCountAggregateOutputType | null
+    _min: ClubEventPhotoMinAggregateOutputType | null
+    _max: ClubEventPhotoMaxAggregateOutputType | null
+  }
+
+  type GetClubEventPhotoGroupByPayload<T extends ClubEventPhotoGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ClubEventPhotoGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ClubEventPhotoGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ClubEventPhotoGroupByOutputType[P]>
+            : GetScalarType<T[P], ClubEventPhotoGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ClubEventPhotoSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    eventId?: boolean
+    userId?: boolean
+    url?: boolean
+    caption?: boolean
+    type?: boolean
+    createdAt?: boolean
+    event?: boolean | ClubEventDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["clubEventPhoto"]>
+
+  export type ClubEventPhotoSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    eventId?: boolean
+    userId?: boolean
+    url?: boolean
+    caption?: boolean
+    type?: boolean
+    createdAt?: boolean
+    event?: boolean | ClubEventDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["clubEventPhoto"]>
+
+  export type ClubEventPhotoSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    eventId?: boolean
+    userId?: boolean
+    url?: boolean
+    caption?: boolean
+    type?: boolean
+    createdAt?: boolean
+    event?: boolean | ClubEventDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["clubEventPhoto"]>
+
+  export type ClubEventPhotoSelectScalar = {
+    id?: boolean
+    eventId?: boolean
+    userId?: boolean
+    url?: boolean
+    caption?: boolean
+    type?: boolean
+    createdAt?: boolean
+  }
+
+  export type ClubEventPhotoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventId" | "userId" | "url" | "caption" | "type" | "createdAt", ExtArgs["result"]["clubEventPhoto"]>
+  export type ClubEventPhotoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    event?: boolean | ClubEventDefaultArgs<ExtArgs>
+  }
+  export type ClubEventPhotoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    event?: boolean | ClubEventDefaultArgs<ExtArgs>
+  }
+  export type ClubEventPhotoIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    event?: boolean | ClubEventDefaultArgs<ExtArgs>
+  }
+
+  export type $ClubEventPhotoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ClubEventPhoto"
+    objects: {
+      event: Prisma.$ClubEventPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      eventId: string
+      userId: string
+      url: string
+      caption: string | null
+      type: string
+      createdAt: Date
+    }, ExtArgs["result"]["clubEventPhoto"]>
+    composites: {}
+  }
+
+  type ClubEventPhotoGetPayload<S extends boolean | null | undefined | ClubEventPhotoDefaultArgs> = $Result.GetResult<Prisma.$ClubEventPhotoPayload, S>
+
+  type ClubEventPhotoCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ClubEventPhotoFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ClubEventPhotoCountAggregateInputType | true
+    }
+
+  export interface ClubEventPhotoDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ClubEventPhoto'], meta: { name: 'ClubEventPhoto' } }
+    /**
+     * Find zero or one ClubEventPhoto that matches the filter.
+     * @param {ClubEventPhotoFindUniqueArgs} args - Arguments to find a ClubEventPhoto
+     * @example
+     * // Get one ClubEventPhoto
+     * const clubEventPhoto = await prisma.clubEventPhoto.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ClubEventPhotoFindUniqueArgs>(args: SelectSubset<T, ClubEventPhotoFindUniqueArgs<ExtArgs>>): Prisma__ClubEventPhotoClient<$Result.GetResult<Prisma.$ClubEventPhotoPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ClubEventPhoto that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ClubEventPhotoFindUniqueOrThrowArgs} args - Arguments to find a ClubEventPhoto
+     * @example
+     * // Get one ClubEventPhoto
+     * const clubEventPhoto = await prisma.clubEventPhoto.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ClubEventPhotoFindUniqueOrThrowArgs>(args: SelectSubset<T, ClubEventPhotoFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ClubEventPhotoClient<$Result.GetResult<Prisma.$ClubEventPhotoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ClubEventPhoto that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClubEventPhotoFindFirstArgs} args - Arguments to find a ClubEventPhoto
+     * @example
+     * // Get one ClubEventPhoto
+     * const clubEventPhoto = await prisma.clubEventPhoto.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ClubEventPhotoFindFirstArgs>(args?: SelectSubset<T, ClubEventPhotoFindFirstArgs<ExtArgs>>): Prisma__ClubEventPhotoClient<$Result.GetResult<Prisma.$ClubEventPhotoPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ClubEventPhoto that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClubEventPhotoFindFirstOrThrowArgs} args - Arguments to find a ClubEventPhoto
+     * @example
+     * // Get one ClubEventPhoto
+     * const clubEventPhoto = await prisma.clubEventPhoto.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ClubEventPhotoFindFirstOrThrowArgs>(args?: SelectSubset<T, ClubEventPhotoFindFirstOrThrowArgs<ExtArgs>>): Prisma__ClubEventPhotoClient<$Result.GetResult<Prisma.$ClubEventPhotoPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ClubEventPhotos that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClubEventPhotoFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ClubEventPhotos
+     * const clubEventPhotos = await prisma.clubEventPhoto.findMany()
+     * 
+     * // Get first 10 ClubEventPhotos
+     * const clubEventPhotos = await prisma.clubEventPhoto.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const clubEventPhotoWithIdOnly = await prisma.clubEventPhoto.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ClubEventPhotoFindManyArgs>(args?: SelectSubset<T, ClubEventPhotoFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClubEventPhotoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ClubEventPhoto.
+     * @param {ClubEventPhotoCreateArgs} args - Arguments to create a ClubEventPhoto.
+     * @example
+     * // Create one ClubEventPhoto
+     * const ClubEventPhoto = await prisma.clubEventPhoto.create({
+     *   data: {
+     *     // ... data to create a ClubEventPhoto
+     *   }
+     * })
+     * 
+     */
+    create<T extends ClubEventPhotoCreateArgs>(args: SelectSubset<T, ClubEventPhotoCreateArgs<ExtArgs>>): Prisma__ClubEventPhotoClient<$Result.GetResult<Prisma.$ClubEventPhotoPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ClubEventPhotos.
+     * @param {ClubEventPhotoCreateManyArgs} args - Arguments to create many ClubEventPhotos.
+     * @example
+     * // Create many ClubEventPhotos
+     * const clubEventPhoto = await prisma.clubEventPhoto.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ClubEventPhotoCreateManyArgs>(args?: SelectSubset<T, ClubEventPhotoCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ClubEventPhotos and returns the data saved in the database.
+     * @param {ClubEventPhotoCreateManyAndReturnArgs} args - Arguments to create many ClubEventPhotos.
+     * @example
+     * // Create many ClubEventPhotos
+     * const clubEventPhoto = await prisma.clubEventPhoto.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ClubEventPhotos and only return the `id`
+     * const clubEventPhotoWithIdOnly = await prisma.clubEventPhoto.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ClubEventPhotoCreateManyAndReturnArgs>(args?: SelectSubset<T, ClubEventPhotoCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClubEventPhotoPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ClubEventPhoto.
+     * @param {ClubEventPhotoDeleteArgs} args - Arguments to delete one ClubEventPhoto.
+     * @example
+     * // Delete one ClubEventPhoto
+     * const ClubEventPhoto = await prisma.clubEventPhoto.delete({
+     *   where: {
+     *     // ... filter to delete one ClubEventPhoto
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ClubEventPhotoDeleteArgs>(args: SelectSubset<T, ClubEventPhotoDeleteArgs<ExtArgs>>): Prisma__ClubEventPhotoClient<$Result.GetResult<Prisma.$ClubEventPhotoPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ClubEventPhoto.
+     * @param {ClubEventPhotoUpdateArgs} args - Arguments to update one ClubEventPhoto.
+     * @example
+     * // Update one ClubEventPhoto
+     * const clubEventPhoto = await prisma.clubEventPhoto.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ClubEventPhotoUpdateArgs>(args: SelectSubset<T, ClubEventPhotoUpdateArgs<ExtArgs>>): Prisma__ClubEventPhotoClient<$Result.GetResult<Prisma.$ClubEventPhotoPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ClubEventPhotos.
+     * @param {ClubEventPhotoDeleteManyArgs} args - Arguments to filter ClubEventPhotos to delete.
+     * @example
+     * // Delete a few ClubEventPhotos
+     * const { count } = await prisma.clubEventPhoto.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ClubEventPhotoDeleteManyArgs>(args?: SelectSubset<T, ClubEventPhotoDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ClubEventPhotos.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClubEventPhotoUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ClubEventPhotos
+     * const clubEventPhoto = await prisma.clubEventPhoto.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ClubEventPhotoUpdateManyArgs>(args: SelectSubset<T, ClubEventPhotoUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ClubEventPhotos and returns the data updated in the database.
+     * @param {ClubEventPhotoUpdateManyAndReturnArgs} args - Arguments to update many ClubEventPhotos.
+     * @example
+     * // Update many ClubEventPhotos
+     * const clubEventPhoto = await prisma.clubEventPhoto.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ClubEventPhotos and only return the `id`
+     * const clubEventPhotoWithIdOnly = await prisma.clubEventPhoto.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ClubEventPhotoUpdateManyAndReturnArgs>(args: SelectSubset<T, ClubEventPhotoUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClubEventPhotoPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ClubEventPhoto.
+     * @param {ClubEventPhotoUpsertArgs} args - Arguments to update or create a ClubEventPhoto.
+     * @example
+     * // Update or create a ClubEventPhoto
+     * const clubEventPhoto = await prisma.clubEventPhoto.upsert({
+     *   create: {
+     *     // ... data to create a ClubEventPhoto
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ClubEventPhoto we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ClubEventPhotoUpsertArgs>(args: SelectSubset<T, ClubEventPhotoUpsertArgs<ExtArgs>>): Prisma__ClubEventPhotoClient<$Result.GetResult<Prisma.$ClubEventPhotoPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ClubEventPhotos.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClubEventPhotoCountArgs} args - Arguments to filter ClubEventPhotos to count.
+     * @example
+     * // Count the number of ClubEventPhotos
+     * const count = await prisma.clubEventPhoto.count({
+     *   where: {
+     *     // ... the filter for the ClubEventPhotos we want to count
+     *   }
+     * })
+    **/
+    count<T extends ClubEventPhotoCountArgs>(
+      args?: Subset<T, ClubEventPhotoCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ClubEventPhotoCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ClubEventPhoto.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClubEventPhotoAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ClubEventPhotoAggregateArgs>(args: Subset<T, ClubEventPhotoAggregateArgs>): Prisma.PrismaPromise<GetClubEventPhotoAggregateType<T>>
+
+    /**
+     * Group by ClubEventPhoto.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClubEventPhotoGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ClubEventPhotoGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ClubEventPhotoGroupByArgs['orderBy'] }
+        : { orderBy?: ClubEventPhotoGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ClubEventPhotoGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetClubEventPhotoGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ClubEventPhoto model
+   */
+  readonly fields: ClubEventPhotoFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ClubEventPhoto.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ClubEventPhotoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    event<T extends ClubEventDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClubEventDefaultArgs<ExtArgs>>): Prisma__ClubEventClient<$Result.GetResult<Prisma.$ClubEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ClubEventPhoto model
+   */
+  interface ClubEventPhotoFieldRefs {
+    readonly id: FieldRef<"ClubEventPhoto", 'String'>
+    readonly eventId: FieldRef<"ClubEventPhoto", 'String'>
+    readonly userId: FieldRef<"ClubEventPhoto", 'String'>
+    readonly url: FieldRef<"ClubEventPhoto", 'String'>
+    readonly caption: FieldRef<"ClubEventPhoto", 'String'>
+    readonly type: FieldRef<"ClubEventPhoto", 'String'>
+    readonly createdAt: FieldRef<"ClubEventPhoto", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ClubEventPhoto findUnique
+   */
+  export type ClubEventPhotoFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEventPhoto
+     */
+    select?: ClubEventPhotoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEventPhoto
+     */
+    omit?: ClubEventPhotoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventPhotoInclude<ExtArgs> | null
+    /**
+     * Filter, which ClubEventPhoto to fetch.
+     */
+    where: ClubEventPhotoWhereUniqueInput
+  }
+
+  /**
+   * ClubEventPhoto findUniqueOrThrow
+   */
+  export type ClubEventPhotoFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEventPhoto
+     */
+    select?: ClubEventPhotoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEventPhoto
+     */
+    omit?: ClubEventPhotoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventPhotoInclude<ExtArgs> | null
+    /**
+     * Filter, which ClubEventPhoto to fetch.
+     */
+    where: ClubEventPhotoWhereUniqueInput
+  }
+
+  /**
+   * ClubEventPhoto findFirst
+   */
+  export type ClubEventPhotoFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEventPhoto
+     */
+    select?: ClubEventPhotoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEventPhoto
+     */
+    omit?: ClubEventPhotoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventPhotoInclude<ExtArgs> | null
+    /**
+     * Filter, which ClubEventPhoto to fetch.
+     */
+    where?: ClubEventPhotoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClubEventPhotos to fetch.
+     */
+    orderBy?: ClubEventPhotoOrderByWithRelationInput | ClubEventPhotoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ClubEventPhotos.
+     */
+    cursor?: ClubEventPhotoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClubEventPhotos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClubEventPhotos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ClubEventPhotos.
+     */
+    distinct?: ClubEventPhotoScalarFieldEnum | ClubEventPhotoScalarFieldEnum[]
+  }
+
+  /**
+   * ClubEventPhoto findFirstOrThrow
+   */
+  export type ClubEventPhotoFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEventPhoto
+     */
+    select?: ClubEventPhotoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEventPhoto
+     */
+    omit?: ClubEventPhotoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventPhotoInclude<ExtArgs> | null
+    /**
+     * Filter, which ClubEventPhoto to fetch.
+     */
+    where?: ClubEventPhotoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClubEventPhotos to fetch.
+     */
+    orderBy?: ClubEventPhotoOrderByWithRelationInput | ClubEventPhotoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ClubEventPhotos.
+     */
+    cursor?: ClubEventPhotoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClubEventPhotos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClubEventPhotos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ClubEventPhotos.
+     */
+    distinct?: ClubEventPhotoScalarFieldEnum | ClubEventPhotoScalarFieldEnum[]
+  }
+
+  /**
+   * ClubEventPhoto findMany
+   */
+  export type ClubEventPhotoFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEventPhoto
+     */
+    select?: ClubEventPhotoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEventPhoto
+     */
+    omit?: ClubEventPhotoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventPhotoInclude<ExtArgs> | null
+    /**
+     * Filter, which ClubEventPhotos to fetch.
+     */
+    where?: ClubEventPhotoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClubEventPhotos to fetch.
+     */
+    orderBy?: ClubEventPhotoOrderByWithRelationInput | ClubEventPhotoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ClubEventPhotos.
+     */
+    cursor?: ClubEventPhotoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClubEventPhotos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClubEventPhotos.
+     */
+    skip?: number
+    distinct?: ClubEventPhotoScalarFieldEnum | ClubEventPhotoScalarFieldEnum[]
+  }
+
+  /**
+   * ClubEventPhoto create
+   */
+  export type ClubEventPhotoCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEventPhoto
+     */
+    select?: ClubEventPhotoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEventPhoto
+     */
+    omit?: ClubEventPhotoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventPhotoInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ClubEventPhoto.
+     */
+    data: XOR<ClubEventPhotoCreateInput, ClubEventPhotoUncheckedCreateInput>
+  }
+
+  /**
+   * ClubEventPhoto createMany
+   */
+  export type ClubEventPhotoCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ClubEventPhotos.
+     */
+    data: ClubEventPhotoCreateManyInput | ClubEventPhotoCreateManyInput[]
+  }
+
+  /**
+   * ClubEventPhoto createManyAndReturn
+   */
+  export type ClubEventPhotoCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEventPhoto
+     */
+    select?: ClubEventPhotoSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEventPhoto
+     */
+    omit?: ClubEventPhotoOmit<ExtArgs> | null
+    /**
+     * The data used to create many ClubEventPhotos.
+     */
+    data: ClubEventPhotoCreateManyInput | ClubEventPhotoCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventPhotoIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ClubEventPhoto update
+   */
+  export type ClubEventPhotoUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEventPhoto
+     */
+    select?: ClubEventPhotoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEventPhoto
+     */
+    omit?: ClubEventPhotoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventPhotoInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ClubEventPhoto.
+     */
+    data: XOR<ClubEventPhotoUpdateInput, ClubEventPhotoUncheckedUpdateInput>
+    /**
+     * Choose, which ClubEventPhoto to update.
+     */
+    where: ClubEventPhotoWhereUniqueInput
+  }
+
+  /**
+   * ClubEventPhoto updateMany
+   */
+  export type ClubEventPhotoUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ClubEventPhotos.
+     */
+    data: XOR<ClubEventPhotoUpdateManyMutationInput, ClubEventPhotoUncheckedUpdateManyInput>
+    /**
+     * Filter which ClubEventPhotos to update
+     */
+    where?: ClubEventPhotoWhereInput
+    /**
+     * Limit how many ClubEventPhotos to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ClubEventPhoto updateManyAndReturn
+   */
+  export type ClubEventPhotoUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEventPhoto
+     */
+    select?: ClubEventPhotoSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEventPhoto
+     */
+    omit?: ClubEventPhotoOmit<ExtArgs> | null
+    /**
+     * The data used to update ClubEventPhotos.
+     */
+    data: XOR<ClubEventPhotoUpdateManyMutationInput, ClubEventPhotoUncheckedUpdateManyInput>
+    /**
+     * Filter which ClubEventPhotos to update
+     */
+    where?: ClubEventPhotoWhereInput
+    /**
+     * Limit how many ClubEventPhotos to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventPhotoIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ClubEventPhoto upsert
+   */
+  export type ClubEventPhotoUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEventPhoto
+     */
+    select?: ClubEventPhotoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEventPhoto
+     */
+    omit?: ClubEventPhotoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventPhotoInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ClubEventPhoto to update in case it exists.
+     */
+    where: ClubEventPhotoWhereUniqueInput
+    /**
+     * In case the ClubEventPhoto found by the `where` argument doesn't exist, create a new ClubEventPhoto with this data.
+     */
+    create: XOR<ClubEventPhotoCreateInput, ClubEventPhotoUncheckedCreateInput>
+    /**
+     * In case the ClubEventPhoto was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ClubEventPhotoUpdateInput, ClubEventPhotoUncheckedUpdateInput>
+  }
+
+  /**
+   * ClubEventPhoto delete
+   */
+  export type ClubEventPhotoDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEventPhoto
+     */
+    select?: ClubEventPhotoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEventPhoto
+     */
+    omit?: ClubEventPhotoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventPhotoInclude<ExtArgs> | null
+    /**
+     * Filter which ClubEventPhoto to delete.
+     */
+    where: ClubEventPhotoWhereUniqueInput
+  }
+
+  /**
+   * ClubEventPhoto deleteMany
+   */
+  export type ClubEventPhotoDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ClubEventPhotos to delete
+     */
+    where?: ClubEventPhotoWhereInput
+    /**
+     * Limit how many ClubEventPhotos to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ClubEventPhoto without action
+   */
+  export type ClubEventPhotoDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEventPhoto
+     */
+    select?: ClubEventPhotoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEventPhoto
+     */
+    omit?: ClubEventPhotoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventPhotoInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -25681,11 +33173,25 @@ export namespace Prisma {
     bio: 'bio',
     avatarUrl: 'avatarUrl',
     coverUrl: 'coverUrl',
+    isAdmin: 'isAdmin',
+    passwordHash: 'passwordHash',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+  export const InvitationScalarFieldEnum: {
+    id: 'id',
+    city: 'city',
+    createdBy: 'createdBy',
+    isUsed: 'isUsed',
+    usedBy: 'usedBy',
+    createdAt: 'createdAt'
+  };
+
+  export type InvitationScalarFieldEnum = (typeof InvitationScalarFieldEnum)[keyof typeof InvitationScalarFieldEnum]
 
 
   export const UserCityScalarFieldEnum: {
@@ -25703,11 +33209,30 @@ export namespace Prisma {
     author: 'author',
     coverUrl: 'coverUrl',
     synopsis: 'synopsis',
-    genre: 'genre',
+    aiStyleDescription: 'aiStyleDescription',
+    createdByUserId: 'createdByUserId',
+    indicationComment: 'indicationComment',
     createdAt: 'createdAt'
   };
 
   export type BookScalarFieldEnum = (typeof BookScalarFieldEnum)[keyof typeof BookScalarFieldEnum]
+
+
+  export const BookStyleImageScalarFieldEnum: {
+    id: 'id',
+    bookId: 'bookId',
+    url: 'url'
+  };
+
+  export type BookStyleImageScalarFieldEnum = (typeof BookStyleImageScalarFieldEnum)[keyof typeof BookStyleImageScalarFieldEnum]
+
+
+  export const CategoryScalarFieldEnum: {
+    id: 'id',
+    name: 'name'
+  };
+
+  export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
 
 
   export const GroupScalarFieldEnum: {
@@ -25776,6 +33301,7 @@ export namespace Prisma {
     year: 'year',
     isActive: 'isActive',
     createdByUserId: 'createdByUserId',
+    indicationComment: 'indicationComment',
     createdAt: 'createdAt',
     activatedAt: 'activatedAt'
   };
@@ -25922,6 +33448,53 @@ export namespace Prisma {
   export type PollVoteScalarFieldEnum = (typeof PollVoteScalarFieldEnum)[keyof typeof PollVoteScalarFieldEnum]
 
 
+  export const ClubEventScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    description: 'description',
+    city: 'city',
+    location: 'location',
+    addressStreet: 'addressStreet',
+    addressNumber: 'addressNumber',
+    addressDistrict: 'addressDistrict',
+    addressCity: 'addressCity',
+    addressState: 'addressState',
+    addressZip: 'addressZip',
+    latitude: 'latitude',
+    longitude: 'longitude',
+    startAt: 'startAt',
+    endAt: 'endAt',
+    createdById: 'createdById',
+    createdAt: 'createdAt'
+  };
+
+  export type ClubEventScalarFieldEnum = (typeof ClubEventScalarFieldEnum)[keyof typeof ClubEventScalarFieldEnum]
+
+
+  export const ClubEventParticipantScalarFieldEnum: {
+    id: 'id',
+    eventId: 'eventId',
+    userId: 'userId',
+    status: 'status',
+    createdAt: 'createdAt'
+  };
+
+  export type ClubEventParticipantScalarFieldEnum = (typeof ClubEventParticipantScalarFieldEnum)[keyof typeof ClubEventParticipantScalarFieldEnum]
+
+
+  export const ClubEventPhotoScalarFieldEnum: {
+    id: 'id',
+    eventId: 'eventId',
+    userId: 'userId',
+    url: 'url',
+    caption: 'caption',
+    type: 'type',
+    createdAt: 'createdAt'
+  };
+
+  export type ClubEventPhotoScalarFieldEnum = (typeof ClubEventPhotoScalarFieldEnum)[keyof typeof ClubEventPhotoScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -25951,6 +33524,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -25961,13 +33541,6 @@ export namespace Prisma {
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-  /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -25990,9 +33563,13 @@ export namespace Prisma {
     bio?: StringFilter<"User"> | string
     avatarUrl?: StringFilter<"User"> | string
     coverUrl?: StringFilter<"User"> | string
+    isAdmin?: BoolFilter<"User"> | boolean
+    passwordHash?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     cities?: UserCityListRelationFilter
+    createdBooks?: BookListRelationFilter
+    createdClubBooks?: ClubBookListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -26001,9 +33578,13 @@ export namespace Prisma {
     bio?: SortOrder
     avatarUrl?: SortOrder
     coverUrl?: SortOrder
+    isAdmin?: SortOrder
+    passwordHash?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     cities?: UserCityOrderByRelationAggregateInput
+    createdBooks?: BookOrderByRelationAggregateInput
+    createdClubBooks?: ClubBookOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -26015,9 +33596,13 @@ export namespace Prisma {
     bio?: StringFilter<"User"> | string
     avatarUrl?: StringFilter<"User"> | string
     coverUrl?: StringFilter<"User"> | string
+    isAdmin?: BoolFilter<"User"> | boolean
+    passwordHash?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     cities?: UserCityListRelationFilter
+    createdBooks?: BookListRelationFilter
+    createdClubBooks?: ClubBookListRelationFilter
   }, "id">
 
   export type UserOrderByWithAggregationInput = {
@@ -26026,6 +33611,8 @@ export namespace Prisma {
     bio?: SortOrder
     avatarUrl?: SortOrder
     coverUrl?: SortOrder
+    isAdmin?: SortOrder
+    passwordHash?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -26042,8 +33629,67 @@ export namespace Prisma {
     bio?: StringWithAggregatesFilter<"User"> | string
     avatarUrl?: StringWithAggregatesFilter<"User"> | string
     coverUrl?: StringWithAggregatesFilter<"User"> | string
+    isAdmin?: BoolWithAggregatesFilter<"User"> | boolean
+    passwordHash?: StringWithAggregatesFilter<"User"> | string
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+  }
+
+  export type InvitationWhereInput = {
+    AND?: InvitationWhereInput | InvitationWhereInput[]
+    OR?: InvitationWhereInput[]
+    NOT?: InvitationWhereInput | InvitationWhereInput[]
+    id?: StringFilter<"Invitation"> | string
+    city?: StringFilter<"Invitation"> | string
+    createdBy?: StringFilter<"Invitation"> | string
+    isUsed?: BoolFilter<"Invitation"> | boolean
+    usedBy?: StringNullableFilter<"Invitation"> | string | null
+    createdAt?: DateTimeFilter<"Invitation"> | Date | string
+  }
+
+  export type InvitationOrderByWithRelationInput = {
+    id?: SortOrder
+    city?: SortOrder
+    createdBy?: SortOrder
+    isUsed?: SortOrder
+    usedBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type InvitationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: InvitationWhereInput | InvitationWhereInput[]
+    OR?: InvitationWhereInput[]
+    NOT?: InvitationWhereInput | InvitationWhereInput[]
+    city?: StringFilter<"Invitation"> | string
+    createdBy?: StringFilter<"Invitation"> | string
+    isUsed?: BoolFilter<"Invitation"> | boolean
+    usedBy?: StringNullableFilter<"Invitation"> | string | null
+    createdAt?: DateTimeFilter<"Invitation"> | Date | string
+  }, "id">
+
+  export type InvitationOrderByWithAggregationInput = {
+    id?: SortOrder
+    city?: SortOrder
+    createdBy?: SortOrder
+    isUsed?: SortOrder
+    usedBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: InvitationCountOrderByAggregateInput
+    _max?: InvitationMaxOrderByAggregateInput
+    _min?: InvitationMinOrderByAggregateInput
+  }
+
+  export type InvitationScalarWhereWithAggregatesInput = {
+    AND?: InvitationScalarWhereWithAggregatesInput | InvitationScalarWhereWithAggregatesInput[]
+    OR?: InvitationScalarWhereWithAggregatesInput[]
+    NOT?: InvitationScalarWhereWithAggregatesInput | InvitationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Invitation"> | string
+    city?: StringWithAggregatesFilter<"Invitation"> | string
+    createdBy?: StringWithAggregatesFilter<"Invitation"> | string
+    isUsed?: BoolWithAggregatesFilter<"Invitation"> | boolean
+    usedBy?: StringNullableWithAggregatesFilter<"Invitation"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Invitation"> | Date | string
   }
 
   export type UserCityWhereInput = {
@@ -26101,8 +33747,14 @@ export namespace Prisma {
     author?: StringFilter<"Book"> | string
     coverUrl?: StringFilter<"Book"> | string
     synopsis?: StringFilter<"Book"> | string
-    genre?: StringNullableFilter<"Book"> | string | null
+    aiStyleDescription?: StringFilter<"Book"> | string
+    createdByUserId?: StringNullableFilter<"Book"> | string | null
+    indicationComment?: StringFilter<"Book"> | string
     createdAt?: DateTimeFilter<"Book"> | Date | string
+    categories?: CategoryListRelationFilter
+    styleImages?: BookStyleImageListRelationFilter
+    createdByUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    clubBooks?: ClubBookListRelationFilter
   }
 
   export type BookOrderByWithRelationInput = {
@@ -26111,8 +33763,14 @@ export namespace Prisma {
     author?: SortOrder
     coverUrl?: SortOrder
     synopsis?: SortOrder
-    genre?: SortOrderInput | SortOrder
+    aiStyleDescription?: SortOrder
+    createdByUserId?: SortOrderInput | SortOrder
+    indicationComment?: SortOrder
     createdAt?: SortOrder
+    categories?: CategoryOrderByRelationAggregateInput
+    styleImages?: BookStyleImageOrderByRelationAggregateInput
+    createdByUser?: UserOrderByWithRelationInput
+    clubBooks?: ClubBookOrderByRelationAggregateInput
   }
 
   export type BookWhereUniqueInput = Prisma.AtLeast<{
@@ -26125,8 +33783,14 @@ export namespace Prisma {
     author?: StringFilter<"Book"> | string
     coverUrl?: StringFilter<"Book"> | string
     synopsis?: StringFilter<"Book"> | string
-    genre?: StringNullableFilter<"Book"> | string | null
+    aiStyleDescription?: StringFilter<"Book"> | string
+    createdByUserId?: StringNullableFilter<"Book"> | string | null
+    indicationComment?: StringFilter<"Book"> | string
     createdAt?: DateTimeFilter<"Book"> | Date | string
+    categories?: CategoryListRelationFilter
+    styleImages?: BookStyleImageListRelationFilter
+    createdByUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    clubBooks?: ClubBookListRelationFilter
   }, "id" | "title_author">
 
   export type BookOrderByWithAggregationInput = {
@@ -26135,7 +33799,9 @@ export namespace Prisma {
     author?: SortOrder
     coverUrl?: SortOrder
     synopsis?: SortOrder
-    genre?: SortOrderInput | SortOrder
+    aiStyleDescription?: SortOrder
+    createdByUserId?: SortOrderInput | SortOrder
+    indicationComment?: SortOrder
     createdAt?: SortOrder
     _count?: BookCountOrderByAggregateInput
     _max?: BookMaxOrderByAggregateInput
@@ -26151,8 +33817,95 @@ export namespace Prisma {
     author?: StringWithAggregatesFilter<"Book"> | string
     coverUrl?: StringWithAggregatesFilter<"Book"> | string
     synopsis?: StringWithAggregatesFilter<"Book"> | string
-    genre?: StringNullableWithAggregatesFilter<"Book"> | string | null
+    aiStyleDescription?: StringWithAggregatesFilter<"Book"> | string
+    createdByUserId?: StringNullableWithAggregatesFilter<"Book"> | string | null
+    indicationComment?: StringWithAggregatesFilter<"Book"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Book"> | Date | string
+  }
+
+  export type BookStyleImageWhereInput = {
+    AND?: BookStyleImageWhereInput | BookStyleImageWhereInput[]
+    OR?: BookStyleImageWhereInput[]
+    NOT?: BookStyleImageWhereInput | BookStyleImageWhereInput[]
+    id?: StringFilter<"BookStyleImage"> | string
+    bookId?: StringFilter<"BookStyleImage"> | string
+    url?: StringFilter<"BookStyleImage"> | string
+    book?: XOR<BookScalarRelationFilter, BookWhereInput>
+  }
+
+  export type BookStyleImageOrderByWithRelationInput = {
+    id?: SortOrder
+    bookId?: SortOrder
+    url?: SortOrder
+    book?: BookOrderByWithRelationInput
+  }
+
+  export type BookStyleImageWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: BookStyleImageWhereInput | BookStyleImageWhereInput[]
+    OR?: BookStyleImageWhereInput[]
+    NOT?: BookStyleImageWhereInput | BookStyleImageWhereInput[]
+    bookId?: StringFilter<"BookStyleImage"> | string
+    url?: StringFilter<"BookStyleImage"> | string
+    book?: XOR<BookScalarRelationFilter, BookWhereInput>
+  }, "id">
+
+  export type BookStyleImageOrderByWithAggregationInput = {
+    id?: SortOrder
+    bookId?: SortOrder
+    url?: SortOrder
+    _count?: BookStyleImageCountOrderByAggregateInput
+    _max?: BookStyleImageMaxOrderByAggregateInput
+    _min?: BookStyleImageMinOrderByAggregateInput
+  }
+
+  export type BookStyleImageScalarWhereWithAggregatesInput = {
+    AND?: BookStyleImageScalarWhereWithAggregatesInput | BookStyleImageScalarWhereWithAggregatesInput[]
+    OR?: BookStyleImageScalarWhereWithAggregatesInput[]
+    NOT?: BookStyleImageScalarWhereWithAggregatesInput | BookStyleImageScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"BookStyleImage"> | string
+    bookId?: StringWithAggregatesFilter<"BookStyleImage"> | string
+    url?: StringWithAggregatesFilter<"BookStyleImage"> | string
+  }
+
+  export type CategoryWhereInput = {
+    AND?: CategoryWhereInput | CategoryWhereInput[]
+    OR?: CategoryWhereInput[]
+    NOT?: CategoryWhereInput | CategoryWhereInput[]
+    id?: StringFilter<"Category"> | string
+    name?: StringFilter<"Category"> | string
+    books?: BookListRelationFilter
+  }
+
+  export type CategoryOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    books?: BookOrderByRelationAggregateInput
+  }
+
+  export type CategoryWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    name?: string
+    AND?: CategoryWhereInput | CategoryWhereInput[]
+    OR?: CategoryWhereInput[]
+    NOT?: CategoryWhereInput | CategoryWhereInput[]
+    books?: BookListRelationFilter
+  }, "id" | "name">
+
+  export type CategoryOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    _count?: CategoryCountOrderByAggregateInput
+    _max?: CategoryMaxOrderByAggregateInput
+    _min?: CategoryMinOrderByAggregateInput
+  }
+
+  export type CategoryScalarWhereWithAggregatesInput = {
+    AND?: CategoryScalarWhereWithAggregatesInput | CategoryScalarWhereWithAggregatesInput[]
+    OR?: CategoryScalarWhereWithAggregatesInput[]
+    NOT?: CategoryScalarWhereWithAggregatesInput | CategoryScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Category"> | string
+    name?: StringWithAggregatesFilter<"Category"> | string
   }
 
   export type GroupWhereInput = {
@@ -26451,8 +34204,11 @@ export namespace Prisma {
     year?: IntFilter<"ClubBook"> | number
     isActive?: BoolFilter<"ClubBook"> | boolean
     createdByUserId?: StringFilter<"ClubBook"> | string
+    indicationComment?: StringFilter<"ClubBook"> | string
     createdAt?: DateTimeFilter<"ClubBook"> | Date | string
     activatedAt?: DateTimeNullableFilter<"ClubBook"> | Date | string | null
+    createdByUser?: XOR<UserScalarRelationFilter, UserWhereInput>
+    book?: XOR<BookScalarRelationFilter, BookWhereInput>
     messages?: ClubBookMessageListRelationFilter
     artifacts?: ClubBookArtifactListRelationFilter
   }
@@ -26469,8 +34225,11 @@ export namespace Prisma {
     year?: SortOrder
     isActive?: SortOrder
     createdByUserId?: SortOrder
+    indicationComment?: SortOrder
     createdAt?: SortOrder
     activatedAt?: SortOrderInput | SortOrder
+    createdByUser?: UserOrderByWithRelationInput
+    book?: BookOrderByWithRelationInput
     messages?: ClubBookMessageOrderByRelationAggregateInput
     artifacts?: ClubBookArtifactOrderByRelationAggregateInput
   }
@@ -26490,8 +34249,11 @@ export namespace Prisma {
     year?: IntFilter<"ClubBook"> | number
     isActive?: BoolFilter<"ClubBook"> | boolean
     createdByUserId?: StringFilter<"ClubBook"> | string
+    indicationComment?: StringFilter<"ClubBook"> | string
     createdAt?: DateTimeFilter<"ClubBook"> | Date | string
     activatedAt?: DateTimeNullableFilter<"ClubBook"> | Date | string | null
+    createdByUser?: XOR<UserScalarRelationFilter, UserWhereInput>
+    book?: XOR<BookScalarRelationFilter, BookWhereInput>
     messages?: ClubBookMessageListRelationFilter
     artifacts?: ClubBookArtifactListRelationFilter
   }, "id">
@@ -26508,6 +34270,7 @@ export namespace Prisma {
     year?: SortOrder
     isActive?: SortOrder
     createdByUserId?: SortOrder
+    indicationComment?: SortOrder
     createdAt?: SortOrder
     activatedAt?: SortOrderInput | SortOrder
     _count?: ClubBookCountOrderByAggregateInput
@@ -26532,6 +34295,7 @@ export namespace Prisma {
     year?: IntWithAggregatesFilter<"ClubBook"> | number
     isActive?: BoolWithAggregatesFilter<"ClubBook"> | boolean
     createdByUserId?: StringWithAggregatesFilter<"ClubBook"> | string
+    indicationComment?: StringWithAggregatesFilter<"ClubBook"> | string
     createdAt?: DateTimeWithAggregatesFilter<"ClubBook"> | Date | string
     activatedAt?: DateTimeNullableWithAggregatesFilter<"ClubBook"> | Date | string | null
   }
@@ -27251,15 +35015,260 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"PollVote"> | Date | string
   }
 
+  export type ClubEventWhereInput = {
+    AND?: ClubEventWhereInput | ClubEventWhereInput[]
+    OR?: ClubEventWhereInput[]
+    NOT?: ClubEventWhereInput | ClubEventWhereInput[]
+    id?: StringFilter<"ClubEvent"> | string
+    title?: StringFilter<"ClubEvent"> | string
+    description?: StringFilter<"ClubEvent"> | string
+    city?: StringFilter<"ClubEvent"> | string
+    location?: StringFilter<"ClubEvent"> | string
+    addressStreet?: StringNullableFilter<"ClubEvent"> | string | null
+    addressNumber?: StringNullableFilter<"ClubEvent"> | string | null
+    addressDistrict?: StringNullableFilter<"ClubEvent"> | string | null
+    addressCity?: StringNullableFilter<"ClubEvent"> | string | null
+    addressState?: StringNullableFilter<"ClubEvent"> | string | null
+    addressZip?: StringNullableFilter<"ClubEvent"> | string | null
+    latitude?: FloatNullableFilter<"ClubEvent"> | number | null
+    longitude?: FloatNullableFilter<"ClubEvent"> | number | null
+    startAt?: DateTimeFilter<"ClubEvent"> | Date | string
+    endAt?: DateTimeNullableFilter<"ClubEvent"> | Date | string | null
+    createdById?: StringFilter<"ClubEvent"> | string
+    createdAt?: DateTimeFilter<"ClubEvent"> | Date | string
+    participants?: ClubEventParticipantListRelationFilter
+    photos?: ClubEventPhotoListRelationFilter
+  }
+
+  export type ClubEventOrderByWithRelationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    city?: SortOrder
+    location?: SortOrder
+    addressStreet?: SortOrderInput | SortOrder
+    addressNumber?: SortOrderInput | SortOrder
+    addressDistrict?: SortOrderInput | SortOrder
+    addressCity?: SortOrderInput | SortOrder
+    addressState?: SortOrderInput | SortOrder
+    addressZip?: SortOrderInput | SortOrder
+    latitude?: SortOrderInput | SortOrder
+    longitude?: SortOrderInput | SortOrder
+    startAt?: SortOrder
+    endAt?: SortOrderInput | SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    participants?: ClubEventParticipantOrderByRelationAggregateInput
+    photos?: ClubEventPhotoOrderByRelationAggregateInput
+  }
+
+  export type ClubEventWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ClubEventWhereInput | ClubEventWhereInput[]
+    OR?: ClubEventWhereInput[]
+    NOT?: ClubEventWhereInput | ClubEventWhereInput[]
+    title?: StringFilter<"ClubEvent"> | string
+    description?: StringFilter<"ClubEvent"> | string
+    city?: StringFilter<"ClubEvent"> | string
+    location?: StringFilter<"ClubEvent"> | string
+    addressStreet?: StringNullableFilter<"ClubEvent"> | string | null
+    addressNumber?: StringNullableFilter<"ClubEvent"> | string | null
+    addressDistrict?: StringNullableFilter<"ClubEvent"> | string | null
+    addressCity?: StringNullableFilter<"ClubEvent"> | string | null
+    addressState?: StringNullableFilter<"ClubEvent"> | string | null
+    addressZip?: StringNullableFilter<"ClubEvent"> | string | null
+    latitude?: FloatNullableFilter<"ClubEvent"> | number | null
+    longitude?: FloatNullableFilter<"ClubEvent"> | number | null
+    startAt?: DateTimeFilter<"ClubEvent"> | Date | string
+    endAt?: DateTimeNullableFilter<"ClubEvent"> | Date | string | null
+    createdById?: StringFilter<"ClubEvent"> | string
+    createdAt?: DateTimeFilter<"ClubEvent"> | Date | string
+    participants?: ClubEventParticipantListRelationFilter
+    photos?: ClubEventPhotoListRelationFilter
+  }, "id">
+
+  export type ClubEventOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    city?: SortOrder
+    location?: SortOrder
+    addressStreet?: SortOrderInput | SortOrder
+    addressNumber?: SortOrderInput | SortOrder
+    addressDistrict?: SortOrderInput | SortOrder
+    addressCity?: SortOrderInput | SortOrder
+    addressState?: SortOrderInput | SortOrder
+    addressZip?: SortOrderInput | SortOrder
+    latitude?: SortOrderInput | SortOrder
+    longitude?: SortOrderInput | SortOrder
+    startAt?: SortOrder
+    endAt?: SortOrderInput | SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    _count?: ClubEventCountOrderByAggregateInput
+    _avg?: ClubEventAvgOrderByAggregateInput
+    _max?: ClubEventMaxOrderByAggregateInput
+    _min?: ClubEventMinOrderByAggregateInput
+    _sum?: ClubEventSumOrderByAggregateInput
+  }
+
+  export type ClubEventScalarWhereWithAggregatesInput = {
+    AND?: ClubEventScalarWhereWithAggregatesInput | ClubEventScalarWhereWithAggregatesInput[]
+    OR?: ClubEventScalarWhereWithAggregatesInput[]
+    NOT?: ClubEventScalarWhereWithAggregatesInput | ClubEventScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ClubEvent"> | string
+    title?: StringWithAggregatesFilter<"ClubEvent"> | string
+    description?: StringWithAggregatesFilter<"ClubEvent"> | string
+    city?: StringWithAggregatesFilter<"ClubEvent"> | string
+    location?: StringWithAggregatesFilter<"ClubEvent"> | string
+    addressStreet?: StringNullableWithAggregatesFilter<"ClubEvent"> | string | null
+    addressNumber?: StringNullableWithAggregatesFilter<"ClubEvent"> | string | null
+    addressDistrict?: StringNullableWithAggregatesFilter<"ClubEvent"> | string | null
+    addressCity?: StringNullableWithAggregatesFilter<"ClubEvent"> | string | null
+    addressState?: StringNullableWithAggregatesFilter<"ClubEvent"> | string | null
+    addressZip?: StringNullableWithAggregatesFilter<"ClubEvent"> | string | null
+    latitude?: FloatNullableWithAggregatesFilter<"ClubEvent"> | number | null
+    longitude?: FloatNullableWithAggregatesFilter<"ClubEvent"> | number | null
+    startAt?: DateTimeWithAggregatesFilter<"ClubEvent"> | Date | string
+    endAt?: DateTimeNullableWithAggregatesFilter<"ClubEvent"> | Date | string | null
+    createdById?: StringWithAggregatesFilter<"ClubEvent"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"ClubEvent"> | Date | string
+  }
+
+  export type ClubEventParticipantWhereInput = {
+    AND?: ClubEventParticipantWhereInput | ClubEventParticipantWhereInput[]
+    OR?: ClubEventParticipantWhereInput[]
+    NOT?: ClubEventParticipantWhereInput | ClubEventParticipantWhereInput[]
+    id?: StringFilter<"ClubEventParticipant"> | string
+    eventId?: StringFilter<"ClubEventParticipant"> | string
+    userId?: StringFilter<"ClubEventParticipant"> | string
+    status?: StringFilter<"ClubEventParticipant"> | string
+    createdAt?: DateTimeFilter<"ClubEventParticipant"> | Date | string
+    event?: XOR<ClubEventScalarRelationFilter, ClubEventWhereInput>
+  }
+
+  export type ClubEventParticipantOrderByWithRelationInput = {
+    id?: SortOrder
+    eventId?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    event?: ClubEventOrderByWithRelationInput
+  }
+
+  export type ClubEventParticipantWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    eventId_userId?: ClubEventParticipantEventIdUserIdCompoundUniqueInput
+    AND?: ClubEventParticipantWhereInput | ClubEventParticipantWhereInput[]
+    OR?: ClubEventParticipantWhereInput[]
+    NOT?: ClubEventParticipantWhereInput | ClubEventParticipantWhereInput[]
+    eventId?: StringFilter<"ClubEventParticipant"> | string
+    userId?: StringFilter<"ClubEventParticipant"> | string
+    status?: StringFilter<"ClubEventParticipant"> | string
+    createdAt?: DateTimeFilter<"ClubEventParticipant"> | Date | string
+    event?: XOR<ClubEventScalarRelationFilter, ClubEventWhereInput>
+  }, "id" | "eventId_userId">
+
+  export type ClubEventParticipantOrderByWithAggregationInput = {
+    id?: SortOrder
+    eventId?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    _count?: ClubEventParticipantCountOrderByAggregateInput
+    _max?: ClubEventParticipantMaxOrderByAggregateInput
+    _min?: ClubEventParticipantMinOrderByAggregateInput
+  }
+
+  export type ClubEventParticipantScalarWhereWithAggregatesInput = {
+    AND?: ClubEventParticipantScalarWhereWithAggregatesInput | ClubEventParticipantScalarWhereWithAggregatesInput[]
+    OR?: ClubEventParticipantScalarWhereWithAggregatesInput[]
+    NOT?: ClubEventParticipantScalarWhereWithAggregatesInput | ClubEventParticipantScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ClubEventParticipant"> | string
+    eventId?: StringWithAggregatesFilter<"ClubEventParticipant"> | string
+    userId?: StringWithAggregatesFilter<"ClubEventParticipant"> | string
+    status?: StringWithAggregatesFilter<"ClubEventParticipant"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"ClubEventParticipant"> | Date | string
+  }
+
+  export type ClubEventPhotoWhereInput = {
+    AND?: ClubEventPhotoWhereInput | ClubEventPhotoWhereInput[]
+    OR?: ClubEventPhotoWhereInput[]
+    NOT?: ClubEventPhotoWhereInput | ClubEventPhotoWhereInput[]
+    id?: StringFilter<"ClubEventPhoto"> | string
+    eventId?: StringFilter<"ClubEventPhoto"> | string
+    userId?: StringFilter<"ClubEventPhoto"> | string
+    url?: StringFilter<"ClubEventPhoto"> | string
+    caption?: StringNullableFilter<"ClubEventPhoto"> | string | null
+    type?: StringFilter<"ClubEventPhoto"> | string
+    createdAt?: DateTimeFilter<"ClubEventPhoto"> | Date | string
+    event?: XOR<ClubEventScalarRelationFilter, ClubEventWhereInput>
+  }
+
+  export type ClubEventPhotoOrderByWithRelationInput = {
+    id?: SortOrder
+    eventId?: SortOrder
+    userId?: SortOrder
+    url?: SortOrder
+    caption?: SortOrderInput | SortOrder
+    type?: SortOrder
+    createdAt?: SortOrder
+    event?: ClubEventOrderByWithRelationInput
+  }
+
+  export type ClubEventPhotoWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ClubEventPhotoWhereInput | ClubEventPhotoWhereInput[]
+    OR?: ClubEventPhotoWhereInput[]
+    NOT?: ClubEventPhotoWhereInput | ClubEventPhotoWhereInput[]
+    eventId?: StringFilter<"ClubEventPhoto"> | string
+    userId?: StringFilter<"ClubEventPhoto"> | string
+    url?: StringFilter<"ClubEventPhoto"> | string
+    caption?: StringNullableFilter<"ClubEventPhoto"> | string | null
+    type?: StringFilter<"ClubEventPhoto"> | string
+    createdAt?: DateTimeFilter<"ClubEventPhoto"> | Date | string
+    event?: XOR<ClubEventScalarRelationFilter, ClubEventWhereInput>
+  }, "id">
+
+  export type ClubEventPhotoOrderByWithAggregationInput = {
+    id?: SortOrder
+    eventId?: SortOrder
+    userId?: SortOrder
+    url?: SortOrder
+    caption?: SortOrderInput | SortOrder
+    type?: SortOrder
+    createdAt?: SortOrder
+    _count?: ClubEventPhotoCountOrderByAggregateInput
+    _max?: ClubEventPhotoMaxOrderByAggregateInput
+    _min?: ClubEventPhotoMinOrderByAggregateInput
+  }
+
+  export type ClubEventPhotoScalarWhereWithAggregatesInput = {
+    AND?: ClubEventPhotoScalarWhereWithAggregatesInput | ClubEventPhotoScalarWhereWithAggregatesInput[]
+    OR?: ClubEventPhotoScalarWhereWithAggregatesInput[]
+    NOT?: ClubEventPhotoScalarWhereWithAggregatesInput | ClubEventPhotoScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ClubEventPhoto"> | string
+    eventId?: StringWithAggregatesFilter<"ClubEventPhoto"> | string
+    userId?: StringWithAggregatesFilter<"ClubEventPhoto"> | string
+    url?: StringWithAggregatesFilter<"ClubEventPhoto"> | string
+    caption?: StringNullableWithAggregatesFilter<"ClubEventPhoto"> | string | null
+    type?: StringWithAggregatesFilter<"ClubEventPhoto"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"ClubEventPhoto"> | Date | string
+  }
+
   export type UserCreateInput = {
     id: string
     name: string
     bio: string
     avatarUrl: string
     coverUrl?: string
+    isAdmin?: boolean
+    passwordHash?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     cities?: UserCityCreateNestedManyWithoutUserInput
+    createdBooks?: BookCreateNestedManyWithoutCreatedByUserInput
+    createdClubBooks?: ClubBookCreateNestedManyWithoutCreatedByUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -27268,9 +35277,13 @@ export namespace Prisma {
     bio: string
     avatarUrl: string
     coverUrl?: string
+    isAdmin?: boolean
+    passwordHash?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     cities?: UserCityUncheckedCreateNestedManyWithoutUserInput
+    createdBooks?: BookUncheckedCreateNestedManyWithoutCreatedByUserInput
+    createdClubBooks?: ClubBookUncheckedCreateNestedManyWithoutCreatedByUserInput
   }
 
   export type UserUpdateInput = {
@@ -27279,9 +35292,13 @@ export namespace Prisma {
     bio?: StringFieldUpdateOperationsInput | string
     avatarUrl?: StringFieldUpdateOperationsInput | string
     coverUrl?: StringFieldUpdateOperationsInput | string
+    isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    passwordHash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cities?: UserCityUpdateManyWithoutUserNestedInput
+    createdBooks?: BookUpdateManyWithoutCreatedByUserNestedInput
+    createdClubBooks?: ClubBookUpdateManyWithoutCreatedByUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -27290,9 +35307,13 @@ export namespace Prisma {
     bio?: StringFieldUpdateOperationsInput | string
     avatarUrl?: StringFieldUpdateOperationsInput | string
     coverUrl?: StringFieldUpdateOperationsInput | string
+    isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    passwordHash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cities?: UserCityUncheckedUpdateManyWithoutUserNestedInput
+    createdBooks?: BookUncheckedUpdateManyWithoutCreatedByUserNestedInput
+    createdClubBooks?: ClubBookUncheckedUpdateManyWithoutCreatedByUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -27301,6 +35322,8 @@ export namespace Prisma {
     bio: string
     avatarUrl: string
     coverUrl?: string
+    isAdmin?: boolean
+    passwordHash?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -27311,6 +35334,8 @@ export namespace Prisma {
     bio?: StringFieldUpdateOperationsInput | string
     avatarUrl?: StringFieldUpdateOperationsInput | string
     coverUrl?: StringFieldUpdateOperationsInput | string
+    isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    passwordHash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -27321,8 +35346,73 @@ export namespace Prisma {
     bio?: StringFieldUpdateOperationsInput | string
     avatarUrl?: StringFieldUpdateOperationsInput | string
     coverUrl?: StringFieldUpdateOperationsInput | string
+    isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    passwordHash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InvitationCreateInput = {
+    id: string
+    city: string
+    createdBy: string
+    isUsed?: boolean
+    usedBy?: string | null
+    createdAt?: Date | string
+  }
+
+  export type InvitationUncheckedCreateInput = {
+    id: string
+    city: string
+    createdBy: string
+    isUsed?: boolean
+    usedBy?: string | null
+    createdAt?: Date | string
+  }
+
+  export type InvitationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    isUsed?: BoolFieldUpdateOperationsInput | boolean
+    usedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InvitationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    isUsed?: BoolFieldUpdateOperationsInput | boolean
+    usedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InvitationCreateManyInput = {
+    id: string
+    city: string
+    createdBy: string
+    isUsed?: boolean
+    usedBy?: string | null
+    createdAt?: Date | string
+  }
+
+  export type InvitationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    isUsed?: BoolFieldUpdateOperationsInput | boolean
+    usedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InvitationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    isUsed?: BoolFieldUpdateOperationsInput | boolean
+    usedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserCityCreateInput = {
@@ -27372,8 +35462,13 @@ export namespace Prisma {
     author: string
     coverUrl?: string
     synopsis?: string
-    genre?: string | null
+    aiStyleDescription?: string
+    indicationComment?: string
     createdAt?: Date | string
+    categories?: CategoryCreateNestedManyWithoutBooksInput
+    styleImages?: BookStyleImageCreateNestedManyWithoutBookInput
+    createdByUser?: UserCreateNestedOneWithoutCreatedBooksInput
+    clubBooks?: ClubBookCreateNestedManyWithoutBookInput
   }
 
   export type BookUncheckedCreateInput = {
@@ -27382,8 +35477,13 @@ export namespace Prisma {
     author: string
     coverUrl?: string
     synopsis?: string
-    genre?: string | null
+    aiStyleDescription?: string
+    createdByUserId?: string | null
+    indicationComment?: string
     createdAt?: Date | string
+    categories?: CategoryUncheckedCreateNestedManyWithoutBooksInput
+    styleImages?: BookStyleImageUncheckedCreateNestedManyWithoutBookInput
+    clubBooks?: ClubBookUncheckedCreateNestedManyWithoutBookInput
   }
 
   export type BookUpdateInput = {
@@ -27392,8 +35492,13 @@ export namespace Prisma {
     author?: StringFieldUpdateOperationsInput | string
     coverUrl?: StringFieldUpdateOperationsInput | string
     synopsis?: StringFieldUpdateOperationsInput | string
-    genre?: NullableStringFieldUpdateOperationsInput | string | null
+    aiStyleDescription?: StringFieldUpdateOperationsInput | string
+    indicationComment?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categories?: CategoryUpdateManyWithoutBooksNestedInput
+    styleImages?: BookStyleImageUpdateManyWithoutBookNestedInput
+    createdByUser?: UserUpdateOneWithoutCreatedBooksNestedInput
+    clubBooks?: ClubBookUpdateManyWithoutBookNestedInput
   }
 
   export type BookUncheckedUpdateInput = {
@@ -27402,8 +35507,13 @@ export namespace Prisma {
     author?: StringFieldUpdateOperationsInput | string
     coverUrl?: StringFieldUpdateOperationsInput | string
     synopsis?: StringFieldUpdateOperationsInput | string
-    genre?: NullableStringFieldUpdateOperationsInput | string | null
+    aiStyleDescription?: StringFieldUpdateOperationsInput | string
+    createdByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    indicationComment?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categories?: CategoryUncheckedUpdateManyWithoutBooksNestedInput
+    styleImages?: BookStyleImageUncheckedUpdateManyWithoutBookNestedInput
+    clubBooks?: ClubBookUncheckedUpdateManyWithoutBookNestedInput
   }
 
   export type BookCreateManyInput = {
@@ -27412,7 +35522,9 @@ export namespace Prisma {
     author: string
     coverUrl?: string
     synopsis?: string
-    genre?: string | null
+    aiStyleDescription?: string
+    createdByUserId?: string | null
+    indicationComment?: string
     createdAt?: Date | string
   }
 
@@ -27422,7 +35534,8 @@ export namespace Prisma {
     author?: StringFieldUpdateOperationsInput | string
     coverUrl?: StringFieldUpdateOperationsInput | string
     synopsis?: StringFieldUpdateOperationsInput | string
-    genre?: NullableStringFieldUpdateOperationsInput | string | null
+    aiStyleDescription?: StringFieldUpdateOperationsInput | string
+    indicationComment?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -27432,8 +35545,90 @@ export namespace Prisma {
     author?: StringFieldUpdateOperationsInput | string
     coverUrl?: StringFieldUpdateOperationsInput | string
     synopsis?: StringFieldUpdateOperationsInput | string
-    genre?: NullableStringFieldUpdateOperationsInput | string | null
+    aiStyleDescription?: StringFieldUpdateOperationsInput | string
+    createdByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    indicationComment?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookStyleImageCreateInput = {
+    id?: string
+    url: string
+    book: BookCreateNestedOneWithoutStyleImagesInput
+  }
+
+  export type BookStyleImageUncheckedCreateInput = {
+    id?: string
+    bookId: string
+    url: string
+  }
+
+  export type BookStyleImageUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    book?: BookUpdateOneRequiredWithoutStyleImagesNestedInput
+  }
+
+  export type BookStyleImageUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bookId?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type BookStyleImageCreateManyInput = {
+    id?: string
+    bookId: string
+    url: string
+  }
+
+  export type BookStyleImageUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type BookStyleImageUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bookId?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type CategoryCreateInput = {
+    id?: string
+    name: string
+    books?: BookCreateNestedManyWithoutCategoriesInput
+  }
+
+  export type CategoryUncheckedCreateInput = {
+    id?: string
+    name: string
+    books?: BookUncheckedCreateNestedManyWithoutCategoriesInput
+  }
+
+  export type CategoryUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    books?: BookUpdateManyWithoutCategoriesNestedInput
+  }
+
+  export type CategoryUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    books?: BookUncheckedUpdateManyWithoutCategoriesNestedInput
+  }
+
+  export type CategoryCreateManyInput = {
+    id?: string
+    name: string
+  }
+
+  export type CategoryUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type CategoryUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
   }
 
   export type GroupCreateInput = {
@@ -27723,7 +35918,6 @@ export namespace Prisma {
 
   export type ClubBookCreateInput = {
     id?: string
-    bookId: string
     title: string
     author: string
     coverUrl?: string
@@ -27732,9 +35926,11 @@ export namespace Prisma {
     month: number
     year: number
     isActive?: boolean
-    createdByUserId: string
+    indicationComment?: string
     createdAt?: Date | string
     activatedAt?: Date | string | null
+    createdByUser: UserCreateNestedOneWithoutCreatedClubBooksInput
+    book: BookCreateNestedOneWithoutClubBooksInput
     messages?: ClubBookMessageCreateNestedManyWithoutClubBookInput
     artifacts?: ClubBookArtifactCreateNestedManyWithoutClubBookInput
   }
@@ -27751,6 +35947,7 @@ export namespace Prisma {
     year: number
     isActive?: boolean
     createdByUserId: string
+    indicationComment?: string
     createdAt?: Date | string
     activatedAt?: Date | string | null
     messages?: ClubBookMessageUncheckedCreateNestedManyWithoutClubBookInput
@@ -27759,7 +35956,6 @@ export namespace Prisma {
 
   export type ClubBookUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    bookId?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     author?: StringFieldUpdateOperationsInput | string
     coverUrl?: StringFieldUpdateOperationsInput | string
@@ -27768,9 +35964,11 @@ export namespace Prisma {
     month?: IntFieldUpdateOperationsInput | number
     year?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdByUserId?: StringFieldUpdateOperationsInput | string
+    indicationComment?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdByUser?: UserUpdateOneRequiredWithoutCreatedClubBooksNestedInput
+    book?: BookUpdateOneRequiredWithoutClubBooksNestedInput
     messages?: ClubBookMessageUpdateManyWithoutClubBookNestedInput
     artifacts?: ClubBookArtifactUpdateManyWithoutClubBookNestedInput
   }
@@ -27787,6 +35985,7 @@ export namespace Prisma {
     year?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdByUserId?: StringFieldUpdateOperationsInput | string
+    indicationComment?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     messages?: ClubBookMessageUncheckedUpdateManyWithoutClubBookNestedInput
@@ -27805,13 +36004,13 @@ export namespace Prisma {
     year: number
     isActive?: boolean
     createdByUserId: string
+    indicationComment?: string
     createdAt?: Date | string
     activatedAt?: Date | string | null
   }
 
   export type ClubBookUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    bookId?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     author?: StringFieldUpdateOperationsInput | string
     coverUrl?: StringFieldUpdateOperationsInput | string
@@ -27820,7 +36019,7 @@ export namespace Prisma {
     month?: IntFieldUpdateOperationsInput | number
     year?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdByUserId?: StringFieldUpdateOperationsInput | string
+    indicationComment?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -27837,6 +36036,7 @@ export namespace Prisma {
     year?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdByUserId?: StringFieldUpdateOperationsInput | string
+    indicationComment?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -28581,6 +36781,278 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ClubEventCreateInput = {
+    id?: string
+    title: string
+    description: string
+    city?: string
+    location: string
+    addressStreet?: string | null
+    addressNumber?: string | null
+    addressDistrict?: string | null
+    addressCity?: string | null
+    addressState?: string | null
+    addressZip?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    startAt: Date | string
+    endAt?: Date | string | null
+    createdById: string
+    createdAt?: Date | string
+    participants?: ClubEventParticipantCreateNestedManyWithoutEventInput
+    photos?: ClubEventPhotoCreateNestedManyWithoutEventInput
+  }
+
+  export type ClubEventUncheckedCreateInput = {
+    id?: string
+    title: string
+    description: string
+    city?: string
+    location: string
+    addressStreet?: string | null
+    addressNumber?: string | null
+    addressDistrict?: string | null
+    addressCity?: string | null
+    addressState?: string | null
+    addressZip?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    startAt: Date | string
+    endAt?: Date | string | null
+    createdById: string
+    createdAt?: Date | string
+    participants?: ClubEventParticipantUncheckedCreateNestedManyWithoutEventInput
+    photos?: ClubEventPhotoUncheckedCreateNestedManyWithoutEventInput
+  }
+
+  export type ClubEventUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressState?: NullableStringFieldUpdateOperationsInput | string | null
+    addressZip?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    participants?: ClubEventParticipantUpdateManyWithoutEventNestedInput
+    photos?: ClubEventPhotoUpdateManyWithoutEventNestedInput
+  }
+
+  export type ClubEventUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressState?: NullableStringFieldUpdateOperationsInput | string | null
+    addressZip?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    participants?: ClubEventParticipantUncheckedUpdateManyWithoutEventNestedInput
+    photos?: ClubEventPhotoUncheckedUpdateManyWithoutEventNestedInput
+  }
+
+  export type ClubEventCreateManyInput = {
+    id?: string
+    title: string
+    description: string
+    city?: string
+    location: string
+    addressStreet?: string | null
+    addressNumber?: string | null
+    addressDistrict?: string | null
+    addressCity?: string | null
+    addressState?: string | null
+    addressZip?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    startAt: Date | string
+    endAt?: Date | string | null
+    createdById: string
+    createdAt?: Date | string
+  }
+
+  export type ClubEventUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressState?: NullableStringFieldUpdateOperationsInput | string | null
+    addressZip?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClubEventUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressState?: NullableStringFieldUpdateOperationsInput | string | null
+    addressZip?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClubEventParticipantCreateInput = {
+    id?: string
+    userId: string
+    status?: string
+    createdAt?: Date | string
+    event: ClubEventCreateNestedOneWithoutParticipantsInput
+  }
+
+  export type ClubEventParticipantUncheckedCreateInput = {
+    id?: string
+    eventId: string
+    userId: string
+    status?: string
+    createdAt?: Date | string
+  }
+
+  export type ClubEventParticipantUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    event?: ClubEventUpdateOneRequiredWithoutParticipantsNestedInput
+  }
+
+  export type ClubEventParticipantUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClubEventParticipantCreateManyInput = {
+    id?: string
+    eventId: string
+    userId: string
+    status?: string
+    createdAt?: Date | string
+  }
+
+  export type ClubEventParticipantUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClubEventParticipantUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClubEventPhotoCreateInput = {
+    id?: string
+    userId: string
+    url: string
+    caption?: string | null
+    type?: string
+    createdAt?: Date | string
+    event: ClubEventCreateNestedOneWithoutPhotosInput
+  }
+
+  export type ClubEventPhotoUncheckedCreateInput = {
+    id?: string
+    eventId: string
+    userId: string
+    url: string
+    caption?: string | null
+    type?: string
+    createdAt?: Date | string
+  }
+
+  export type ClubEventPhotoUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    caption?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    event?: ClubEventUpdateOneRequiredWithoutPhotosNestedInput
+  }
+
+  export type ClubEventPhotoUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    caption?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClubEventPhotoCreateManyInput = {
+    id?: string
+    eventId: string
+    userId: string
+    url: string
+    caption?: string | null
+    type?: string
+    createdAt?: Date | string
+  }
+
+  export type ClubEventPhotoUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    caption?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClubEventPhotoUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    caption?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[]
@@ -28593,6 +37065,11 @@ export namespace Prisma {
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     not?: NestedStringFilter<$PrismaModel> | string
+  }
+
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type DateTimeFilter<$PrismaModel = never> = {
@@ -28612,7 +37089,27 @@ export namespace Prisma {
     none?: UserCityWhereInput
   }
 
+  export type BookListRelationFilter = {
+    every?: BookWhereInput
+    some?: BookWhereInput
+    none?: BookWhereInput
+  }
+
+  export type ClubBookListRelationFilter = {
+    every?: ClubBookWhereInput
+    some?: ClubBookWhereInput
+    none?: ClubBookWhereInput
+  }
+
   export type UserCityOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type BookOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ClubBookOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -28622,6 +37119,8 @@ export namespace Prisma {
     bio?: SortOrder
     avatarUrl?: SortOrder
     coverUrl?: SortOrder
+    isAdmin?: SortOrder
+    passwordHash?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -28632,6 +37131,8 @@ export namespace Prisma {
     bio?: SortOrder
     avatarUrl?: SortOrder
     coverUrl?: SortOrder
+    isAdmin?: SortOrder
+    passwordHash?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -28642,6 +37143,8 @@ export namespace Prisma {
     bio?: SortOrder
     avatarUrl?: SortOrder
     coverUrl?: SortOrder
+    isAdmin?: SortOrder
+    passwordHash?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -28663,6 +37166,14 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[]
@@ -28675,6 +37186,69 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
+  }
+
+  export type InvitationCountOrderByAggregateInput = {
+    id?: SortOrder
+    city?: SortOrder
+    createdBy?: SortOrder
+    isUsed?: SortOrder
+    usedBy?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type InvitationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    city?: SortOrder
+    createdBy?: SortOrder
+    isUsed?: SortOrder
+    usedBy?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type InvitationMinOrderByAggregateInput = {
+    id?: SortOrder
+    city?: SortOrder
+    createdBy?: SortOrder
+    isUsed?: SortOrder
+    usedBy?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type UserScalarRelationFilter = {
@@ -28705,23 +37279,29 @@ export namespace Prisma {
     city?: SortOrder
   }
 
-  export type StringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | null
-    notIn?: string[] | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  export type CategoryListRelationFilter = {
+    every?: CategoryWhereInput
+    some?: CategoryWhereInput
+    none?: CategoryWhereInput
   }
 
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
+  export type BookStyleImageListRelationFilter = {
+    every?: BookStyleImageWhereInput
+    some?: BookStyleImageWhereInput
+    none?: BookStyleImageWhereInput
+  }
+
+  export type UserNullableScalarRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
+  }
+
+  export type CategoryOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type BookStyleImageOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type BookTitleAuthorCompoundUniqueInput = {
@@ -28735,7 +37315,9 @@ export namespace Prisma {
     author?: SortOrder
     coverUrl?: SortOrder
     synopsis?: SortOrder
-    genre?: SortOrder
+    aiStyleDescription?: SortOrder
+    createdByUserId?: SortOrder
+    indicationComment?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -28745,7 +37327,9 @@ export namespace Prisma {
     author?: SortOrder
     coverUrl?: SortOrder
     synopsis?: SortOrder
-    genre?: SortOrder
+    aiStyleDescription?: SortOrder
+    createdByUserId?: SortOrder
+    indicationComment?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -28755,25 +37339,48 @@ export namespace Prisma {
     author?: SortOrder
     coverUrl?: SortOrder
     synopsis?: SortOrder
-    genre?: SortOrder
+    aiStyleDescription?: SortOrder
+    createdByUserId?: SortOrder
+    indicationComment?: SortOrder
     createdAt?: SortOrder
   }
 
-  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | null
-    notIn?: string[] | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
+  export type BookScalarRelationFilter = {
+    is?: BookWhereInput
+    isNot?: BookWhereInput
+  }
+
+  export type BookStyleImageCountOrderByAggregateInput = {
+    id?: SortOrder
+    bookId?: SortOrder
+    url?: SortOrder
+  }
+
+  export type BookStyleImageMaxOrderByAggregateInput = {
+    id?: SortOrder
+    bookId?: SortOrder
+    url?: SortOrder
+  }
+
+  export type BookStyleImageMinOrderByAggregateInput = {
+    id?: SortOrder
+    bookId?: SortOrder
+    url?: SortOrder
+  }
+
+  export type CategoryCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+  }
+
+  export type CategoryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+  }
+
+  export type CategoryMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
   }
 
   export type MembershipListRelationFilter = {
@@ -28985,11 +37592,6 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
   export type ClubBookMessageListRelationFilter = {
     every?: ClubBookMessageWhereInput
     some?: ClubBookMessageWhereInput
@@ -29022,6 +37624,7 @@ export namespace Prisma {
     year?: SortOrder
     isActive?: SortOrder
     createdByUserId?: SortOrder
+    indicationComment?: SortOrder
     createdAt?: SortOrder
     activatedAt?: SortOrder
   }
@@ -29043,6 +37646,7 @@ export namespace Prisma {
     year?: SortOrder
     isActive?: SortOrder
     createdByUserId?: SortOrder
+    indicationComment?: SortOrder
     createdAt?: SortOrder
     activatedAt?: SortOrder
   }
@@ -29059,6 +37663,7 @@ export namespace Prisma {
     year?: SortOrder
     isActive?: SortOrder
     createdByUserId?: SortOrder
+    indicationComment?: SortOrder
     createdAt?: SortOrder
     activatedAt?: SortOrder
   }
@@ -29082,14 +37687,6 @@ export namespace Prisma {
     _sum?: NestedIntFilter<$PrismaModel>
     _min?: NestedIntFilter<$PrismaModel>
     _max?: NestedIntFilter<$PrismaModel>
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type ClubBookScalarRelationFilter = {
@@ -29521,11 +38118,206 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type ClubEventParticipantListRelationFilter = {
+    every?: ClubEventParticipantWhereInput
+    some?: ClubEventParticipantWhereInput
+    none?: ClubEventParticipantWhereInput
+  }
+
+  export type ClubEventPhotoListRelationFilter = {
+    every?: ClubEventPhotoWhereInput
+    some?: ClubEventPhotoWhereInput
+    none?: ClubEventPhotoWhereInput
+  }
+
+  export type ClubEventParticipantOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ClubEventPhotoOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ClubEventCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    city?: SortOrder
+    location?: SortOrder
+    addressStreet?: SortOrder
+    addressNumber?: SortOrder
+    addressDistrict?: SortOrder
+    addressCity?: SortOrder
+    addressState?: SortOrder
+    addressZip?: SortOrder
+    latitude?: SortOrder
+    longitude?: SortOrder
+    startAt?: SortOrder
+    endAt?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ClubEventAvgOrderByAggregateInput = {
+    latitude?: SortOrder
+    longitude?: SortOrder
+  }
+
+  export type ClubEventMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    city?: SortOrder
+    location?: SortOrder
+    addressStreet?: SortOrder
+    addressNumber?: SortOrder
+    addressDistrict?: SortOrder
+    addressCity?: SortOrder
+    addressState?: SortOrder
+    addressZip?: SortOrder
+    latitude?: SortOrder
+    longitude?: SortOrder
+    startAt?: SortOrder
+    endAt?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ClubEventMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    city?: SortOrder
+    location?: SortOrder
+    addressStreet?: SortOrder
+    addressNumber?: SortOrder
+    addressDistrict?: SortOrder
+    addressCity?: SortOrder
+    addressState?: SortOrder
+    addressZip?: SortOrder
+    latitude?: SortOrder
+    longitude?: SortOrder
+    startAt?: SortOrder
+    endAt?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ClubEventSumOrderByAggregateInput = {
+    latitude?: SortOrder
+    longitude?: SortOrder
+  }
+
+  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
+  export type ClubEventScalarRelationFilter = {
+    is?: ClubEventWhereInput
+    isNot?: ClubEventWhereInput
+  }
+
+  export type ClubEventParticipantEventIdUserIdCompoundUniqueInput = {
+    eventId: string
+    userId: string
+  }
+
+  export type ClubEventParticipantCountOrderByAggregateInput = {
+    id?: SortOrder
+    eventId?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ClubEventParticipantMaxOrderByAggregateInput = {
+    id?: SortOrder
+    eventId?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ClubEventParticipantMinOrderByAggregateInput = {
+    id?: SortOrder
+    eventId?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ClubEventPhotoCountOrderByAggregateInput = {
+    id?: SortOrder
+    eventId?: SortOrder
+    userId?: SortOrder
+    url?: SortOrder
+    caption?: SortOrder
+    type?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ClubEventPhotoMaxOrderByAggregateInput = {
+    id?: SortOrder
+    eventId?: SortOrder
+    userId?: SortOrder
+    url?: SortOrder
+    caption?: SortOrder
+    type?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ClubEventPhotoMinOrderByAggregateInput = {
+    id?: SortOrder
+    eventId?: SortOrder
+    userId?: SortOrder
+    url?: SortOrder
+    caption?: SortOrder
+    type?: SortOrder
+    createdAt?: SortOrder
+  }
+
   export type UserCityCreateNestedManyWithoutUserInput = {
     create?: XOR<UserCityCreateWithoutUserInput, UserCityUncheckedCreateWithoutUserInput> | UserCityCreateWithoutUserInput[] | UserCityUncheckedCreateWithoutUserInput[]
     connectOrCreate?: UserCityCreateOrConnectWithoutUserInput | UserCityCreateOrConnectWithoutUserInput[]
     createMany?: UserCityCreateManyUserInputEnvelope
     connect?: UserCityWhereUniqueInput | UserCityWhereUniqueInput[]
+  }
+
+  export type BookCreateNestedManyWithoutCreatedByUserInput = {
+    create?: XOR<BookCreateWithoutCreatedByUserInput, BookUncheckedCreateWithoutCreatedByUserInput> | BookCreateWithoutCreatedByUserInput[] | BookUncheckedCreateWithoutCreatedByUserInput[]
+    connectOrCreate?: BookCreateOrConnectWithoutCreatedByUserInput | BookCreateOrConnectWithoutCreatedByUserInput[]
+    createMany?: BookCreateManyCreatedByUserInputEnvelope
+    connect?: BookWhereUniqueInput | BookWhereUniqueInput[]
+  }
+
+  export type ClubBookCreateNestedManyWithoutCreatedByUserInput = {
+    create?: XOR<ClubBookCreateWithoutCreatedByUserInput, ClubBookUncheckedCreateWithoutCreatedByUserInput> | ClubBookCreateWithoutCreatedByUserInput[] | ClubBookUncheckedCreateWithoutCreatedByUserInput[]
+    connectOrCreate?: ClubBookCreateOrConnectWithoutCreatedByUserInput | ClubBookCreateOrConnectWithoutCreatedByUserInput[]
+    createMany?: ClubBookCreateManyCreatedByUserInputEnvelope
+    connect?: ClubBookWhereUniqueInput | ClubBookWhereUniqueInput[]
   }
 
   export type UserCityUncheckedCreateNestedManyWithoutUserInput = {
@@ -29535,8 +38327,26 @@ export namespace Prisma {
     connect?: UserCityWhereUniqueInput | UserCityWhereUniqueInput[]
   }
 
+  export type BookUncheckedCreateNestedManyWithoutCreatedByUserInput = {
+    create?: XOR<BookCreateWithoutCreatedByUserInput, BookUncheckedCreateWithoutCreatedByUserInput> | BookCreateWithoutCreatedByUserInput[] | BookUncheckedCreateWithoutCreatedByUserInput[]
+    connectOrCreate?: BookCreateOrConnectWithoutCreatedByUserInput | BookCreateOrConnectWithoutCreatedByUserInput[]
+    createMany?: BookCreateManyCreatedByUserInputEnvelope
+    connect?: BookWhereUniqueInput | BookWhereUniqueInput[]
+  }
+
+  export type ClubBookUncheckedCreateNestedManyWithoutCreatedByUserInput = {
+    create?: XOR<ClubBookCreateWithoutCreatedByUserInput, ClubBookUncheckedCreateWithoutCreatedByUserInput> | ClubBookCreateWithoutCreatedByUserInput[] | ClubBookUncheckedCreateWithoutCreatedByUserInput[]
+    connectOrCreate?: ClubBookCreateOrConnectWithoutCreatedByUserInput | ClubBookCreateOrConnectWithoutCreatedByUserInput[]
+    createMany?: ClubBookCreateManyCreatedByUserInputEnvelope
+    connect?: ClubBookWhereUniqueInput | ClubBookWhereUniqueInput[]
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -29557,6 +38367,34 @@ export namespace Prisma {
     deleteMany?: UserCityScalarWhereInput | UserCityScalarWhereInput[]
   }
 
+  export type BookUpdateManyWithoutCreatedByUserNestedInput = {
+    create?: XOR<BookCreateWithoutCreatedByUserInput, BookUncheckedCreateWithoutCreatedByUserInput> | BookCreateWithoutCreatedByUserInput[] | BookUncheckedCreateWithoutCreatedByUserInput[]
+    connectOrCreate?: BookCreateOrConnectWithoutCreatedByUserInput | BookCreateOrConnectWithoutCreatedByUserInput[]
+    upsert?: BookUpsertWithWhereUniqueWithoutCreatedByUserInput | BookUpsertWithWhereUniqueWithoutCreatedByUserInput[]
+    createMany?: BookCreateManyCreatedByUserInputEnvelope
+    set?: BookWhereUniqueInput | BookWhereUniqueInput[]
+    disconnect?: BookWhereUniqueInput | BookWhereUniqueInput[]
+    delete?: BookWhereUniqueInput | BookWhereUniqueInput[]
+    connect?: BookWhereUniqueInput | BookWhereUniqueInput[]
+    update?: BookUpdateWithWhereUniqueWithoutCreatedByUserInput | BookUpdateWithWhereUniqueWithoutCreatedByUserInput[]
+    updateMany?: BookUpdateManyWithWhereWithoutCreatedByUserInput | BookUpdateManyWithWhereWithoutCreatedByUserInput[]
+    deleteMany?: BookScalarWhereInput | BookScalarWhereInput[]
+  }
+
+  export type ClubBookUpdateManyWithoutCreatedByUserNestedInput = {
+    create?: XOR<ClubBookCreateWithoutCreatedByUserInput, ClubBookUncheckedCreateWithoutCreatedByUserInput> | ClubBookCreateWithoutCreatedByUserInput[] | ClubBookUncheckedCreateWithoutCreatedByUserInput[]
+    connectOrCreate?: ClubBookCreateOrConnectWithoutCreatedByUserInput | ClubBookCreateOrConnectWithoutCreatedByUserInput[]
+    upsert?: ClubBookUpsertWithWhereUniqueWithoutCreatedByUserInput | ClubBookUpsertWithWhereUniqueWithoutCreatedByUserInput[]
+    createMany?: ClubBookCreateManyCreatedByUserInputEnvelope
+    set?: ClubBookWhereUniqueInput | ClubBookWhereUniqueInput[]
+    disconnect?: ClubBookWhereUniqueInput | ClubBookWhereUniqueInput[]
+    delete?: ClubBookWhereUniqueInput | ClubBookWhereUniqueInput[]
+    connect?: ClubBookWhereUniqueInput | ClubBookWhereUniqueInput[]
+    update?: ClubBookUpdateWithWhereUniqueWithoutCreatedByUserInput | ClubBookUpdateWithWhereUniqueWithoutCreatedByUserInput[]
+    updateMany?: ClubBookUpdateManyWithWhereWithoutCreatedByUserInput | ClubBookUpdateManyWithWhereWithoutCreatedByUserInput[]
+    deleteMany?: ClubBookScalarWhereInput | ClubBookScalarWhereInput[]
+  }
+
   export type UserCityUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<UserCityCreateWithoutUserInput, UserCityUncheckedCreateWithoutUserInput> | UserCityCreateWithoutUserInput[] | UserCityUncheckedCreateWithoutUserInput[]
     connectOrCreate?: UserCityCreateOrConnectWithoutUserInput | UserCityCreateOrConnectWithoutUserInput[]
@@ -29569,6 +38407,38 @@ export namespace Prisma {
     update?: UserCityUpdateWithWhereUniqueWithoutUserInput | UserCityUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: UserCityUpdateManyWithWhereWithoutUserInput | UserCityUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: UserCityScalarWhereInput | UserCityScalarWhereInput[]
+  }
+
+  export type BookUncheckedUpdateManyWithoutCreatedByUserNestedInput = {
+    create?: XOR<BookCreateWithoutCreatedByUserInput, BookUncheckedCreateWithoutCreatedByUserInput> | BookCreateWithoutCreatedByUserInput[] | BookUncheckedCreateWithoutCreatedByUserInput[]
+    connectOrCreate?: BookCreateOrConnectWithoutCreatedByUserInput | BookCreateOrConnectWithoutCreatedByUserInput[]
+    upsert?: BookUpsertWithWhereUniqueWithoutCreatedByUserInput | BookUpsertWithWhereUniqueWithoutCreatedByUserInput[]
+    createMany?: BookCreateManyCreatedByUserInputEnvelope
+    set?: BookWhereUniqueInput | BookWhereUniqueInput[]
+    disconnect?: BookWhereUniqueInput | BookWhereUniqueInput[]
+    delete?: BookWhereUniqueInput | BookWhereUniqueInput[]
+    connect?: BookWhereUniqueInput | BookWhereUniqueInput[]
+    update?: BookUpdateWithWhereUniqueWithoutCreatedByUserInput | BookUpdateWithWhereUniqueWithoutCreatedByUserInput[]
+    updateMany?: BookUpdateManyWithWhereWithoutCreatedByUserInput | BookUpdateManyWithWhereWithoutCreatedByUserInput[]
+    deleteMany?: BookScalarWhereInput | BookScalarWhereInput[]
+  }
+
+  export type ClubBookUncheckedUpdateManyWithoutCreatedByUserNestedInput = {
+    create?: XOR<ClubBookCreateWithoutCreatedByUserInput, ClubBookUncheckedCreateWithoutCreatedByUserInput> | ClubBookCreateWithoutCreatedByUserInput[] | ClubBookUncheckedCreateWithoutCreatedByUserInput[]
+    connectOrCreate?: ClubBookCreateOrConnectWithoutCreatedByUserInput | ClubBookCreateOrConnectWithoutCreatedByUserInput[]
+    upsert?: ClubBookUpsertWithWhereUniqueWithoutCreatedByUserInput | ClubBookUpsertWithWhereUniqueWithoutCreatedByUserInput[]
+    createMany?: ClubBookCreateManyCreatedByUserInputEnvelope
+    set?: ClubBookWhereUniqueInput | ClubBookWhereUniqueInput[]
+    disconnect?: ClubBookWhereUniqueInput | ClubBookWhereUniqueInput[]
+    delete?: ClubBookWhereUniqueInput | ClubBookWhereUniqueInput[]
+    connect?: ClubBookWhereUniqueInput | ClubBookWhereUniqueInput[]
+    update?: ClubBookUpdateWithWhereUniqueWithoutCreatedByUserInput | ClubBookUpdateWithWhereUniqueWithoutCreatedByUserInput[]
+    updateMany?: ClubBookUpdateManyWithWhereWithoutCreatedByUserInput | ClubBookUpdateManyWithWhereWithoutCreatedByUserInput[]
+    deleteMany?: ClubBookScalarWhereInput | ClubBookScalarWhereInput[]
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
   }
 
   export type UserCreateNestedOneWithoutCitiesInput = {
@@ -29585,8 +38455,194 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCitiesInput, UserUpdateWithoutCitiesInput>, UserUncheckedUpdateWithoutCitiesInput>
   }
 
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
+  export type CategoryCreateNestedManyWithoutBooksInput = {
+    create?: XOR<CategoryCreateWithoutBooksInput, CategoryUncheckedCreateWithoutBooksInput> | CategoryCreateWithoutBooksInput[] | CategoryUncheckedCreateWithoutBooksInput[]
+    connectOrCreate?: CategoryCreateOrConnectWithoutBooksInput | CategoryCreateOrConnectWithoutBooksInput[]
+    connect?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
+  }
+
+  export type BookStyleImageCreateNestedManyWithoutBookInput = {
+    create?: XOR<BookStyleImageCreateWithoutBookInput, BookStyleImageUncheckedCreateWithoutBookInput> | BookStyleImageCreateWithoutBookInput[] | BookStyleImageUncheckedCreateWithoutBookInput[]
+    connectOrCreate?: BookStyleImageCreateOrConnectWithoutBookInput | BookStyleImageCreateOrConnectWithoutBookInput[]
+    createMany?: BookStyleImageCreateManyBookInputEnvelope
+    connect?: BookStyleImageWhereUniqueInput | BookStyleImageWhereUniqueInput[]
+  }
+
+  export type UserCreateNestedOneWithoutCreatedBooksInput = {
+    create?: XOR<UserCreateWithoutCreatedBooksInput, UserUncheckedCreateWithoutCreatedBooksInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedBooksInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ClubBookCreateNestedManyWithoutBookInput = {
+    create?: XOR<ClubBookCreateWithoutBookInput, ClubBookUncheckedCreateWithoutBookInput> | ClubBookCreateWithoutBookInput[] | ClubBookUncheckedCreateWithoutBookInput[]
+    connectOrCreate?: ClubBookCreateOrConnectWithoutBookInput | ClubBookCreateOrConnectWithoutBookInput[]
+    createMany?: ClubBookCreateManyBookInputEnvelope
+    connect?: ClubBookWhereUniqueInput | ClubBookWhereUniqueInput[]
+  }
+
+  export type CategoryUncheckedCreateNestedManyWithoutBooksInput = {
+    create?: XOR<CategoryCreateWithoutBooksInput, CategoryUncheckedCreateWithoutBooksInput> | CategoryCreateWithoutBooksInput[] | CategoryUncheckedCreateWithoutBooksInput[]
+    connectOrCreate?: CategoryCreateOrConnectWithoutBooksInput | CategoryCreateOrConnectWithoutBooksInput[]
+    connect?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
+  }
+
+  export type BookStyleImageUncheckedCreateNestedManyWithoutBookInput = {
+    create?: XOR<BookStyleImageCreateWithoutBookInput, BookStyleImageUncheckedCreateWithoutBookInput> | BookStyleImageCreateWithoutBookInput[] | BookStyleImageUncheckedCreateWithoutBookInput[]
+    connectOrCreate?: BookStyleImageCreateOrConnectWithoutBookInput | BookStyleImageCreateOrConnectWithoutBookInput[]
+    createMany?: BookStyleImageCreateManyBookInputEnvelope
+    connect?: BookStyleImageWhereUniqueInput | BookStyleImageWhereUniqueInput[]
+  }
+
+  export type ClubBookUncheckedCreateNestedManyWithoutBookInput = {
+    create?: XOR<ClubBookCreateWithoutBookInput, ClubBookUncheckedCreateWithoutBookInput> | ClubBookCreateWithoutBookInput[] | ClubBookUncheckedCreateWithoutBookInput[]
+    connectOrCreate?: ClubBookCreateOrConnectWithoutBookInput | ClubBookCreateOrConnectWithoutBookInput[]
+    createMany?: ClubBookCreateManyBookInputEnvelope
+    connect?: ClubBookWhereUniqueInput | ClubBookWhereUniqueInput[]
+  }
+
+  export type CategoryUpdateManyWithoutBooksNestedInput = {
+    create?: XOR<CategoryCreateWithoutBooksInput, CategoryUncheckedCreateWithoutBooksInput> | CategoryCreateWithoutBooksInput[] | CategoryUncheckedCreateWithoutBooksInput[]
+    connectOrCreate?: CategoryCreateOrConnectWithoutBooksInput | CategoryCreateOrConnectWithoutBooksInput[]
+    upsert?: CategoryUpsertWithWhereUniqueWithoutBooksInput | CategoryUpsertWithWhereUniqueWithoutBooksInput[]
+    set?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
+    disconnect?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
+    delete?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
+    connect?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
+    update?: CategoryUpdateWithWhereUniqueWithoutBooksInput | CategoryUpdateWithWhereUniqueWithoutBooksInput[]
+    updateMany?: CategoryUpdateManyWithWhereWithoutBooksInput | CategoryUpdateManyWithWhereWithoutBooksInput[]
+    deleteMany?: CategoryScalarWhereInput | CategoryScalarWhereInput[]
+  }
+
+  export type BookStyleImageUpdateManyWithoutBookNestedInput = {
+    create?: XOR<BookStyleImageCreateWithoutBookInput, BookStyleImageUncheckedCreateWithoutBookInput> | BookStyleImageCreateWithoutBookInput[] | BookStyleImageUncheckedCreateWithoutBookInput[]
+    connectOrCreate?: BookStyleImageCreateOrConnectWithoutBookInput | BookStyleImageCreateOrConnectWithoutBookInput[]
+    upsert?: BookStyleImageUpsertWithWhereUniqueWithoutBookInput | BookStyleImageUpsertWithWhereUniqueWithoutBookInput[]
+    createMany?: BookStyleImageCreateManyBookInputEnvelope
+    set?: BookStyleImageWhereUniqueInput | BookStyleImageWhereUniqueInput[]
+    disconnect?: BookStyleImageWhereUniqueInput | BookStyleImageWhereUniqueInput[]
+    delete?: BookStyleImageWhereUniqueInput | BookStyleImageWhereUniqueInput[]
+    connect?: BookStyleImageWhereUniqueInput | BookStyleImageWhereUniqueInput[]
+    update?: BookStyleImageUpdateWithWhereUniqueWithoutBookInput | BookStyleImageUpdateWithWhereUniqueWithoutBookInput[]
+    updateMany?: BookStyleImageUpdateManyWithWhereWithoutBookInput | BookStyleImageUpdateManyWithWhereWithoutBookInput[]
+    deleteMany?: BookStyleImageScalarWhereInput | BookStyleImageScalarWhereInput[]
+  }
+
+  export type UserUpdateOneWithoutCreatedBooksNestedInput = {
+    create?: XOR<UserCreateWithoutCreatedBooksInput, UserUncheckedCreateWithoutCreatedBooksInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedBooksInput
+    upsert?: UserUpsertWithoutCreatedBooksInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCreatedBooksInput, UserUpdateWithoutCreatedBooksInput>, UserUncheckedUpdateWithoutCreatedBooksInput>
+  }
+
+  export type ClubBookUpdateManyWithoutBookNestedInput = {
+    create?: XOR<ClubBookCreateWithoutBookInput, ClubBookUncheckedCreateWithoutBookInput> | ClubBookCreateWithoutBookInput[] | ClubBookUncheckedCreateWithoutBookInput[]
+    connectOrCreate?: ClubBookCreateOrConnectWithoutBookInput | ClubBookCreateOrConnectWithoutBookInput[]
+    upsert?: ClubBookUpsertWithWhereUniqueWithoutBookInput | ClubBookUpsertWithWhereUniqueWithoutBookInput[]
+    createMany?: ClubBookCreateManyBookInputEnvelope
+    set?: ClubBookWhereUniqueInput | ClubBookWhereUniqueInput[]
+    disconnect?: ClubBookWhereUniqueInput | ClubBookWhereUniqueInput[]
+    delete?: ClubBookWhereUniqueInput | ClubBookWhereUniqueInput[]
+    connect?: ClubBookWhereUniqueInput | ClubBookWhereUniqueInput[]
+    update?: ClubBookUpdateWithWhereUniqueWithoutBookInput | ClubBookUpdateWithWhereUniqueWithoutBookInput[]
+    updateMany?: ClubBookUpdateManyWithWhereWithoutBookInput | ClubBookUpdateManyWithWhereWithoutBookInput[]
+    deleteMany?: ClubBookScalarWhereInput | ClubBookScalarWhereInput[]
+  }
+
+  export type CategoryUncheckedUpdateManyWithoutBooksNestedInput = {
+    create?: XOR<CategoryCreateWithoutBooksInput, CategoryUncheckedCreateWithoutBooksInput> | CategoryCreateWithoutBooksInput[] | CategoryUncheckedCreateWithoutBooksInput[]
+    connectOrCreate?: CategoryCreateOrConnectWithoutBooksInput | CategoryCreateOrConnectWithoutBooksInput[]
+    upsert?: CategoryUpsertWithWhereUniqueWithoutBooksInput | CategoryUpsertWithWhereUniqueWithoutBooksInput[]
+    set?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
+    disconnect?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
+    delete?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
+    connect?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
+    update?: CategoryUpdateWithWhereUniqueWithoutBooksInput | CategoryUpdateWithWhereUniqueWithoutBooksInput[]
+    updateMany?: CategoryUpdateManyWithWhereWithoutBooksInput | CategoryUpdateManyWithWhereWithoutBooksInput[]
+    deleteMany?: CategoryScalarWhereInput | CategoryScalarWhereInput[]
+  }
+
+  export type BookStyleImageUncheckedUpdateManyWithoutBookNestedInput = {
+    create?: XOR<BookStyleImageCreateWithoutBookInput, BookStyleImageUncheckedCreateWithoutBookInput> | BookStyleImageCreateWithoutBookInput[] | BookStyleImageUncheckedCreateWithoutBookInput[]
+    connectOrCreate?: BookStyleImageCreateOrConnectWithoutBookInput | BookStyleImageCreateOrConnectWithoutBookInput[]
+    upsert?: BookStyleImageUpsertWithWhereUniqueWithoutBookInput | BookStyleImageUpsertWithWhereUniqueWithoutBookInput[]
+    createMany?: BookStyleImageCreateManyBookInputEnvelope
+    set?: BookStyleImageWhereUniqueInput | BookStyleImageWhereUniqueInput[]
+    disconnect?: BookStyleImageWhereUniqueInput | BookStyleImageWhereUniqueInput[]
+    delete?: BookStyleImageWhereUniqueInput | BookStyleImageWhereUniqueInput[]
+    connect?: BookStyleImageWhereUniqueInput | BookStyleImageWhereUniqueInput[]
+    update?: BookStyleImageUpdateWithWhereUniqueWithoutBookInput | BookStyleImageUpdateWithWhereUniqueWithoutBookInput[]
+    updateMany?: BookStyleImageUpdateManyWithWhereWithoutBookInput | BookStyleImageUpdateManyWithWhereWithoutBookInput[]
+    deleteMany?: BookStyleImageScalarWhereInput | BookStyleImageScalarWhereInput[]
+  }
+
+  export type ClubBookUncheckedUpdateManyWithoutBookNestedInput = {
+    create?: XOR<ClubBookCreateWithoutBookInput, ClubBookUncheckedCreateWithoutBookInput> | ClubBookCreateWithoutBookInput[] | ClubBookUncheckedCreateWithoutBookInput[]
+    connectOrCreate?: ClubBookCreateOrConnectWithoutBookInput | ClubBookCreateOrConnectWithoutBookInput[]
+    upsert?: ClubBookUpsertWithWhereUniqueWithoutBookInput | ClubBookUpsertWithWhereUniqueWithoutBookInput[]
+    createMany?: ClubBookCreateManyBookInputEnvelope
+    set?: ClubBookWhereUniqueInput | ClubBookWhereUniqueInput[]
+    disconnect?: ClubBookWhereUniqueInput | ClubBookWhereUniqueInput[]
+    delete?: ClubBookWhereUniqueInput | ClubBookWhereUniqueInput[]
+    connect?: ClubBookWhereUniqueInput | ClubBookWhereUniqueInput[]
+    update?: ClubBookUpdateWithWhereUniqueWithoutBookInput | ClubBookUpdateWithWhereUniqueWithoutBookInput[]
+    updateMany?: ClubBookUpdateManyWithWhereWithoutBookInput | ClubBookUpdateManyWithWhereWithoutBookInput[]
+    deleteMany?: ClubBookScalarWhereInput | ClubBookScalarWhereInput[]
+  }
+
+  export type BookCreateNestedOneWithoutStyleImagesInput = {
+    create?: XOR<BookCreateWithoutStyleImagesInput, BookUncheckedCreateWithoutStyleImagesInput>
+    connectOrCreate?: BookCreateOrConnectWithoutStyleImagesInput
+    connect?: BookWhereUniqueInput
+  }
+
+  export type BookUpdateOneRequiredWithoutStyleImagesNestedInput = {
+    create?: XOR<BookCreateWithoutStyleImagesInput, BookUncheckedCreateWithoutStyleImagesInput>
+    connectOrCreate?: BookCreateOrConnectWithoutStyleImagesInput
+    upsert?: BookUpsertWithoutStyleImagesInput
+    connect?: BookWhereUniqueInput
+    update?: XOR<XOR<BookUpdateToOneWithWhereWithoutStyleImagesInput, BookUpdateWithoutStyleImagesInput>, BookUncheckedUpdateWithoutStyleImagesInput>
+  }
+
+  export type BookCreateNestedManyWithoutCategoriesInput = {
+    create?: XOR<BookCreateWithoutCategoriesInput, BookUncheckedCreateWithoutCategoriesInput> | BookCreateWithoutCategoriesInput[] | BookUncheckedCreateWithoutCategoriesInput[]
+    connectOrCreate?: BookCreateOrConnectWithoutCategoriesInput | BookCreateOrConnectWithoutCategoriesInput[]
+    connect?: BookWhereUniqueInput | BookWhereUniqueInput[]
+  }
+
+  export type BookUncheckedCreateNestedManyWithoutCategoriesInput = {
+    create?: XOR<BookCreateWithoutCategoriesInput, BookUncheckedCreateWithoutCategoriesInput> | BookCreateWithoutCategoriesInput[] | BookUncheckedCreateWithoutCategoriesInput[]
+    connectOrCreate?: BookCreateOrConnectWithoutCategoriesInput | BookCreateOrConnectWithoutCategoriesInput[]
+    connect?: BookWhereUniqueInput | BookWhereUniqueInput[]
+  }
+
+  export type BookUpdateManyWithoutCategoriesNestedInput = {
+    create?: XOR<BookCreateWithoutCategoriesInput, BookUncheckedCreateWithoutCategoriesInput> | BookCreateWithoutCategoriesInput[] | BookUncheckedCreateWithoutCategoriesInput[]
+    connectOrCreate?: BookCreateOrConnectWithoutCategoriesInput | BookCreateOrConnectWithoutCategoriesInput[]
+    upsert?: BookUpsertWithWhereUniqueWithoutCategoriesInput | BookUpsertWithWhereUniqueWithoutCategoriesInput[]
+    set?: BookWhereUniqueInput | BookWhereUniqueInput[]
+    disconnect?: BookWhereUniqueInput | BookWhereUniqueInput[]
+    delete?: BookWhereUniqueInput | BookWhereUniqueInput[]
+    connect?: BookWhereUniqueInput | BookWhereUniqueInput[]
+    update?: BookUpdateWithWhereUniqueWithoutCategoriesInput | BookUpdateWithWhereUniqueWithoutCategoriesInput[]
+    updateMany?: BookUpdateManyWithWhereWithoutCategoriesInput | BookUpdateManyWithWhereWithoutCategoriesInput[]
+    deleteMany?: BookScalarWhereInput | BookScalarWhereInput[]
+  }
+
+  export type BookUncheckedUpdateManyWithoutCategoriesNestedInput = {
+    create?: XOR<BookCreateWithoutCategoriesInput, BookUncheckedCreateWithoutCategoriesInput> | BookCreateWithoutCategoriesInput[] | BookUncheckedCreateWithoutCategoriesInput[]
+    connectOrCreate?: BookCreateOrConnectWithoutCategoriesInput | BookCreateOrConnectWithoutCategoriesInput[]
+    upsert?: BookUpsertWithWhereUniqueWithoutCategoriesInput | BookUpsertWithWhereUniqueWithoutCategoriesInput[]
+    set?: BookWhereUniqueInput | BookWhereUniqueInput[]
+    disconnect?: BookWhereUniqueInput | BookWhereUniqueInput[]
+    delete?: BookWhereUniqueInput | BookWhereUniqueInput[]
+    connect?: BookWhereUniqueInput | BookWhereUniqueInput[]
+    update?: BookUpdateWithWhereUniqueWithoutCategoriesInput | BookUpdateWithWhereUniqueWithoutCategoriesInput[]
+    updateMany?: BookUpdateManyWithWhereWithoutCategoriesInput | BookUpdateManyWithWhereWithoutCategoriesInput[]
+    deleteMany?: BookScalarWhereInput | BookScalarWhereInput[]
   }
 
   export type MembershipCreateNestedManyWithoutGroupInput = {
@@ -29817,6 +38873,18 @@ export namespace Prisma {
     update?: XOR<XOR<GroupUpdateToOneWithWhereWithoutBookOfMonthSelectionsInput, GroupUpdateWithoutBookOfMonthSelectionsInput>, GroupUncheckedUpdateWithoutBookOfMonthSelectionsInput>
   }
 
+  export type UserCreateNestedOneWithoutCreatedClubBooksInput = {
+    create?: XOR<UserCreateWithoutCreatedClubBooksInput, UserUncheckedCreateWithoutCreatedClubBooksInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedClubBooksInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type BookCreateNestedOneWithoutClubBooksInput = {
+    create?: XOR<BookCreateWithoutClubBooksInput, BookUncheckedCreateWithoutClubBooksInput>
+    connectOrCreate?: BookCreateOrConnectWithoutClubBooksInput
+    connect?: BookWhereUniqueInput
+  }
+
   export type ClubBookMessageCreateNestedManyWithoutClubBookInput = {
     create?: XOR<ClubBookMessageCreateWithoutClubBookInput, ClubBookMessageUncheckedCreateWithoutClubBookInput> | ClubBookMessageCreateWithoutClubBookInput[] | ClubBookMessageUncheckedCreateWithoutClubBookInput[]
     connectOrCreate?: ClubBookMessageCreateOrConnectWithoutClubBookInput | ClubBookMessageCreateOrConnectWithoutClubBookInput[]
@@ -29853,8 +38921,20 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
+  export type UserUpdateOneRequiredWithoutCreatedClubBooksNestedInput = {
+    create?: XOR<UserCreateWithoutCreatedClubBooksInput, UserUncheckedCreateWithoutCreatedClubBooksInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedClubBooksInput
+    upsert?: UserUpsertWithoutCreatedClubBooksInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCreatedClubBooksInput, UserUpdateWithoutCreatedClubBooksInput>, UserUncheckedUpdateWithoutCreatedClubBooksInput>
+  }
+
+  export type BookUpdateOneRequiredWithoutClubBooksNestedInput = {
+    create?: XOR<BookCreateWithoutClubBooksInput, BookUncheckedCreateWithoutClubBooksInput>
+    connectOrCreate?: BookCreateOrConnectWithoutClubBooksInput
+    upsert?: BookUpsertWithoutClubBooksInput
+    connect?: BookWhereUniqueInput
+    update?: XOR<XOR<BookUpdateToOneWithWhereWithoutClubBooksInput, BookUpdateWithoutClubBooksInput>, BookUncheckedUpdateWithoutClubBooksInput>
   }
 
   export type ClubBookMessageUpdateManyWithoutClubBookNestedInput = {
@@ -30333,6 +39413,126 @@ export namespace Prisma {
     update?: XOR<XOR<PollOptionUpdateToOneWithWhereWithoutVotesInput, PollOptionUpdateWithoutVotesInput>, PollOptionUncheckedUpdateWithoutVotesInput>
   }
 
+  export type ClubEventParticipantCreateNestedManyWithoutEventInput = {
+    create?: XOR<ClubEventParticipantCreateWithoutEventInput, ClubEventParticipantUncheckedCreateWithoutEventInput> | ClubEventParticipantCreateWithoutEventInput[] | ClubEventParticipantUncheckedCreateWithoutEventInput[]
+    connectOrCreate?: ClubEventParticipantCreateOrConnectWithoutEventInput | ClubEventParticipantCreateOrConnectWithoutEventInput[]
+    createMany?: ClubEventParticipantCreateManyEventInputEnvelope
+    connect?: ClubEventParticipantWhereUniqueInput | ClubEventParticipantWhereUniqueInput[]
+  }
+
+  export type ClubEventPhotoCreateNestedManyWithoutEventInput = {
+    create?: XOR<ClubEventPhotoCreateWithoutEventInput, ClubEventPhotoUncheckedCreateWithoutEventInput> | ClubEventPhotoCreateWithoutEventInput[] | ClubEventPhotoUncheckedCreateWithoutEventInput[]
+    connectOrCreate?: ClubEventPhotoCreateOrConnectWithoutEventInput | ClubEventPhotoCreateOrConnectWithoutEventInput[]
+    createMany?: ClubEventPhotoCreateManyEventInputEnvelope
+    connect?: ClubEventPhotoWhereUniqueInput | ClubEventPhotoWhereUniqueInput[]
+  }
+
+  export type ClubEventParticipantUncheckedCreateNestedManyWithoutEventInput = {
+    create?: XOR<ClubEventParticipantCreateWithoutEventInput, ClubEventParticipantUncheckedCreateWithoutEventInput> | ClubEventParticipantCreateWithoutEventInput[] | ClubEventParticipantUncheckedCreateWithoutEventInput[]
+    connectOrCreate?: ClubEventParticipantCreateOrConnectWithoutEventInput | ClubEventParticipantCreateOrConnectWithoutEventInput[]
+    createMany?: ClubEventParticipantCreateManyEventInputEnvelope
+    connect?: ClubEventParticipantWhereUniqueInput | ClubEventParticipantWhereUniqueInput[]
+  }
+
+  export type ClubEventPhotoUncheckedCreateNestedManyWithoutEventInput = {
+    create?: XOR<ClubEventPhotoCreateWithoutEventInput, ClubEventPhotoUncheckedCreateWithoutEventInput> | ClubEventPhotoCreateWithoutEventInput[] | ClubEventPhotoUncheckedCreateWithoutEventInput[]
+    connectOrCreate?: ClubEventPhotoCreateOrConnectWithoutEventInput | ClubEventPhotoCreateOrConnectWithoutEventInput[]
+    createMany?: ClubEventPhotoCreateManyEventInputEnvelope
+    connect?: ClubEventPhotoWhereUniqueInput | ClubEventPhotoWhereUniqueInput[]
+  }
+
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type ClubEventParticipantUpdateManyWithoutEventNestedInput = {
+    create?: XOR<ClubEventParticipantCreateWithoutEventInput, ClubEventParticipantUncheckedCreateWithoutEventInput> | ClubEventParticipantCreateWithoutEventInput[] | ClubEventParticipantUncheckedCreateWithoutEventInput[]
+    connectOrCreate?: ClubEventParticipantCreateOrConnectWithoutEventInput | ClubEventParticipantCreateOrConnectWithoutEventInput[]
+    upsert?: ClubEventParticipantUpsertWithWhereUniqueWithoutEventInput | ClubEventParticipantUpsertWithWhereUniqueWithoutEventInput[]
+    createMany?: ClubEventParticipantCreateManyEventInputEnvelope
+    set?: ClubEventParticipantWhereUniqueInput | ClubEventParticipantWhereUniqueInput[]
+    disconnect?: ClubEventParticipantWhereUniqueInput | ClubEventParticipantWhereUniqueInput[]
+    delete?: ClubEventParticipantWhereUniqueInput | ClubEventParticipantWhereUniqueInput[]
+    connect?: ClubEventParticipantWhereUniqueInput | ClubEventParticipantWhereUniqueInput[]
+    update?: ClubEventParticipantUpdateWithWhereUniqueWithoutEventInput | ClubEventParticipantUpdateWithWhereUniqueWithoutEventInput[]
+    updateMany?: ClubEventParticipantUpdateManyWithWhereWithoutEventInput | ClubEventParticipantUpdateManyWithWhereWithoutEventInput[]
+    deleteMany?: ClubEventParticipantScalarWhereInput | ClubEventParticipantScalarWhereInput[]
+  }
+
+  export type ClubEventPhotoUpdateManyWithoutEventNestedInput = {
+    create?: XOR<ClubEventPhotoCreateWithoutEventInput, ClubEventPhotoUncheckedCreateWithoutEventInput> | ClubEventPhotoCreateWithoutEventInput[] | ClubEventPhotoUncheckedCreateWithoutEventInput[]
+    connectOrCreate?: ClubEventPhotoCreateOrConnectWithoutEventInput | ClubEventPhotoCreateOrConnectWithoutEventInput[]
+    upsert?: ClubEventPhotoUpsertWithWhereUniqueWithoutEventInput | ClubEventPhotoUpsertWithWhereUniqueWithoutEventInput[]
+    createMany?: ClubEventPhotoCreateManyEventInputEnvelope
+    set?: ClubEventPhotoWhereUniqueInput | ClubEventPhotoWhereUniqueInput[]
+    disconnect?: ClubEventPhotoWhereUniqueInput | ClubEventPhotoWhereUniqueInput[]
+    delete?: ClubEventPhotoWhereUniqueInput | ClubEventPhotoWhereUniqueInput[]
+    connect?: ClubEventPhotoWhereUniqueInput | ClubEventPhotoWhereUniqueInput[]
+    update?: ClubEventPhotoUpdateWithWhereUniqueWithoutEventInput | ClubEventPhotoUpdateWithWhereUniqueWithoutEventInput[]
+    updateMany?: ClubEventPhotoUpdateManyWithWhereWithoutEventInput | ClubEventPhotoUpdateManyWithWhereWithoutEventInput[]
+    deleteMany?: ClubEventPhotoScalarWhereInput | ClubEventPhotoScalarWhereInput[]
+  }
+
+  export type ClubEventParticipantUncheckedUpdateManyWithoutEventNestedInput = {
+    create?: XOR<ClubEventParticipantCreateWithoutEventInput, ClubEventParticipantUncheckedCreateWithoutEventInput> | ClubEventParticipantCreateWithoutEventInput[] | ClubEventParticipantUncheckedCreateWithoutEventInput[]
+    connectOrCreate?: ClubEventParticipantCreateOrConnectWithoutEventInput | ClubEventParticipantCreateOrConnectWithoutEventInput[]
+    upsert?: ClubEventParticipantUpsertWithWhereUniqueWithoutEventInput | ClubEventParticipantUpsertWithWhereUniqueWithoutEventInput[]
+    createMany?: ClubEventParticipantCreateManyEventInputEnvelope
+    set?: ClubEventParticipantWhereUniqueInput | ClubEventParticipantWhereUniqueInput[]
+    disconnect?: ClubEventParticipantWhereUniqueInput | ClubEventParticipantWhereUniqueInput[]
+    delete?: ClubEventParticipantWhereUniqueInput | ClubEventParticipantWhereUniqueInput[]
+    connect?: ClubEventParticipantWhereUniqueInput | ClubEventParticipantWhereUniqueInput[]
+    update?: ClubEventParticipantUpdateWithWhereUniqueWithoutEventInput | ClubEventParticipantUpdateWithWhereUniqueWithoutEventInput[]
+    updateMany?: ClubEventParticipantUpdateManyWithWhereWithoutEventInput | ClubEventParticipantUpdateManyWithWhereWithoutEventInput[]
+    deleteMany?: ClubEventParticipantScalarWhereInput | ClubEventParticipantScalarWhereInput[]
+  }
+
+  export type ClubEventPhotoUncheckedUpdateManyWithoutEventNestedInput = {
+    create?: XOR<ClubEventPhotoCreateWithoutEventInput, ClubEventPhotoUncheckedCreateWithoutEventInput> | ClubEventPhotoCreateWithoutEventInput[] | ClubEventPhotoUncheckedCreateWithoutEventInput[]
+    connectOrCreate?: ClubEventPhotoCreateOrConnectWithoutEventInput | ClubEventPhotoCreateOrConnectWithoutEventInput[]
+    upsert?: ClubEventPhotoUpsertWithWhereUniqueWithoutEventInput | ClubEventPhotoUpsertWithWhereUniqueWithoutEventInput[]
+    createMany?: ClubEventPhotoCreateManyEventInputEnvelope
+    set?: ClubEventPhotoWhereUniqueInput | ClubEventPhotoWhereUniqueInput[]
+    disconnect?: ClubEventPhotoWhereUniqueInput | ClubEventPhotoWhereUniqueInput[]
+    delete?: ClubEventPhotoWhereUniqueInput | ClubEventPhotoWhereUniqueInput[]
+    connect?: ClubEventPhotoWhereUniqueInput | ClubEventPhotoWhereUniqueInput[]
+    update?: ClubEventPhotoUpdateWithWhereUniqueWithoutEventInput | ClubEventPhotoUpdateWithWhereUniqueWithoutEventInput[]
+    updateMany?: ClubEventPhotoUpdateManyWithWhereWithoutEventInput | ClubEventPhotoUpdateManyWithWhereWithoutEventInput[]
+    deleteMany?: ClubEventPhotoScalarWhereInput | ClubEventPhotoScalarWhereInput[]
+  }
+
+  export type ClubEventCreateNestedOneWithoutParticipantsInput = {
+    create?: XOR<ClubEventCreateWithoutParticipantsInput, ClubEventUncheckedCreateWithoutParticipantsInput>
+    connectOrCreate?: ClubEventCreateOrConnectWithoutParticipantsInput
+    connect?: ClubEventWhereUniqueInput
+  }
+
+  export type ClubEventUpdateOneRequiredWithoutParticipantsNestedInput = {
+    create?: XOR<ClubEventCreateWithoutParticipantsInput, ClubEventUncheckedCreateWithoutParticipantsInput>
+    connectOrCreate?: ClubEventCreateOrConnectWithoutParticipantsInput
+    upsert?: ClubEventUpsertWithoutParticipantsInput
+    connect?: ClubEventWhereUniqueInput
+    update?: XOR<XOR<ClubEventUpdateToOneWithWhereWithoutParticipantsInput, ClubEventUpdateWithoutParticipantsInput>, ClubEventUncheckedUpdateWithoutParticipantsInput>
+  }
+
+  export type ClubEventCreateNestedOneWithoutPhotosInput = {
+    create?: XOR<ClubEventCreateWithoutPhotosInput, ClubEventUncheckedCreateWithoutPhotosInput>
+    connectOrCreate?: ClubEventCreateOrConnectWithoutPhotosInput
+    connect?: ClubEventWhereUniqueInput
+  }
+
+  export type ClubEventUpdateOneRequiredWithoutPhotosNestedInput = {
+    create?: XOR<ClubEventCreateWithoutPhotosInput, ClubEventUncheckedCreateWithoutPhotosInput>
+    connectOrCreate?: ClubEventCreateOrConnectWithoutPhotosInput
+    upsert?: ClubEventUpsertWithoutPhotosInput
+    connect?: ClubEventWhereUniqueInput
+    update?: XOR<XOR<ClubEventUpdateToOneWithWhereWithoutPhotosInput, ClubEventUpdateWithoutPhotosInput>, ClubEventUncheckedUpdateWithoutPhotosInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[]
@@ -30345,6 +39545,11 @@ export namespace Prisma {
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     not?: NestedStringFilter<$PrismaModel> | string
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type NestedDateTimeFilter<$PrismaModel = never> = {
@@ -30384,6 +39589,14 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -30467,11 +39680,6 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[]
@@ -30499,12 +39707,31 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type UserCityCreateWithoutUserInput = {
@@ -30524,6 +39751,88 @@ export namespace Prisma {
 
   export type UserCityCreateManyUserInputEnvelope = {
     data: UserCityCreateManyUserInput | UserCityCreateManyUserInput[]
+  }
+
+  export type BookCreateWithoutCreatedByUserInput = {
+    id?: string
+    title: string
+    author: string
+    coverUrl?: string
+    synopsis?: string
+    aiStyleDescription?: string
+    indicationComment?: string
+    createdAt?: Date | string
+    categories?: CategoryCreateNestedManyWithoutBooksInput
+    styleImages?: BookStyleImageCreateNestedManyWithoutBookInput
+    clubBooks?: ClubBookCreateNestedManyWithoutBookInput
+  }
+
+  export type BookUncheckedCreateWithoutCreatedByUserInput = {
+    id?: string
+    title: string
+    author: string
+    coverUrl?: string
+    synopsis?: string
+    aiStyleDescription?: string
+    indicationComment?: string
+    createdAt?: Date | string
+    categories?: CategoryUncheckedCreateNestedManyWithoutBooksInput
+    styleImages?: BookStyleImageUncheckedCreateNestedManyWithoutBookInput
+    clubBooks?: ClubBookUncheckedCreateNestedManyWithoutBookInput
+  }
+
+  export type BookCreateOrConnectWithoutCreatedByUserInput = {
+    where: BookWhereUniqueInput
+    create: XOR<BookCreateWithoutCreatedByUserInput, BookUncheckedCreateWithoutCreatedByUserInput>
+  }
+
+  export type BookCreateManyCreatedByUserInputEnvelope = {
+    data: BookCreateManyCreatedByUserInput | BookCreateManyCreatedByUserInput[]
+  }
+
+  export type ClubBookCreateWithoutCreatedByUserInput = {
+    id?: string
+    title: string
+    author: string
+    coverUrl?: string
+    colorKey: string
+    city?: string
+    month: number
+    year: number
+    isActive?: boolean
+    indicationComment?: string
+    createdAt?: Date | string
+    activatedAt?: Date | string | null
+    book: BookCreateNestedOneWithoutClubBooksInput
+    messages?: ClubBookMessageCreateNestedManyWithoutClubBookInput
+    artifacts?: ClubBookArtifactCreateNestedManyWithoutClubBookInput
+  }
+
+  export type ClubBookUncheckedCreateWithoutCreatedByUserInput = {
+    id?: string
+    bookId: string
+    title: string
+    author: string
+    coverUrl?: string
+    colorKey: string
+    city?: string
+    month: number
+    year: number
+    isActive?: boolean
+    indicationComment?: string
+    createdAt?: Date | string
+    activatedAt?: Date | string | null
+    messages?: ClubBookMessageUncheckedCreateNestedManyWithoutClubBookInput
+    artifacts?: ClubBookArtifactUncheckedCreateNestedManyWithoutClubBookInput
+  }
+
+  export type ClubBookCreateOrConnectWithoutCreatedByUserInput = {
+    where: ClubBookWhereUniqueInput
+    create: XOR<ClubBookCreateWithoutCreatedByUserInput, ClubBookUncheckedCreateWithoutCreatedByUserInput>
+  }
+
+  export type ClubBookCreateManyCreatedByUserInputEnvelope = {
+    data: ClubBookCreateManyCreatedByUserInput | ClubBookCreateManyCreatedByUserInput[]
   }
 
   export type UserCityUpsertWithWhereUniqueWithoutUserInput = {
@@ -30551,14 +39860,85 @@ export namespace Prisma {
     city?: StringFilter<"UserCity"> | string
   }
 
+  export type BookUpsertWithWhereUniqueWithoutCreatedByUserInput = {
+    where: BookWhereUniqueInput
+    update: XOR<BookUpdateWithoutCreatedByUserInput, BookUncheckedUpdateWithoutCreatedByUserInput>
+    create: XOR<BookCreateWithoutCreatedByUserInput, BookUncheckedCreateWithoutCreatedByUserInput>
+  }
+
+  export type BookUpdateWithWhereUniqueWithoutCreatedByUserInput = {
+    where: BookWhereUniqueInput
+    data: XOR<BookUpdateWithoutCreatedByUserInput, BookUncheckedUpdateWithoutCreatedByUserInput>
+  }
+
+  export type BookUpdateManyWithWhereWithoutCreatedByUserInput = {
+    where: BookScalarWhereInput
+    data: XOR<BookUpdateManyMutationInput, BookUncheckedUpdateManyWithoutCreatedByUserInput>
+  }
+
+  export type BookScalarWhereInput = {
+    AND?: BookScalarWhereInput | BookScalarWhereInput[]
+    OR?: BookScalarWhereInput[]
+    NOT?: BookScalarWhereInput | BookScalarWhereInput[]
+    id?: StringFilter<"Book"> | string
+    title?: StringFilter<"Book"> | string
+    author?: StringFilter<"Book"> | string
+    coverUrl?: StringFilter<"Book"> | string
+    synopsis?: StringFilter<"Book"> | string
+    aiStyleDescription?: StringFilter<"Book"> | string
+    createdByUserId?: StringNullableFilter<"Book"> | string | null
+    indicationComment?: StringFilter<"Book"> | string
+    createdAt?: DateTimeFilter<"Book"> | Date | string
+  }
+
+  export type ClubBookUpsertWithWhereUniqueWithoutCreatedByUserInput = {
+    where: ClubBookWhereUniqueInput
+    update: XOR<ClubBookUpdateWithoutCreatedByUserInput, ClubBookUncheckedUpdateWithoutCreatedByUserInput>
+    create: XOR<ClubBookCreateWithoutCreatedByUserInput, ClubBookUncheckedCreateWithoutCreatedByUserInput>
+  }
+
+  export type ClubBookUpdateWithWhereUniqueWithoutCreatedByUserInput = {
+    where: ClubBookWhereUniqueInput
+    data: XOR<ClubBookUpdateWithoutCreatedByUserInput, ClubBookUncheckedUpdateWithoutCreatedByUserInput>
+  }
+
+  export type ClubBookUpdateManyWithWhereWithoutCreatedByUserInput = {
+    where: ClubBookScalarWhereInput
+    data: XOR<ClubBookUpdateManyMutationInput, ClubBookUncheckedUpdateManyWithoutCreatedByUserInput>
+  }
+
+  export type ClubBookScalarWhereInput = {
+    AND?: ClubBookScalarWhereInput | ClubBookScalarWhereInput[]
+    OR?: ClubBookScalarWhereInput[]
+    NOT?: ClubBookScalarWhereInput | ClubBookScalarWhereInput[]
+    id?: StringFilter<"ClubBook"> | string
+    bookId?: StringFilter<"ClubBook"> | string
+    title?: StringFilter<"ClubBook"> | string
+    author?: StringFilter<"ClubBook"> | string
+    coverUrl?: StringFilter<"ClubBook"> | string
+    colorKey?: StringFilter<"ClubBook"> | string
+    city?: StringFilter<"ClubBook"> | string
+    month?: IntFilter<"ClubBook"> | number
+    year?: IntFilter<"ClubBook"> | number
+    isActive?: BoolFilter<"ClubBook"> | boolean
+    createdByUserId?: StringFilter<"ClubBook"> | string
+    indicationComment?: StringFilter<"ClubBook"> | string
+    createdAt?: DateTimeFilter<"ClubBook"> | Date | string
+    activatedAt?: DateTimeNullableFilter<"ClubBook"> | Date | string | null
+  }
+
   export type UserCreateWithoutCitiesInput = {
     id: string
     name: string
     bio: string
     avatarUrl: string
     coverUrl?: string
+    isAdmin?: boolean
+    passwordHash?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    createdBooks?: BookCreateNestedManyWithoutCreatedByUserInput
+    createdClubBooks?: ClubBookCreateNestedManyWithoutCreatedByUserInput
   }
 
   export type UserUncheckedCreateWithoutCitiesInput = {
@@ -30567,8 +39947,12 @@ export namespace Prisma {
     bio: string
     avatarUrl: string
     coverUrl?: string
+    isAdmin?: boolean
+    passwordHash?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    createdBooks?: BookUncheckedCreateNestedManyWithoutCreatedByUserInput
+    createdClubBooks?: ClubBookUncheckedCreateNestedManyWithoutCreatedByUserInput
   }
 
   export type UserCreateOrConnectWithoutCitiesInput = {
@@ -30593,8 +39977,12 @@ export namespace Prisma {
     bio?: StringFieldUpdateOperationsInput | string
     avatarUrl?: StringFieldUpdateOperationsInput | string
     coverUrl?: StringFieldUpdateOperationsInput | string
+    isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    passwordHash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBooks?: BookUpdateManyWithoutCreatedByUserNestedInput
+    createdClubBooks?: ClubBookUpdateManyWithoutCreatedByUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCitiesInput = {
@@ -30603,8 +39991,349 @@ export namespace Prisma {
     bio?: StringFieldUpdateOperationsInput | string
     avatarUrl?: StringFieldUpdateOperationsInput | string
     coverUrl?: StringFieldUpdateOperationsInput | string
+    isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    passwordHash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBooks?: BookUncheckedUpdateManyWithoutCreatedByUserNestedInput
+    createdClubBooks?: ClubBookUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  }
+
+  export type CategoryCreateWithoutBooksInput = {
+    id?: string
+    name: string
+  }
+
+  export type CategoryUncheckedCreateWithoutBooksInput = {
+    id?: string
+    name: string
+  }
+
+  export type CategoryCreateOrConnectWithoutBooksInput = {
+    where: CategoryWhereUniqueInput
+    create: XOR<CategoryCreateWithoutBooksInput, CategoryUncheckedCreateWithoutBooksInput>
+  }
+
+  export type BookStyleImageCreateWithoutBookInput = {
+    id?: string
+    url: string
+  }
+
+  export type BookStyleImageUncheckedCreateWithoutBookInput = {
+    id?: string
+    url: string
+  }
+
+  export type BookStyleImageCreateOrConnectWithoutBookInput = {
+    where: BookStyleImageWhereUniqueInput
+    create: XOR<BookStyleImageCreateWithoutBookInput, BookStyleImageUncheckedCreateWithoutBookInput>
+  }
+
+  export type BookStyleImageCreateManyBookInputEnvelope = {
+    data: BookStyleImageCreateManyBookInput | BookStyleImageCreateManyBookInput[]
+  }
+
+  export type UserCreateWithoutCreatedBooksInput = {
+    id: string
+    name: string
+    bio: string
+    avatarUrl: string
+    coverUrl?: string
+    isAdmin?: boolean
+    passwordHash?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cities?: UserCityCreateNestedManyWithoutUserInput
+    createdClubBooks?: ClubBookCreateNestedManyWithoutCreatedByUserInput
+  }
+
+  export type UserUncheckedCreateWithoutCreatedBooksInput = {
+    id: string
+    name: string
+    bio: string
+    avatarUrl: string
+    coverUrl?: string
+    isAdmin?: boolean
+    passwordHash?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cities?: UserCityUncheckedCreateNestedManyWithoutUserInput
+    createdClubBooks?: ClubBookUncheckedCreateNestedManyWithoutCreatedByUserInput
+  }
+
+  export type UserCreateOrConnectWithoutCreatedBooksInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCreatedBooksInput, UserUncheckedCreateWithoutCreatedBooksInput>
+  }
+
+  export type ClubBookCreateWithoutBookInput = {
+    id?: string
+    title: string
+    author: string
+    coverUrl?: string
+    colorKey: string
+    city?: string
+    month: number
+    year: number
+    isActive?: boolean
+    indicationComment?: string
+    createdAt?: Date | string
+    activatedAt?: Date | string | null
+    createdByUser: UserCreateNestedOneWithoutCreatedClubBooksInput
+    messages?: ClubBookMessageCreateNestedManyWithoutClubBookInput
+    artifacts?: ClubBookArtifactCreateNestedManyWithoutClubBookInput
+  }
+
+  export type ClubBookUncheckedCreateWithoutBookInput = {
+    id?: string
+    title: string
+    author: string
+    coverUrl?: string
+    colorKey: string
+    city?: string
+    month: number
+    year: number
+    isActive?: boolean
+    createdByUserId: string
+    indicationComment?: string
+    createdAt?: Date | string
+    activatedAt?: Date | string | null
+    messages?: ClubBookMessageUncheckedCreateNestedManyWithoutClubBookInput
+    artifacts?: ClubBookArtifactUncheckedCreateNestedManyWithoutClubBookInput
+  }
+
+  export type ClubBookCreateOrConnectWithoutBookInput = {
+    where: ClubBookWhereUniqueInput
+    create: XOR<ClubBookCreateWithoutBookInput, ClubBookUncheckedCreateWithoutBookInput>
+  }
+
+  export type ClubBookCreateManyBookInputEnvelope = {
+    data: ClubBookCreateManyBookInput | ClubBookCreateManyBookInput[]
+  }
+
+  export type CategoryUpsertWithWhereUniqueWithoutBooksInput = {
+    where: CategoryWhereUniqueInput
+    update: XOR<CategoryUpdateWithoutBooksInput, CategoryUncheckedUpdateWithoutBooksInput>
+    create: XOR<CategoryCreateWithoutBooksInput, CategoryUncheckedCreateWithoutBooksInput>
+  }
+
+  export type CategoryUpdateWithWhereUniqueWithoutBooksInput = {
+    where: CategoryWhereUniqueInput
+    data: XOR<CategoryUpdateWithoutBooksInput, CategoryUncheckedUpdateWithoutBooksInput>
+  }
+
+  export type CategoryUpdateManyWithWhereWithoutBooksInput = {
+    where: CategoryScalarWhereInput
+    data: XOR<CategoryUpdateManyMutationInput, CategoryUncheckedUpdateManyWithoutBooksInput>
+  }
+
+  export type CategoryScalarWhereInput = {
+    AND?: CategoryScalarWhereInput | CategoryScalarWhereInput[]
+    OR?: CategoryScalarWhereInput[]
+    NOT?: CategoryScalarWhereInput | CategoryScalarWhereInput[]
+    id?: StringFilter<"Category"> | string
+    name?: StringFilter<"Category"> | string
+  }
+
+  export type BookStyleImageUpsertWithWhereUniqueWithoutBookInput = {
+    where: BookStyleImageWhereUniqueInput
+    update: XOR<BookStyleImageUpdateWithoutBookInput, BookStyleImageUncheckedUpdateWithoutBookInput>
+    create: XOR<BookStyleImageCreateWithoutBookInput, BookStyleImageUncheckedCreateWithoutBookInput>
+  }
+
+  export type BookStyleImageUpdateWithWhereUniqueWithoutBookInput = {
+    where: BookStyleImageWhereUniqueInput
+    data: XOR<BookStyleImageUpdateWithoutBookInput, BookStyleImageUncheckedUpdateWithoutBookInput>
+  }
+
+  export type BookStyleImageUpdateManyWithWhereWithoutBookInput = {
+    where: BookStyleImageScalarWhereInput
+    data: XOR<BookStyleImageUpdateManyMutationInput, BookStyleImageUncheckedUpdateManyWithoutBookInput>
+  }
+
+  export type BookStyleImageScalarWhereInput = {
+    AND?: BookStyleImageScalarWhereInput | BookStyleImageScalarWhereInput[]
+    OR?: BookStyleImageScalarWhereInput[]
+    NOT?: BookStyleImageScalarWhereInput | BookStyleImageScalarWhereInput[]
+    id?: StringFilter<"BookStyleImage"> | string
+    bookId?: StringFilter<"BookStyleImage"> | string
+    url?: StringFilter<"BookStyleImage"> | string
+  }
+
+  export type UserUpsertWithoutCreatedBooksInput = {
+    update: XOR<UserUpdateWithoutCreatedBooksInput, UserUncheckedUpdateWithoutCreatedBooksInput>
+    create: XOR<UserCreateWithoutCreatedBooksInput, UserUncheckedCreateWithoutCreatedBooksInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCreatedBooksInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCreatedBooksInput, UserUncheckedUpdateWithoutCreatedBooksInput>
+  }
+
+  export type UserUpdateWithoutCreatedBooksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    bio?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: StringFieldUpdateOperationsInput | string
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cities?: UserCityUpdateManyWithoutUserNestedInput
+    createdClubBooks?: ClubBookUpdateManyWithoutCreatedByUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCreatedBooksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    bio?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: StringFieldUpdateOperationsInput | string
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cities?: UserCityUncheckedUpdateManyWithoutUserNestedInput
+    createdClubBooks?: ClubBookUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  }
+
+  export type ClubBookUpsertWithWhereUniqueWithoutBookInput = {
+    where: ClubBookWhereUniqueInput
+    update: XOR<ClubBookUpdateWithoutBookInput, ClubBookUncheckedUpdateWithoutBookInput>
+    create: XOR<ClubBookCreateWithoutBookInput, ClubBookUncheckedCreateWithoutBookInput>
+  }
+
+  export type ClubBookUpdateWithWhereUniqueWithoutBookInput = {
+    where: ClubBookWhereUniqueInput
+    data: XOR<ClubBookUpdateWithoutBookInput, ClubBookUncheckedUpdateWithoutBookInput>
+  }
+
+  export type ClubBookUpdateManyWithWhereWithoutBookInput = {
+    where: ClubBookScalarWhereInput
+    data: XOR<ClubBookUpdateManyMutationInput, ClubBookUncheckedUpdateManyWithoutBookInput>
+  }
+
+  export type BookCreateWithoutStyleImagesInput = {
+    id?: string
+    title: string
+    author: string
+    coverUrl?: string
+    synopsis?: string
+    aiStyleDescription?: string
+    indicationComment?: string
+    createdAt?: Date | string
+    categories?: CategoryCreateNestedManyWithoutBooksInput
+    createdByUser?: UserCreateNestedOneWithoutCreatedBooksInput
+    clubBooks?: ClubBookCreateNestedManyWithoutBookInput
+  }
+
+  export type BookUncheckedCreateWithoutStyleImagesInput = {
+    id?: string
+    title: string
+    author: string
+    coverUrl?: string
+    synopsis?: string
+    aiStyleDescription?: string
+    createdByUserId?: string | null
+    indicationComment?: string
+    createdAt?: Date | string
+    categories?: CategoryUncheckedCreateNestedManyWithoutBooksInput
+    clubBooks?: ClubBookUncheckedCreateNestedManyWithoutBookInput
+  }
+
+  export type BookCreateOrConnectWithoutStyleImagesInput = {
+    where: BookWhereUniqueInput
+    create: XOR<BookCreateWithoutStyleImagesInput, BookUncheckedCreateWithoutStyleImagesInput>
+  }
+
+  export type BookUpsertWithoutStyleImagesInput = {
+    update: XOR<BookUpdateWithoutStyleImagesInput, BookUncheckedUpdateWithoutStyleImagesInput>
+    create: XOR<BookCreateWithoutStyleImagesInput, BookUncheckedCreateWithoutStyleImagesInput>
+    where?: BookWhereInput
+  }
+
+  export type BookUpdateToOneWithWhereWithoutStyleImagesInput = {
+    where?: BookWhereInput
+    data: XOR<BookUpdateWithoutStyleImagesInput, BookUncheckedUpdateWithoutStyleImagesInput>
+  }
+
+  export type BookUpdateWithoutStyleImagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    author?: StringFieldUpdateOperationsInput | string
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    synopsis?: StringFieldUpdateOperationsInput | string
+    aiStyleDescription?: StringFieldUpdateOperationsInput | string
+    indicationComment?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categories?: CategoryUpdateManyWithoutBooksNestedInput
+    createdByUser?: UserUpdateOneWithoutCreatedBooksNestedInput
+    clubBooks?: ClubBookUpdateManyWithoutBookNestedInput
+  }
+
+  export type BookUncheckedUpdateWithoutStyleImagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    author?: StringFieldUpdateOperationsInput | string
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    synopsis?: StringFieldUpdateOperationsInput | string
+    aiStyleDescription?: StringFieldUpdateOperationsInput | string
+    createdByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    indicationComment?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categories?: CategoryUncheckedUpdateManyWithoutBooksNestedInput
+    clubBooks?: ClubBookUncheckedUpdateManyWithoutBookNestedInput
+  }
+
+  export type BookCreateWithoutCategoriesInput = {
+    id?: string
+    title: string
+    author: string
+    coverUrl?: string
+    synopsis?: string
+    aiStyleDescription?: string
+    indicationComment?: string
+    createdAt?: Date | string
+    styleImages?: BookStyleImageCreateNestedManyWithoutBookInput
+    createdByUser?: UserCreateNestedOneWithoutCreatedBooksInput
+    clubBooks?: ClubBookCreateNestedManyWithoutBookInput
+  }
+
+  export type BookUncheckedCreateWithoutCategoriesInput = {
+    id?: string
+    title: string
+    author: string
+    coverUrl?: string
+    synopsis?: string
+    aiStyleDescription?: string
+    createdByUserId?: string | null
+    indicationComment?: string
+    createdAt?: Date | string
+    styleImages?: BookStyleImageUncheckedCreateNestedManyWithoutBookInput
+    clubBooks?: ClubBookUncheckedCreateNestedManyWithoutBookInput
+  }
+
+  export type BookCreateOrConnectWithoutCategoriesInput = {
+    where: BookWhereUniqueInput
+    create: XOR<BookCreateWithoutCategoriesInput, BookUncheckedCreateWithoutCategoriesInput>
+  }
+
+  export type BookUpsertWithWhereUniqueWithoutCategoriesInput = {
+    where: BookWhereUniqueInput
+    update: XOR<BookUpdateWithoutCategoriesInput, BookUncheckedUpdateWithoutCategoriesInput>
+    create: XOR<BookCreateWithoutCategoriesInput, BookUncheckedCreateWithoutCategoriesInput>
+  }
+
+  export type BookUpdateWithWhereUniqueWithoutCategoriesInput = {
+    where: BookWhereUniqueInput
+    data: XOR<BookUpdateWithoutCategoriesInput, BookUncheckedUpdateWithoutCategoriesInput>
+  }
+
+  export type BookUpdateManyWithWhereWithoutCategoriesInput = {
+    where: BookScalarWhereInput
+    data: XOR<BookUpdateManyMutationInput, BookUncheckedUpdateManyWithoutCategoriesInput>
   }
 
   export type MembershipCreateWithoutGroupInput = {
@@ -31044,6 +40773,72 @@ export namespace Prisma {
     joinRequests?: JoinRequestUncheckedUpdateManyWithoutGroupNestedInput
   }
 
+  export type UserCreateWithoutCreatedClubBooksInput = {
+    id: string
+    name: string
+    bio: string
+    avatarUrl: string
+    coverUrl?: string
+    isAdmin?: boolean
+    passwordHash?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cities?: UserCityCreateNestedManyWithoutUserInput
+    createdBooks?: BookCreateNestedManyWithoutCreatedByUserInput
+  }
+
+  export type UserUncheckedCreateWithoutCreatedClubBooksInput = {
+    id: string
+    name: string
+    bio: string
+    avatarUrl: string
+    coverUrl?: string
+    isAdmin?: boolean
+    passwordHash?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cities?: UserCityUncheckedCreateNestedManyWithoutUserInput
+    createdBooks?: BookUncheckedCreateNestedManyWithoutCreatedByUserInput
+  }
+
+  export type UserCreateOrConnectWithoutCreatedClubBooksInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCreatedClubBooksInput, UserUncheckedCreateWithoutCreatedClubBooksInput>
+  }
+
+  export type BookCreateWithoutClubBooksInput = {
+    id?: string
+    title: string
+    author: string
+    coverUrl?: string
+    synopsis?: string
+    aiStyleDescription?: string
+    indicationComment?: string
+    createdAt?: Date | string
+    categories?: CategoryCreateNestedManyWithoutBooksInput
+    styleImages?: BookStyleImageCreateNestedManyWithoutBookInput
+    createdByUser?: UserCreateNestedOneWithoutCreatedBooksInput
+  }
+
+  export type BookUncheckedCreateWithoutClubBooksInput = {
+    id?: string
+    title: string
+    author: string
+    coverUrl?: string
+    synopsis?: string
+    aiStyleDescription?: string
+    createdByUserId?: string | null
+    indicationComment?: string
+    createdAt?: Date | string
+    categories?: CategoryUncheckedCreateNestedManyWithoutBooksInput
+    styleImages?: BookStyleImageUncheckedCreateNestedManyWithoutBookInput
+  }
+
+  export type BookCreateOrConnectWithoutClubBooksInput = {
+    where: BookWhereUniqueInput
+    create: XOR<BookCreateWithoutClubBooksInput, BookUncheckedCreateWithoutClubBooksInput>
+  }
+
   export type ClubBookMessageCreateWithoutClubBookInput = {
     id?: string
     userId: string
@@ -31094,6 +40889,84 @@ export namespace Prisma {
 
   export type ClubBookArtifactCreateManyClubBookInputEnvelope = {
     data: ClubBookArtifactCreateManyClubBookInput | ClubBookArtifactCreateManyClubBookInput[]
+  }
+
+  export type UserUpsertWithoutCreatedClubBooksInput = {
+    update: XOR<UserUpdateWithoutCreatedClubBooksInput, UserUncheckedUpdateWithoutCreatedClubBooksInput>
+    create: XOR<UserCreateWithoutCreatedClubBooksInput, UserUncheckedCreateWithoutCreatedClubBooksInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCreatedClubBooksInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCreatedClubBooksInput, UserUncheckedUpdateWithoutCreatedClubBooksInput>
+  }
+
+  export type UserUpdateWithoutCreatedClubBooksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    bio?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: StringFieldUpdateOperationsInput | string
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cities?: UserCityUpdateManyWithoutUserNestedInput
+    createdBooks?: BookUpdateManyWithoutCreatedByUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCreatedClubBooksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    bio?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: StringFieldUpdateOperationsInput | string
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cities?: UserCityUncheckedUpdateManyWithoutUserNestedInput
+    createdBooks?: BookUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  }
+
+  export type BookUpsertWithoutClubBooksInput = {
+    update: XOR<BookUpdateWithoutClubBooksInput, BookUncheckedUpdateWithoutClubBooksInput>
+    create: XOR<BookCreateWithoutClubBooksInput, BookUncheckedCreateWithoutClubBooksInput>
+    where?: BookWhereInput
+  }
+
+  export type BookUpdateToOneWithWhereWithoutClubBooksInput = {
+    where?: BookWhereInput
+    data: XOR<BookUpdateWithoutClubBooksInput, BookUncheckedUpdateWithoutClubBooksInput>
+  }
+
+  export type BookUpdateWithoutClubBooksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    author?: StringFieldUpdateOperationsInput | string
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    synopsis?: StringFieldUpdateOperationsInput | string
+    aiStyleDescription?: StringFieldUpdateOperationsInput | string
+    indicationComment?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categories?: CategoryUpdateManyWithoutBooksNestedInput
+    styleImages?: BookStyleImageUpdateManyWithoutBookNestedInput
+    createdByUser?: UserUpdateOneWithoutCreatedBooksNestedInput
+  }
+
+  export type BookUncheckedUpdateWithoutClubBooksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    author?: StringFieldUpdateOperationsInput | string
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    synopsis?: StringFieldUpdateOperationsInput | string
+    aiStyleDescription?: StringFieldUpdateOperationsInput | string
+    createdByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    indicationComment?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categories?: CategoryUncheckedUpdateManyWithoutBooksNestedInput
+    styleImages?: BookStyleImageUncheckedUpdateManyWithoutBookNestedInput
   }
 
   export type ClubBookMessageUpsertWithWhereUniqueWithoutClubBookInput = {
@@ -31155,7 +41028,6 @@ export namespace Prisma {
 
   export type ClubBookCreateWithoutMessagesInput = {
     id?: string
-    bookId: string
     title: string
     author: string
     coverUrl?: string
@@ -31164,9 +41036,11 @@ export namespace Prisma {
     month: number
     year: number
     isActive?: boolean
-    createdByUserId: string
+    indicationComment?: string
     createdAt?: Date | string
     activatedAt?: Date | string | null
+    createdByUser: UserCreateNestedOneWithoutCreatedClubBooksInput
+    book: BookCreateNestedOneWithoutClubBooksInput
     artifacts?: ClubBookArtifactCreateNestedManyWithoutClubBookInput
   }
 
@@ -31182,6 +41056,7 @@ export namespace Prisma {
     year: number
     isActive?: boolean
     createdByUserId: string
+    indicationComment?: string
     createdAt?: Date | string
     activatedAt?: Date | string | null
     artifacts?: ClubBookArtifactUncheckedCreateNestedManyWithoutClubBookInput
@@ -31205,7 +41080,6 @@ export namespace Prisma {
 
   export type ClubBookUpdateWithoutMessagesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    bookId?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     author?: StringFieldUpdateOperationsInput | string
     coverUrl?: StringFieldUpdateOperationsInput | string
@@ -31214,9 +41088,11 @@ export namespace Prisma {
     month?: IntFieldUpdateOperationsInput | number
     year?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdByUserId?: StringFieldUpdateOperationsInput | string
+    indicationComment?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdByUser?: UserUpdateOneRequiredWithoutCreatedClubBooksNestedInput
+    book?: BookUpdateOneRequiredWithoutClubBooksNestedInput
     artifacts?: ClubBookArtifactUpdateManyWithoutClubBookNestedInput
   }
 
@@ -31232,6 +41108,7 @@ export namespace Prisma {
     year?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdByUserId?: StringFieldUpdateOperationsInput | string
+    indicationComment?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     artifacts?: ClubBookArtifactUncheckedUpdateManyWithoutClubBookNestedInput
@@ -31239,7 +41116,6 @@ export namespace Prisma {
 
   export type ClubBookCreateWithoutArtifactsInput = {
     id?: string
-    bookId: string
     title: string
     author: string
     coverUrl?: string
@@ -31248,9 +41124,11 @@ export namespace Prisma {
     month: number
     year: number
     isActive?: boolean
-    createdByUserId: string
+    indicationComment?: string
     createdAt?: Date | string
     activatedAt?: Date | string | null
+    createdByUser: UserCreateNestedOneWithoutCreatedClubBooksInput
+    book: BookCreateNestedOneWithoutClubBooksInput
     messages?: ClubBookMessageCreateNestedManyWithoutClubBookInput
   }
 
@@ -31266,6 +41144,7 @@ export namespace Prisma {
     year: number
     isActive?: boolean
     createdByUserId: string
+    indicationComment?: string
     createdAt?: Date | string
     activatedAt?: Date | string | null
     messages?: ClubBookMessageUncheckedCreateNestedManyWithoutClubBookInput
@@ -31289,7 +41168,6 @@ export namespace Prisma {
 
   export type ClubBookUpdateWithoutArtifactsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    bookId?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     author?: StringFieldUpdateOperationsInput | string
     coverUrl?: StringFieldUpdateOperationsInput | string
@@ -31298,9 +41176,11 @@ export namespace Prisma {
     month?: IntFieldUpdateOperationsInput | number
     year?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdByUserId?: StringFieldUpdateOperationsInput | string
+    indicationComment?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdByUser?: UserUpdateOneRequiredWithoutCreatedClubBooksNestedInput
+    book?: BookUpdateOneRequiredWithoutClubBooksNestedInput
     messages?: ClubBookMessageUpdateManyWithoutClubBookNestedInput
   }
 
@@ -31316,6 +41196,7 @@ export namespace Prisma {
     year?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdByUserId?: StringFieldUpdateOperationsInput | string
+    indicationComment?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     messages?: ClubBookMessageUncheckedUpdateManyWithoutClubBookNestedInput
@@ -32071,9 +41952,342 @@ export namespace Prisma {
     index?: IntFieldUpdateOperationsInput | number
   }
 
+  export type ClubEventParticipantCreateWithoutEventInput = {
+    id?: string
+    userId: string
+    status?: string
+    createdAt?: Date | string
+  }
+
+  export type ClubEventParticipantUncheckedCreateWithoutEventInput = {
+    id?: string
+    userId: string
+    status?: string
+    createdAt?: Date | string
+  }
+
+  export type ClubEventParticipantCreateOrConnectWithoutEventInput = {
+    where: ClubEventParticipantWhereUniqueInput
+    create: XOR<ClubEventParticipantCreateWithoutEventInput, ClubEventParticipantUncheckedCreateWithoutEventInput>
+  }
+
+  export type ClubEventParticipantCreateManyEventInputEnvelope = {
+    data: ClubEventParticipantCreateManyEventInput | ClubEventParticipantCreateManyEventInput[]
+  }
+
+  export type ClubEventPhotoCreateWithoutEventInput = {
+    id?: string
+    userId: string
+    url: string
+    caption?: string | null
+    type?: string
+    createdAt?: Date | string
+  }
+
+  export type ClubEventPhotoUncheckedCreateWithoutEventInput = {
+    id?: string
+    userId: string
+    url: string
+    caption?: string | null
+    type?: string
+    createdAt?: Date | string
+  }
+
+  export type ClubEventPhotoCreateOrConnectWithoutEventInput = {
+    where: ClubEventPhotoWhereUniqueInput
+    create: XOR<ClubEventPhotoCreateWithoutEventInput, ClubEventPhotoUncheckedCreateWithoutEventInput>
+  }
+
+  export type ClubEventPhotoCreateManyEventInputEnvelope = {
+    data: ClubEventPhotoCreateManyEventInput | ClubEventPhotoCreateManyEventInput[]
+  }
+
+  export type ClubEventParticipantUpsertWithWhereUniqueWithoutEventInput = {
+    where: ClubEventParticipantWhereUniqueInput
+    update: XOR<ClubEventParticipantUpdateWithoutEventInput, ClubEventParticipantUncheckedUpdateWithoutEventInput>
+    create: XOR<ClubEventParticipantCreateWithoutEventInput, ClubEventParticipantUncheckedCreateWithoutEventInput>
+  }
+
+  export type ClubEventParticipantUpdateWithWhereUniqueWithoutEventInput = {
+    where: ClubEventParticipantWhereUniqueInput
+    data: XOR<ClubEventParticipantUpdateWithoutEventInput, ClubEventParticipantUncheckedUpdateWithoutEventInput>
+  }
+
+  export type ClubEventParticipantUpdateManyWithWhereWithoutEventInput = {
+    where: ClubEventParticipantScalarWhereInput
+    data: XOR<ClubEventParticipantUpdateManyMutationInput, ClubEventParticipantUncheckedUpdateManyWithoutEventInput>
+  }
+
+  export type ClubEventParticipantScalarWhereInput = {
+    AND?: ClubEventParticipantScalarWhereInput | ClubEventParticipantScalarWhereInput[]
+    OR?: ClubEventParticipantScalarWhereInput[]
+    NOT?: ClubEventParticipantScalarWhereInput | ClubEventParticipantScalarWhereInput[]
+    id?: StringFilter<"ClubEventParticipant"> | string
+    eventId?: StringFilter<"ClubEventParticipant"> | string
+    userId?: StringFilter<"ClubEventParticipant"> | string
+    status?: StringFilter<"ClubEventParticipant"> | string
+    createdAt?: DateTimeFilter<"ClubEventParticipant"> | Date | string
+  }
+
+  export type ClubEventPhotoUpsertWithWhereUniqueWithoutEventInput = {
+    where: ClubEventPhotoWhereUniqueInput
+    update: XOR<ClubEventPhotoUpdateWithoutEventInput, ClubEventPhotoUncheckedUpdateWithoutEventInput>
+    create: XOR<ClubEventPhotoCreateWithoutEventInput, ClubEventPhotoUncheckedCreateWithoutEventInput>
+  }
+
+  export type ClubEventPhotoUpdateWithWhereUniqueWithoutEventInput = {
+    where: ClubEventPhotoWhereUniqueInput
+    data: XOR<ClubEventPhotoUpdateWithoutEventInput, ClubEventPhotoUncheckedUpdateWithoutEventInput>
+  }
+
+  export type ClubEventPhotoUpdateManyWithWhereWithoutEventInput = {
+    where: ClubEventPhotoScalarWhereInput
+    data: XOR<ClubEventPhotoUpdateManyMutationInput, ClubEventPhotoUncheckedUpdateManyWithoutEventInput>
+  }
+
+  export type ClubEventPhotoScalarWhereInput = {
+    AND?: ClubEventPhotoScalarWhereInput | ClubEventPhotoScalarWhereInput[]
+    OR?: ClubEventPhotoScalarWhereInput[]
+    NOT?: ClubEventPhotoScalarWhereInput | ClubEventPhotoScalarWhereInput[]
+    id?: StringFilter<"ClubEventPhoto"> | string
+    eventId?: StringFilter<"ClubEventPhoto"> | string
+    userId?: StringFilter<"ClubEventPhoto"> | string
+    url?: StringFilter<"ClubEventPhoto"> | string
+    caption?: StringNullableFilter<"ClubEventPhoto"> | string | null
+    type?: StringFilter<"ClubEventPhoto"> | string
+    createdAt?: DateTimeFilter<"ClubEventPhoto"> | Date | string
+  }
+
+  export type ClubEventCreateWithoutParticipantsInput = {
+    id?: string
+    title: string
+    description: string
+    city?: string
+    location: string
+    addressStreet?: string | null
+    addressNumber?: string | null
+    addressDistrict?: string | null
+    addressCity?: string | null
+    addressState?: string | null
+    addressZip?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    startAt: Date | string
+    endAt?: Date | string | null
+    createdById: string
+    createdAt?: Date | string
+    photos?: ClubEventPhotoCreateNestedManyWithoutEventInput
+  }
+
+  export type ClubEventUncheckedCreateWithoutParticipantsInput = {
+    id?: string
+    title: string
+    description: string
+    city?: string
+    location: string
+    addressStreet?: string | null
+    addressNumber?: string | null
+    addressDistrict?: string | null
+    addressCity?: string | null
+    addressState?: string | null
+    addressZip?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    startAt: Date | string
+    endAt?: Date | string | null
+    createdById: string
+    createdAt?: Date | string
+    photos?: ClubEventPhotoUncheckedCreateNestedManyWithoutEventInput
+  }
+
+  export type ClubEventCreateOrConnectWithoutParticipantsInput = {
+    where: ClubEventWhereUniqueInput
+    create: XOR<ClubEventCreateWithoutParticipantsInput, ClubEventUncheckedCreateWithoutParticipantsInput>
+  }
+
+  export type ClubEventUpsertWithoutParticipantsInput = {
+    update: XOR<ClubEventUpdateWithoutParticipantsInput, ClubEventUncheckedUpdateWithoutParticipantsInput>
+    create: XOR<ClubEventCreateWithoutParticipantsInput, ClubEventUncheckedCreateWithoutParticipantsInput>
+    where?: ClubEventWhereInput
+  }
+
+  export type ClubEventUpdateToOneWithWhereWithoutParticipantsInput = {
+    where?: ClubEventWhereInput
+    data: XOR<ClubEventUpdateWithoutParticipantsInput, ClubEventUncheckedUpdateWithoutParticipantsInput>
+  }
+
+  export type ClubEventUpdateWithoutParticipantsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressState?: NullableStringFieldUpdateOperationsInput | string | null
+    addressZip?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    photos?: ClubEventPhotoUpdateManyWithoutEventNestedInput
+  }
+
+  export type ClubEventUncheckedUpdateWithoutParticipantsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressState?: NullableStringFieldUpdateOperationsInput | string | null
+    addressZip?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    photos?: ClubEventPhotoUncheckedUpdateManyWithoutEventNestedInput
+  }
+
+  export type ClubEventCreateWithoutPhotosInput = {
+    id?: string
+    title: string
+    description: string
+    city?: string
+    location: string
+    addressStreet?: string | null
+    addressNumber?: string | null
+    addressDistrict?: string | null
+    addressCity?: string | null
+    addressState?: string | null
+    addressZip?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    startAt: Date | string
+    endAt?: Date | string | null
+    createdById: string
+    createdAt?: Date | string
+    participants?: ClubEventParticipantCreateNestedManyWithoutEventInput
+  }
+
+  export type ClubEventUncheckedCreateWithoutPhotosInput = {
+    id?: string
+    title: string
+    description: string
+    city?: string
+    location: string
+    addressStreet?: string | null
+    addressNumber?: string | null
+    addressDistrict?: string | null
+    addressCity?: string | null
+    addressState?: string | null
+    addressZip?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    startAt: Date | string
+    endAt?: Date | string | null
+    createdById: string
+    createdAt?: Date | string
+    participants?: ClubEventParticipantUncheckedCreateNestedManyWithoutEventInput
+  }
+
+  export type ClubEventCreateOrConnectWithoutPhotosInput = {
+    where: ClubEventWhereUniqueInput
+    create: XOR<ClubEventCreateWithoutPhotosInput, ClubEventUncheckedCreateWithoutPhotosInput>
+  }
+
+  export type ClubEventUpsertWithoutPhotosInput = {
+    update: XOR<ClubEventUpdateWithoutPhotosInput, ClubEventUncheckedUpdateWithoutPhotosInput>
+    create: XOR<ClubEventCreateWithoutPhotosInput, ClubEventUncheckedCreateWithoutPhotosInput>
+    where?: ClubEventWhereInput
+  }
+
+  export type ClubEventUpdateToOneWithWhereWithoutPhotosInput = {
+    where?: ClubEventWhereInput
+    data: XOR<ClubEventUpdateWithoutPhotosInput, ClubEventUncheckedUpdateWithoutPhotosInput>
+  }
+
+  export type ClubEventUpdateWithoutPhotosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressState?: NullableStringFieldUpdateOperationsInput | string | null
+    addressZip?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    participants?: ClubEventParticipantUpdateManyWithoutEventNestedInput
+  }
+
+  export type ClubEventUncheckedUpdateWithoutPhotosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressState?: NullableStringFieldUpdateOperationsInput | string | null
+    addressZip?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    participants?: ClubEventParticipantUncheckedUpdateManyWithoutEventNestedInput
+  }
+
   export type UserCityCreateManyUserInput = {
     id?: string
     city: string
+  }
+
+  export type BookCreateManyCreatedByUserInput = {
+    id?: string
+    title: string
+    author: string
+    coverUrl?: string
+    synopsis?: string
+    aiStyleDescription?: string
+    indicationComment?: string
+    createdAt?: Date | string
+  }
+
+  export type ClubBookCreateManyCreatedByUserInput = {
+    id?: string
+    bookId: string
+    title: string
+    author: string
+    coverUrl?: string
+    colorKey: string
+    city?: string
+    month: number
+    year: number
+    isActive?: boolean
+    indicationComment?: string
+    createdAt?: Date | string
+    activatedAt?: Date | string | null
   }
 
   export type UserCityUpdateWithoutUserInput = {
@@ -32089,6 +42303,240 @@ export namespace Prisma {
   export type UserCityUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type BookUpdateWithoutCreatedByUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    author?: StringFieldUpdateOperationsInput | string
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    synopsis?: StringFieldUpdateOperationsInput | string
+    aiStyleDescription?: StringFieldUpdateOperationsInput | string
+    indicationComment?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categories?: CategoryUpdateManyWithoutBooksNestedInput
+    styleImages?: BookStyleImageUpdateManyWithoutBookNestedInput
+    clubBooks?: ClubBookUpdateManyWithoutBookNestedInput
+  }
+
+  export type BookUncheckedUpdateWithoutCreatedByUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    author?: StringFieldUpdateOperationsInput | string
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    synopsis?: StringFieldUpdateOperationsInput | string
+    aiStyleDescription?: StringFieldUpdateOperationsInput | string
+    indicationComment?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categories?: CategoryUncheckedUpdateManyWithoutBooksNestedInput
+    styleImages?: BookStyleImageUncheckedUpdateManyWithoutBookNestedInput
+    clubBooks?: ClubBookUncheckedUpdateManyWithoutBookNestedInput
+  }
+
+  export type BookUncheckedUpdateManyWithoutCreatedByUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    author?: StringFieldUpdateOperationsInput | string
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    synopsis?: StringFieldUpdateOperationsInput | string
+    aiStyleDescription?: StringFieldUpdateOperationsInput | string
+    indicationComment?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClubBookUpdateWithoutCreatedByUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    author?: StringFieldUpdateOperationsInput | string
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    colorKey?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    month?: IntFieldUpdateOperationsInput | number
+    year?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    indicationComment?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    book?: BookUpdateOneRequiredWithoutClubBooksNestedInput
+    messages?: ClubBookMessageUpdateManyWithoutClubBookNestedInput
+    artifacts?: ClubBookArtifactUpdateManyWithoutClubBookNestedInput
+  }
+
+  export type ClubBookUncheckedUpdateWithoutCreatedByUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bookId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    author?: StringFieldUpdateOperationsInput | string
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    colorKey?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    month?: IntFieldUpdateOperationsInput | number
+    year?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    indicationComment?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    messages?: ClubBookMessageUncheckedUpdateManyWithoutClubBookNestedInput
+    artifacts?: ClubBookArtifactUncheckedUpdateManyWithoutClubBookNestedInput
+  }
+
+  export type ClubBookUncheckedUpdateManyWithoutCreatedByUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bookId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    author?: StringFieldUpdateOperationsInput | string
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    colorKey?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    month?: IntFieldUpdateOperationsInput | number
+    year?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    indicationComment?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type BookStyleImageCreateManyBookInput = {
+    id?: string
+    url: string
+  }
+
+  export type ClubBookCreateManyBookInput = {
+    id?: string
+    title: string
+    author: string
+    coverUrl?: string
+    colorKey: string
+    city?: string
+    month: number
+    year: number
+    isActive?: boolean
+    createdByUserId: string
+    indicationComment?: string
+    createdAt?: Date | string
+    activatedAt?: Date | string | null
+  }
+
+  export type CategoryUpdateWithoutBooksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type CategoryUncheckedUpdateWithoutBooksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type CategoryUncheckedUpdateManyWithoutBooksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type BookStyleImageUpdateWithoutBookInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type BookStyleImageUncheckedUpdateWithoutBookInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type BookStyleImageUncheckedUpdateManyWithoutBookInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ClubBookUpdateWithoutBookInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    author?: StringFieldUpdateOperationsInput | string
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    colorKey?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    month?: IntFieldUpdateOperationsInput | number
+    year?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    indicationComment?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdByUser?: UserUpdateOneRequiredWithoutCreatedClubBooksNestedInput
+    messages?: ClubBookMessageUpdateManyWithoutClubBookNestedInput
+    artifacts?: ClubBookArtifactUpdateManyWithoutClubBookNestedInput
+  }
+
+  export type ClubBookUncheckedUpdateWithoutBookInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    author?: StringFieldUpdateOperationsInput | string
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    colorKey?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    month?: IntFieldUpdateOperationsInput | number
+    year?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdByUserId?: StringFieldUpdateOperationsInput | string
+    indicationComment?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    messages?: ClubBookMessageUncheckedUpdateManyWithoutClubBookNestedInput
+    artifacts?: ClubBookArtifactUncheckedUpdateManyWithoutClubBookNestedInput
+  }
+
+  export type ClubBookUncheckedUpdateManyWithoutBookInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    author?: StringFieldUpdateOperationsInput | string
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    colorKey?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    month?: IntFieldUpdateOperationsInput | number
+    year?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdByUserId?: StringFieldUpdateOperationsInput | string
+    indicationComment?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type BookUpdateWithoutCategoriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    author?: StringFieldUpdateOperationsInput | string
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    synopsis?: StringFieldUpdateOperationsInput | string
+    aiStyleDescription?: StringFieldUpdateOperationsInput | string
+    indicationComment?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    styleImages?: BookStyleImageUpdateManyWithoutBookNestedInput
+    createdByUser?: UserUpdateOneWithoutCreatedBooksNestedInput
+    clubBooks?: ClubBookUpdateManyWithoutBookNestedInput
+  }
+
+  export type BookUncheckedUpdateWithoutCategoriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    author?: StringFieldUpdateOperationsInput | string
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    synopsis?: StringFieldUpdateOperationsInput | string
+    aiStyleDescription?: StringFieldUpdateOperationsInput | string
+    createdByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    indicationComment?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    styleImages?: BookStyleImageUncheckedUpdateManyWithoutBookNestedInput
+    clubBooks?: ClubBookUncheckedUpdateManyWithoutBookNestedInput
+  }
+
+  export type BookUncheckedUpdateManyWithoutCategoriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    author?: StringFieldUpdateOperationsInput | string
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    synopsis?: StringFieldUpdateOperationsInput | string
+    aiStyleDescription?: StringFieldUpdateOperationsInput | string
+    createdByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    indicationComment?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MembershipCreateManyGroupInput = {
@@ -32458,6 +42906,70 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     pollId?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClubEventParticipantCreateManyEventInput = {
+    id?: string
+    userId: string
+    status?: string
+    createdAt?: Date | string
+  }
+
+  export type ClubEventPhotoCreateManyEventInput = {
+    id?: string
+    userId: string
+    url: string
+    caption?: string | null
+    type?: string
+    createdAt?: Date | string
+  }
+
+  export type ClubEventParticipantUpdateWithoutEventInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClubEventParticipantUncheckedUpdateWithoutEventInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClubEventParticipantUncheckedUpdateManyWithoutEventInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClubEventPhotoUpdateWithoutEventInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    caption?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClubEventPhotoUncheckedUpdateWithoutEventInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    caption?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClubEventPhotoUncheckedUpdateManyWithoutEventInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    caption?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

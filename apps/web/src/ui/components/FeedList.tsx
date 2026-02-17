@@ -5,6 +5,8 @@ import BookChip from "./BookChip";
 import { api } from "../../lib/api";
 import { clubColorHex } from "../lib/clubColors";
 import FullScreenFeed from "./FullScreenFeed";
+import { LuTrash2 } from "react-icons/lu";
+import ConfirmModal from "./ConfirmModal";
 
 type ReactionType = "like" | "love" | "laugh" | "wow" | "sad" | "clap";
 
@@ -97,6 +99,25 @@ export default function FeedList({
   const [commentText, setCommentText] = useState("");
   const [fullScreenPostId, setFullScreenPostId] = useState<string | null>(null);
   const [clickedImageIndex, setClickedImageIndex] = useState(0);
+  const [currentUser, setCurrentUser] = useState<{ id: string; isAdmin: boolean } | null>(null);
+  const [menuFor, setMenuFor] = useState<string>("");
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string>("");
+
+  useEffect(() => {
+    api<{ user: { id: string; isAdmin: boolean } }>("/me")
+      .then(res => setCurrentUser(res.user))
+      .catch(console.warn);
+  }, []);
+
+  const handleDeletePost = async (postId: string) => {
+    try {
+      await api(`/posts/${encodeURIComponent(postId)}`, { method: "DELETE" });
+      setConfirmDeleteId("");
+      refresh();
+    } catch (e: any) {
+      alert("Erro ao remover post: " + e.message);
+    }
+  };
 
   const feedPath = useMemo(() => {
     const qs = new URLSearchParams();
@@ -161,7 +182,7 @@ export default function FeedList({
           >
             {bookColor && (
               <div
-                className="absolute top-0 bottom-0 left-0 w-[3px]"
+                className="absolute top-0 bottom-0 left-0 w-[3px] z-10"
                 style={{ backgroundColor: bookColor }}
                 title={`Post sobre ${p.clubBook?.title}`}
               />
@@ -180,9 +201,36 @@ export default function FeedList({
                   )}
                 </div>
               </Link>
-              <button className="text-neutral-400 hover:text-neutral-600">
-                <Icons.More />
-              </button>
+              <div className="relative">
+                <button
+                  onClick={() => setMenuFor(menuFor === p.id ? "" : p.id)}
+                  className="w-8 h-8 flex items-center justify-center text-neutral-400 hover:text-neutral-600 hover:bg-neutral-100 rounded-full transition-colors"
+                  title="Mais opções"
+                >
+                  <Icons.More />
+                </button>
+
+                {menuFor === p.id && (
+                  <>
+                    <div className="fixed inset-0 z-30" onClick={() => setMenuFor("")} />
+                    <div className="absolute top-full right-0 mt-1 w-48 bg-white rounded-2xl shadow-xl border border-black/5 py-2 z-40 animate-in fade-in zoom-in-95 duration-200">
+                      {currentUser?.isAdmin && (
+                        <button
+                          onClick={() => {
+                            setMenuFor("");
+                            setConfirmDeleteId(p.id);
+                          }}
+                          className="w-full px-4 py-2 text-left text-sm font-bold text-red-500 hover:bg-red-50 flex items-center gap-2"
+                        >
+                          <LuTrash2 size={16} />
+                          Remover Post
+                        </button>
+                      )}
+                      {/* Outras opções podem entrar aqui */}
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
 
             {/* Media */}
@@ -327,7 +375,6 @@ export default function FeedList({
       {
         posts.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-center px-4">
-            <div className="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center mb-4 text-3xl">NOT_IMPLEMENTED_yet</div>
             <div className="text-lg font-bold text-neutral-900">Ainda não há posts</div>
             <p className="text-neutral-500 max-w-xs mt-2">Seja o primeiro a compartilhar algo interessante com o clube!</p>
           </div>
@@ -358,7 +405,10 @@ export default function FeedList({
                   <>
                     {/* Original Post content context (optional, maybe just caption) */}
                     <div className="flex gap-3 pb-4 border-b border-neutral-100">
-                      <Avatar user={detail.user || { id: detail.userId, name: detail.userId }} size={32} />
+                      <Avatar
+                        user={detail.user || { id: detail.userId, name: detail.userId }}
+                        size={32}
+                      />
                       <div>
                         <div className="text-sm">
                           <span className="font-bold mr-1">{detail.user?.name || detail.userId}</span>
@@ -445,6 +495,16 @@ export default function FeedList({
           />
         )
       }
+
+      <ConfirmModal
+        isOpen={!!confirmDeleteId}
+        title="Remover Post"
+        message="Você tem certeza que deseja remover este post? Esta ação não pode ser desfeita."
+        confirmLabel="Remover"
+        isDestructive
+        onConfirm={() => handleDeletePost(confirmDeleteId)}
+        onCancel={() => setConfirmDeleteId("")}
+      />
     </div >
   );
 }

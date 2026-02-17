@@ -66,7 +66,7 @@
 
   .shelf {
     position: relative;
-    padding: 22px 6px 1.5rem;
+    padding: 22px 2px 1.5rem 2px;
     transform-style: preserve-3d;
     overflow: visible;
     /* Recessed look */
@@ -199,8 +199,8 @@
     display: block;
     transform-style: preserve-3d;
     transform-origin: 18% 60%;
-    /* Cover visible by default, slightly angled inward with clear depth (pages). */
-    transform: translateZ(-10px) rotateY(-40deg) rotateX(9deg) rotateZ(-2.6deg);
+    /* Cover visible by default, simple random rotation (flat to camera) */
+    transform: rotateZ(var(--random-rot, 0deg));
     transition:
       transform 520ms cubic-bezier(0.2, 0.9, 0.2, 1),
       filter 520ms cubic-bezier(0.2, 0.9, 0.2, 1);
@@ -227,10 +227,11 @@
 
   .book-3d:hover,
   .book-3d:focus-visible {
-    transform: translateZ(46px) rotateY(-14deg) rotateX(-6deg) translateY(-2px);
-    z-index: 50;
+    /* Pop out effect: Move forward, slight angle to show depth, scale up */
+    transform: translateZ(40px) rotateY(-12deg) rotateX(-5deg) scale(1.1);
+    z-index: 100;
     filter:
-      drop-shadow(4px 14px 12px rgba(0, 0, 0, 0.2)) drop-shadow(10px 24px 30px rgba(0, 0, 0, 0.35));
+      drop-shadow(8px 18px 16px rgba(0, 0, 0, 0.25)) drop-shadow(12px 28px 40px rgba(0, 0, 0, 0.4));
   }
 
   .book-3d:active {
@@ -435,23 +436,148 @@
     opacity: 0.86;
   }
 
-  .book-3d--add {
-    --accent: #222;
+  .book-3d__ribbon-container {
+    position: absolute;
+    top: -2px;
+    /* Higher to hide the top edge behind the cover volume */
+    right: 52px;
+    z-index: 10;
+    /* Stronger shape-aware shadow for better visibility on all covers */
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.55));
+    transform-origin: top;
+    /* Move in Z-space to stay over the front cover since we moved it out of overflow:hidden */
   }
 
-  /* Dark charcoal cover with subtle texture */
+  .book2-3d:hover .book-3d__ribbon-container {
+    transform: translateZ(2px) translateY(8px);
+    filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.55));
+  }
+
+  .book-3d__ribbon {
+    position: relative;
+    width: 20px;
+    height: 62px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 10px;
+    /* Slightly more padding due to higher top */
+    gap: 2px;
+    font-size: 11px;
+    font-weight: 950;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    text-align: center;
+    /* Bookmark V-shape cut at the bottom */
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 88%, 0% 100%);
+    /* Stronger borders for visibility */
+    border: 1.5px solid rgba(0, 0, 0, 0.2);
+    box-shadow:
+      inset 0 0 0 0.8px rgba(255, 255, 255, 0.5),
+      /* Stronger inner light rim */
+      inset 0 -5px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .book-3d__ribbon span {
+    display: block;
+    transform: scaleX(1.1);
+    /* Slightly wider letters for vertical reading */
+  }
+
+  .book-3d--add {
+    --accent: #ffbf00;
+    /* Golden Amber Silk */
+    --text-color: #5d4037;
+    --plus-color: #5d4037;
+  }
+
+  /* Variant: Burgundy Silk (rose) */
+  .book-3d--add--rose {
+    --accent: #800020;
+    --text-color: #ffc1e3;
+    --plus-color: #ffc1e3;
+    --circle-bg: linear-gradient(135deg, #4d0013, #33000d);
+  }
+
+  .book-3d--add--rose .book-3d__front {
+    background:
+      linear-gradient(115deg, rgba(255, 255, 255, 0.3) 0%, transparent 35%, rgba(255, 255, 255, 0.1) 55%, transparent 75%),
+      /* Diagonal Silk Weave - Asymmetrical Diagonals (35deg & -25deg) */
+      repeating-linear-gradient(35deg, rgba(255, 255, 255, 0.04) 0px, rgba(255, 255, 255, 0.04) 1px, transparent 1px, transparent 14px),
+      repeating-linear-gradient(-25deg, rgba(255, 255, 255, 0.03) 0px, rgba(255, 255, 255, 0.03) 1px, transparent 1px, transparent 10px),
+      radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.15) 0%, transparent 60%),
+      linear-gradient(180deg, #4d0013 0%, #800020 100%);
+  }
+
+  .book-3d--add--rose .book-3d__book::after {
+    background: linear-gradient(145deg, #4d0013, #800020);
+  }
+
+  /* Variant: Forest Silk (mint) */
+  .book-3d--add--mint {
+    --accent: #06402b;
+    --text-color: #b9f6ca;
+    --plus-color: #b9f6ca;
+    --circle-bg: linear-gradient(135deg, #02261a, #011a12);
+  }
+
+  .book-3d--add--mint .book-3d__front {
+    background:
+      linear-gradient(115deg, rgba(255, 255, 255, 0.3) 0%, transparent 35%, rgba(255, 255, 255, 0.1) 55%, transparent 75%),
+      /* Diagonal Silk Weave - Asymmetrical Diagonals (35deg & -25deg) */
+      repeating-linear-gradient(35deg, rgba(255, 255, 255, 0.04) 0px, rgba(255, 255, 255, 0.04) 1px, transparent 1px, transparent 14px),
+      repeating-linear-gradient(-25deg, rgba(255, 255, 255, 0.03) 0px, rgba(255, 255, 255, 0.03) 1px, transparent 1px, transparent 10px),
+      radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.15) 0%, transparent 60%),
+      linear-gradient(180deg, #02261a 0%, #06402b 100%);
+  }
+
+  .book-3d--add--mint .book-3d__book::after {
+    background: linear-gradient(145deg, #02261a, #06402b);
+  }
+
+  /* Variant: Midnight Silk (azure) */
+  .book-3d--add--azure {
+    --accent: #000033;
+    --text-color: #b3e5fc;
+    --plus-color: #b3e5fc;
+    --circle-bg: linear-gradient(135deg, #000022, #000011);
+  }
+
+  .book-3d--add--azure .book-3d__front {
+    background:
+      linear-gradient(115deg, rgba(255, 255, 255, 0.3) 0%, transparent 35%, rgba(255, 255, 255, 0.1) 55%, transparent 75%),
+      /* Diagonal Silk Weave - Asymmetrical Diagonals (35deg & -25deg) */
+      repeating-linear-gradient(35deg, rgba(255, 255, 255, 0.04) 0px, rgba(255, 255, 255, 0.04) 1px, transparent 1px, transparent 14px),
+      repeating-linear-gradient(-25deg, rgba(255, 255, 255, 0.03) 0px, rgba(255, 255, 255, 0.03) 1px, transparent 1px, transparent 10px),
+      radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.15) 0%, transparent 60%),
+      linear-gradient(180deg, #000022 0%, #000033 100%);
+  }
+
+  .book-3d--add--azure .book-3d__book::after {
+    background: linear-gradient(145deg, #000022, #000033);
+  }
+
+  /* Sensitive "Silk/Matte Fabric" style - Golden Amber Silk */
   .book-3d--add .book-3d__front {
     background:
-      linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 40%),
-      repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0.05) 2px, transparent 2px, transparent 4px),
-      linear-gradient(180deg, #333 0%, #1a1a1a 100%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: inset 0 0 0 4px rgba(255, 215, 0, 0.1);
-    /* Gold hint trace */
+      /* Silk Sheen - Wide soft reflections */
+      linear-gradient(115deg, rgba(255, 255, 255, 0.45) 0%, transparent 35%, rgba(255, 255, 255, 0.15) 55%, transparent 75%),
+      /* Diagonal Silk Weave - Asymmetrical Diagonals (35deg & -25deg) */
+      repeating-linear-gradient(35deg, rgba(0, 0, 0, 0.02) 0px, rgba(0, 0, 0, 0.02) 1px, transparent 1px, transparent 14px),
+      repeating-linear-gradient(-25deg, rgba(0, 0, 0, 0.015) 0px, rgba(0, 0, 0, 0.015) 1px, transparent 1px, transparent 10px),
+      /* Soft iridescent shift */
+      radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.25) 0%, transparent 60%),
+      /* Saturated Golden Amber base */
+      linear-gradient(180deg, #ffca28 0%, #ffbf00 100%);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.45),
+      inset 0 0 12px rgba(0, 0, 0, 0.05);
   }
 
   .book-3d--add .book-3d__book::after {
-    background: linear-gradient(145deg, #333, #000);
+    background: linear-gradient(145deg, #ffca28, #ffbf00);
   }
 
   .book-add__content {
@@ -463,9 +589,9 @@
     align-items: center;
     justify-content: center;
     gap: 12px;
+    color: var(--text-color);
     padding: 16px;
     text-align: center;
-    color: rgba(255, 255, 255, 0.9);
   }
 
   .book-add__plus {
@@ -474,28 +600,32 @@
     border-radius: 50%;
     display: grid;
     place-items: center;
-    background: linear-gradient(135deg, #ffd700, #b8860b);
-    /* Gold gradient */
-    color: #1a1a1a;
+    background: var(--circle-bg);
+    color: var(--plus-color);
     box-shadow:
-      0 4px 12px rgba(0, 0, 0, 0.4),
-      inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      inset 0 3px 6px rgba(0, 0, 0, 0.2),
+      inset 0 1px 2px rgba(0, 0, 0, 0.1),
+      0 1px 0 rgba(255, 255, 255, 0.6);
     transform: translateY(0);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
 
   .book-3d--add:hover .book-add__plus {
     transform: scale(1.1) rotate(90deg);
-    box-shadow: 0 8px 16px rgba(255, 215, 0, 0.3);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   }
 
   .book-add__label {
     font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 0.15em;
+    font-weight: 950;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.8);
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    color: inherit;
+    opacity: 0.8;
+    /* Clean Stamped effect on delicate background */
+    text-shadow:
+      0.5px 0.5px 0px rgba(255, 255, 255, 0.5),
+      -0.5px -0.5px 1px rgba(0, 0, 0, 0.15);
   }
 
   .chat-wallpaper {
@@ -545,6 +675,8 @@
     transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
     /* ALWAYS center the spine (left edge of the volume) - Moved to inline styles for dynamic control */
     transform: translateX(50%);
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
   }
 
   .book-sheet {
@@ -566,7 +698,8 @@
     inset: 0;
     backface-visibility: hidden;
     overflow: hidden;
-    border-radius: 2px 4px 4px 2px;
+    /* Spine(2px) Outer(25px) Outer(25px) Spine(2px) - Increased radius */
+    border-radius: 2px 25px 25px 2px;
     background: #fdfbf7;
     background-image:
       linear-gradient(to right, rgba(0, 0, 0, 0.02) 0%, transparent 5%),
@@ -579,22 +712,42 @@
     box-shadow:
       inset 18px 0 26px rgba(0, 0, 0, 0.16),
       -2px 0 5px rgba(0, 0, 0, 0.2);
+    /* Persistent outer borders in brown tone - thickened to 2px */
+    border-top: 1px solid #3e281f;
+    border-bottom: 1px solid #3e281f;
+    border-right: 2px solid #3e281f;
   }
 
   .book-page-back {
     transform: rotateY(180deg);
     z-index: 1;
-    border-radius: 4px 2px 2px 4px;
+    /* Outer(25px) Spine(2px) Spine(2px) Outer(25px) */
+    border-radius: 25px 2px 2px 25px;
     box-shadow:
       inset -3px 0 10px rgba(0, 0, 0, 0.05),
       2px 0 5px rgba(0, 0, 0, 0.2);
+    /* Persistent outer borders in brown tone - thickened to 2px */
+    border-top: 2px solid #3e281f;
+    border-bottom: 2px solid #3e281f;
+    border-left: 2px solid #3e281f;
   }
 
   .book-page img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     display: block;
+  }
+
+  /* Specific style for the Front Cover to simulate pages on the right */
+  .book-cover-front {
+    /* Thick yellowish page edge - using !important to ensure it wins on the right */
+    border-right: 6px solid #dda !important;
+  }
+
+  /* Ensure inner pages don't show this border if reused */
+  .book-page:not(.book-cover-front) {
+    border-right: 0;
   }
 
   .book-page::after {
@@ -617,11 +770,17 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: #3e281f;
+    /*
+
+     Colocar uma cor que vai no degrade */
     /* Leather color */
+    background: linear-gradient(115deg, #3e281f, #4e382f 2px, #5e483f, #4e382f, #3e281f);
     transform: translateZ(-10px);
-    border-radius: 2px 6px 6px 2px;
+    /* Match Book3D closed shape: 10px 25px 25px 10px */
+    border-radius: 10px 25px 25px 10px;
     box-shadow: 5px 15px 40px rgba(0, 0, 0, 0.6);
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
   }
 
   /* Responsive */
@@ -672,8 +831,10 @@
       opacity: 1;
     }
 
+    /* .book-page padding removed to allow full-bleed cover images. 
+       Text pages handle their own padding via utility classes. */
     .book-page {
-      padding: 0.5rem !important;
+      /* padding: 0.5rem !important; */
     }
 
     .book-page-front {
@@ -685,5 +846,159 @@
 
   .book-back-cover::after {
     content: "";
+  }
+
+  /* Refactored Bookshelf Styles */
+  .bookshelf-container {
+    @apply bookshelf min-h-[500px] py-10 px-0 flex flex-col gap-2 relative;
+    border-left-width: 8px;
+    border-right-width: 8px;
+    border-top-width: 4px;
+    border-bottom-width: 4px;
+    border-color: #3e281f;
+  }
+
+  .margaridas-header {
+    @apply text-xl sm:text-2xl font-black uppercase tracking-[0.6em] text-black/50 pl-4;
+    text-shadow: -1px -1px 2px rgba(0, 0, 0, 0.5), 1px 1px 1px rgba(255, 255, 255, 0.4);
+    box-shadow: inset 0px 4px 6px rgba(0, 0, 0, 0.2);
+    opacity: 0.85;
+  }
+
+  .shelf-row {
+    @apply shelf relative overflow-visible;
+    padding-bottom: 1.75rem !important;
+    padding-top: 1.45rem;
+  }
+
+  .shelf-row::before {
+    content: "";
+    position: absolute;
+    left: -1px;
+    right: -1px;
+    bottom: 17px;
+    height: 12px;
+    border-radius: 14px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.0)),
+      linear-gradient(180deg, rgba(0, 0, 0, 0.14), rgba(0, 0, 0, 0.0));
+    opacity: 0.75;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .shelf-title {
+    font-size: 16px;
+    font-weight: 1000;
+    text-transform: uppercase;
+    letter-spacing: 0.6em;
+    color: #000;
+    padding-left: 0.75rem;
+    padding-top: 0px;
+    pointer-events: none;
+    text-shadow: -1px -1px 2px rgba(100, 100, 100, 0.4), 1px 1px 1px rgba(255, 255, 255, 0.3);
+    box-shadow: inset 0px 2px 4px rgba(0, 0, 0, 0.15);
+    opacity: 0.45;
+  }
+
+  @media (min-width: 640px) {
+    .shelf-title {
+      font-size: 12px;
+    }
+  }
+
+  .shelf-scroll-container {
+    /* @apply relative overflow-x-auto cursor-grab active:cursor-grabbing z-10; */
+    position: relative;
+    overflow-x: auto;
+    cursor: grab;
+    z-index: 10;
+
+    /* Add padding to prevent clipping of hovered items */
+    padding: 24px 0;
+    margin: -24px 0;
+
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .shelf-scroll-container:active {
+    cursor: grabbing;
+  }
+
+  .shelf-scroll-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .shelf-books-row {
+    /* @apply shelf-books !justify-start min-w-max; */
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: flex-end;
+    gap: 0.7rem;
+    padding: 6px 4px 7px;
+    overflow: visible;
+    /* Allowing pop-out */
+    padding-left: 0.2rem;
+    padding-right: 2.5rem;
+
+    justify-content: flex-start !important;
+    min-width: max-content;
+  }
+
+  .shelf-end-spacer {
+    /* @apply w-16 h-10 shrink-0; */
+    width: 4rem;
+    height: 2.5rem;
+    flex-shrink: 0;
+  }
+
+  .book-add-rotation {
+    transform: rotateZ(-1deg);
+  }
+
+  .bookshelf-error-alert {
+    @apply absolute top-20 inset-x-4 z-50 rounded-3xl border border-red-200/70 bg-red-50/70 px-4 py-3 text-sm text-red-700;
+  }
+
+  .bookshelf-retry-button {
+    @apply mt-3 w-full rounded-2xl px-4 py-2 text-sm font-black bg-white/70 border border-black/10 hover:bg-white transition;
+  }
+
+  .bookshelf-loading-container {
+    @apply fixed inset-x-0 bottom-8 flex justify-center pointer-events-none;
+  }
+
+  .bookshelf-loading-pill {
+    @apply bg-white/90 backdrop-blur px-4 py-2 rounded-full shadow-lg border border-black/5 text-xs font-black animate-pulse;
+  }
+
+  .shelf-title-container {
+    @apply absolute top-1 left-0 right-0 flex justify-center pointer-events-none select-none z-0;
+  }
+
+  .shelf-book-wrapper {
+    @apply shrink-0;
+  }
+
+  .bookshelf-page-wrapper {
+    @apply space-y-12 pb-20;
+  }
+
+  .bookshelf-perspective-wrapper {
+    @apply perspective-shelf px-2 mt-4;
+  }
+
+  .bookshelf-clean-wrapper {
+    @apply bookshelf !bg-transparent !border-0 !shadow-none !p-0;
+  }
+
+  .margaridas-header-container {
+    @apply absolute top-1 left-0 right-0 flex justify-center pointer-events-none select-none z-10;
+  }
+
+  .shelf-wrapper {
+    position: relative;
   }
 }

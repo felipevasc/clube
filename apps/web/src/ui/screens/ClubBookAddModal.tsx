@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { api } from "../../lib/api";
 import { CLUB_COLORS, ClubColorKey } from "@clube/shared";
 import { LuSearch, LuPlus, LuX, LuChevronRight, LuCalendar } from "react-icons/lu";
+import CategorySelector from "../components/CategorySelector";
 
 type Props = {
     isOpen: boolean;
@@ -33,14 +34,17 @@ export default function ClubBookAddModal({ isOpen, onClose, onBookAdded, city }:
     const [newTitle, setNewTitle] = useState("");
     const [newAuthor, setNewAuthor] = useState("");
     const [newCoverUrl, setNewCoverUrl] = useState("");
-    const [newGenre, setNewGenre] = useState("");
+    const [newCategoryIds, setNewCategoryIds] = useState<string[]>([]);
     const [uploading, setUploading] = useState(false);
+    const [searchingCovers, setSearchingCovers] = useState(false);
+    const [proposedCovers, setProposedCovers] = useState<string[]>([]);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Confirm Step
     const [month, setMonth] = useState(new Date().getMonth() + 1);
     const [year, setYear] = useState(new Date().getFullYear());
     const [colorKey, setColorKey] = useState<ClubColorKey>("rubi");
+    const [indicationComment, setIndicationComment] = useState("");
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState("");
 
@@ -55,7 +59,8 @@ export default function ClubBookAddModal({ isOpen, onClose, onBookAdded, city }:
         setNewTitle("");
         setNewAuthor("");
         setNewCoverUrl("");
-        setNewGenre("");
+        setNewCategoryIds([]);
+        setIndicationComment("");
         setError("");
     }, [isOpen]);
 
@@ -86,6 +91,24 @@ export default function ClubBookAddModal({ isOpen, onClose, onBookAdded, city }:
         setStep("confirm");
     };
 
+    const handleSearchCovers = async () => {
+        if (!newTitle.trim() && !newAuthor.trim()) return;
+        setSearchingCovers(true);
+        setError("");
+        try {
+            const res = await api<{ covers: string[] }>(`/books/search-covers?title=${encodeURIComponent(newTitle)}&author=${encodeURIComponent(newAuthor)}`);
+            setProposedCovers(res.covers);
+            if (res.covers.length === 0) {
+                setError("Nenhuma capa encontrada.");
+            }
+        } catch (err: any) {
+            console.error(err);
+            setError("Erro ao buscar capas.");
+        } finally {
+            setSearchingCovers(false);
+        }
+    };
+
     const handleCreateBook = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!newTitle.trim() || !newAuthor.trim()) return;
@@ -99,7 +122,7 @@ export default function ClubBookAddModal({ isOpen, onClose, onBookAdded, city }:
                     title: newTitle,
                     author: newAuthor,
                     coverUrl: newCoverUrl,
-                    genre: newGenre,
+                    categoryIds: newCategoryIds,
                 }),
             });
             setSelectedBook(res.book);
@@ -127,6 +150,7 @@ export default function ClubBookAddModal({ isOpen, onClose, onBookAdded, city }:
                     city,
                     month: Number(month),
                     year: Number(year),
+                    indicationComment,
                 }),
             });
             onBookAdded();
@@ -262,6 +286,30 @@ export default function ClubBookAddModal({ isOpen, onClose, onBookAdded, city }:
                                     placeholder="Ex: J.R.R. Tolkien"
                                 />
                             </div>
+
+                            {proposedCovers.length > 0 && (
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-neutral-500 uppercase">Capas Encontradas</label>
+                                    <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
+                                        {proposedCovers.map((url, i) => (
+                                            <button
+                                                key={i}
+                                                type="button"
+                                                onClick={() => setNewCoverUrl(url)}
+                                                className={`shrink-0 w-16 aspect-[2/3] rounded-lg overflow-hidden border-2 transition ${newCoverUrl === url ? 'border-sun-500 ring-2 ring-sun-200' : 'border-transparent'}`}
+                                            >
+                                                <img src={url} className="w-full h-full object-cover" />
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            <CategorySelector
+                                selectedIds={newCategoryIds}
+                                onChange={setNewCategoryIds}
+                            />
+
                             <div className="space-y-2">
                                 <label className="text-xs font-bold text-neutral-500 uppercase">Capa</label>
                                 <input
@@ -278,8 +326,30 @@ export default function ClubBookAddModal({ isOpen, onClose, onBookAdded, city }:
                                     {newCoverUrl ? (
                                         <img src={newCoverUrl} className="absolute inset-0 w-full h-full object-cover" />
                                     ) : (
-                                        uploading ? <div className="animate-spin w-5 h-5 border-2 border-current border-t-transparent rounded-full" /> : <span className="text-xs font-bold text-neutral-400">Clique para enviar capa</span>
+                                        uploading ? <div className="animate-spin w-5 h-5 border-2 border-current border-t-transparent rounded-full" /> : <span className="text-xs font-bold text-neutral-400 font-serif">A capa do livro aparecerá aqui</span>
                                     )}
+                                </div>
+                                <div className="flex gap-2">
+                                    <button
+                                        type="button"
+                                        onClick={() => fileInputRef.current?.click()}
+                                        className="flex-1 py-2 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-xs font-bold text-neutral-600 transition"
+                                    >
+                                        Upload
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={handleSearchCovers}
+                                        disabled={searchingCovers || (!newTitle.trim() && !newAuthor.trim())}
+                                        className="flex-1 py-2 rounded-xl bg-neutral-100 hover:bg-sun-500 hover:text-black text-neutral-600 transition disabled:opacity-50 flex items-center justify-center gap-2"
+                                    >
+                                        {searchingCovers ? (
+                                            <div className="animate-spin w-4 h-4 border-2 border-current border-t-transparent rounded-full" />
+                                        ) : (
+                                            <LuSearch size={16} />
+                                        )}
+                                        <span className="text-xs font-bold uppercase">Buscar</span>
+                                    </button>
                                 </div>
                             </div>
 
@@ -326,6 +396,16 @@ export default function ClubBookAddModal({ isOpen, onClose, onBookAdded, city }:
                                         className="w-full px-4 py-3 rounded-xl bg-neutral-100 focus:bg-white focus:ring-2 focus:ring-sun-500 outline-none font-bold"
                                     />
                                 </div>
+                            </div>
+
+                            <div className="space-y-1">
+                                <label className="text-xs font-bold text-neutral-500 uppercase">Quer deixar um comentário sobre este livro?</label>
+                                <textarea
+                                    value={indicationComment}
+                                    onChange={(e) => setIndicationComment(e.target.value)}
+                                    className="w-full px-3 py-2 rounded-xl bg-neutral-100 border-transparent focus:bg-white focus:ring-2 focus:ring-sun-300 focus:outline-none transition font-medium min-h-[60px] resize-none text-xs"
+                                    placeholder="Escreva uma dedicatória ou motivo da indicação..."
+                                />
                             </div>
 
                             <div className="space-y-1">

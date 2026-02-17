@@ -15,5 +15,7 @@
     "lint": "pnpm -r lint",
     "typecheck": "pnpm -r typecheck"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "prisma": "^6.3.1"
+  }
 }

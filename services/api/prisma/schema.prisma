@@ -13,14 +13,27 @@ datasource db {
 // --- USERS ---
 
 model User {
+  id           String   @id
+  name         String
+  bio          String
+  avatarUrl    String
+  coverUrl     String   @default("")
+  isAdmin      Boolean  @default(false)
+  passwordHash String   @default("")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  cities       UserCity[]
+  createdBooks Book[] @relation("BookCreator")
+  createdClubBooks ClubBook[] @relation("ClubBookCreator")
+}
+
+model Invitation {
   id        String   @id
-  name      String
-  bio       String
-  avatarUrl String
-  coverUrl  String   @default("")
+  city      String
+  createdBy String
+  isUsed    Boolean  @default(false)
+  usedBy    String?
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  cities    UserCity[]
 }
 
 model UserCity {
@@ -35,18 +48,39 @@ model UserCity {
 // --- BOOKS ---
 
 model Book {
-  id        String   @id @default(cuid())
-  title     String
-  author    String
-  coverUrl  String   @default("")
-  synopsis  String   @default("")
-  genre     String?  @default("")
-  createdAt DateTime @default(now())
+  id                 String   @id @default(cuid())
+  title              String
+  author             String
+  coverUrl           String   @default("")
+  synopsis           String   @default("")
+  aiStyleDescription String   @default("")
+  categories         Category[]
+  styleImages        BookStyleImage[]
+  createdByUserId    String?
+  indicationComment  String   @default("")
+  createdAt          DateTime @default(now())
+
+  createdByUser User? @relation("BookCreator", fields: [createdByUserId], references: [id])
+  clubBooks     ClubBook[]
 
   @@index([title])
   @@index([author])
-  @@index([genre])
   @@unique([title, author])
+}
+
+model BookStyleImage {
+  id      String @id @default(cuid())
+  bookId  String
+  url     String
+  book    Book   @relation(fields: [bookId], references: [id], onDelete: Cascade)
+
+  @@index([bookId])
+}
+
+model Category {
+  id    String @id @default(cuid())
+  name  String @unique
+  books Book[]
 }
 
 // --- GROUPS ---
@@ -127,8 +161,12 @@ model ClubBook {
   year            Int
   isActive        Boolean  @default(false)
   createdByUserId String
+  indicationComment String @default("")
   createdAt       DateTime @default(now())
   activatedAt     DateTime?
+
+  createdByUser User @relation("ClubBookCreator", fields: [createdByUserId], references: [id])
+  book          Book @relation(fields: [bookId], references: [id])
 
   messages  ClubBookMessage[]
   artifacts ClubBookArtifact[]
@@ -302,5 +340,63 @@ model PollVote {
   @@unique([pollId, userId, optionId])
   @@index([pollId])
   @@index([optionId])
+  @@index([userId])
+}
+
+// --- EVENTS ---
+
+model ClubEvent {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  city        String   @default("FORTALEZA") // FORTALEZA or BRASILIA
+  location    String   // Text address or name
+  addressStreet   String?
+  addressNumber   String?
+  addressDistrict String?
+  addressCity     String?
+  addressState    String?
+  addressZip      String?
+  latitude    Float?
+  longitude   Float?
+  startAt     DateTime
+  endAt       DateTime?
+  // coverUrl removed
+  createdById String
+  createdAt   DateTime @default(now())
+
+  participants ClubEventParticipant[]
+  photos       ClubEventPhoto[]
+
+  @@index([city])
+  @@index([startAt])
+}
+
+model ClubEventParticipant {
+  id        String   @id @default(cuid())
+  eventId   String
+  userId    String
+  status    String   @default("confirmed") // confirmed, maybe, declined
+  createdAt DateTime @default(now())
+
+  event ClubEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, userId])
+  @@index([eventId])
+  @@index([userId])
+}
+
+model ClubEventPhoto {
+  id        String   @id @default(cuid())
+  eventId   String
+  userId    String
+  url       String
+  caption   String?
+  type      String   @default("GALLERY") // LOCATION, GALLERY
+  createdAt DateTime @default(now())
+
+  event ClubEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@index([eventId])
   @@index([userId])
 }

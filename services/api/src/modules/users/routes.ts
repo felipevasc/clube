@@ -1,5 +1,5 @@
 import type { Express } from "express";
-import { LoginSchema, UserProfileSchema, makeEventEnvelope, publishEvent } from "@clube/shared";
+import { LoginSchema, RegisterSchema, UserProfileSchema, makeEventEnvelope, publishEvent } from "@clube/shared";
 import { prisma } from "../../db.js";
 import {
     clearGoogleOAuthStateCookie,
@@ -19,6 +19,7 @@ import {
     readStateToken
 } from "../../google.js";
 import crypto from "node:crypto";
+import bcrypt from "bcryptjs";
 
 function getSessionSecret(): string {
     return process.env.SESSION_SECRET || (process.env.NODE_ENV === "production" ? "" : "dev-session-secret-change-me");
@@ -31,11 +32,25 @@ function getSessionMaxAgeSeconds(): number {
 function getUsername(req: any): string | null {
     // Try reading from header (set by middleware or client)
     const v = req.header("x-username");
-    if (v) return String(v);
+    if (v) return String(v).toLowerCase();
 
     // Try reading from cookie directly
     const secret = getSessionSecret();
-    return getUserIdFromRequest(req, secret || undefined);
+    const uid = getUserIdFromRequest(req, secret || undefined);
+    return uid ? uid.toLowerCase() : null;
+}
+
+function allowDevUsernameLogin(): boolean {
+    return process.env.NODE_ENV !== "production" && !isDisabled(process.env.ALLOW_DEV_USERNAME_LOGIN);
+}
+
+async function assertAdmin(username: string): Promise<boolean> {
+    const u = await prisma.user.findUnique({ where: { id: username }, select: { isAdmin: true } });
+    const isAdmin = !!u?.isAdmin;
+    if (!isAdmin) {
+        console.warn(`[admin] Access denied for user: ${username} (exists: ${!!u})`);
+    }
+    return isAdmin;
 }
 
 function eventTargets(): string[] {
@@ -51,10 +66,6 @@ function isDisabled(v: string | undefined): boolean {
     return t === "0" || t === "false" || t === "no" || t === "off";
 }
 
-function allowDevUsernameLogin(): boolean {
-    return process.env.NODE_ENV !== "production" && !isDisabled(process.env.ALLOW_DEV_USERNAME_LOGIN);
-}
-
 function safeFromPath(v: unknown): string {
     const s = String(v || "").trim();
     if (!s) return "/";
@@ -68,9 +79,17 @@ export function registerRoutes(app: Express) {
     // Database Initialization (Alice & Initial Data)
     (async () => {
         try {
+            const passwordHash = await bcrypt.hash("Teste123", 10);
             await (prisma as any).$executeRawUnsafe(`
-        INSERT OR IGNORE INTO "User" ("id", "name", "bio", "avatarUrl", "updatedAt") 
-        VALUES ('alice', 'Alice', 'Leitora voraz.', '', CURRENT_TIMESTAMP)
+        INSERT OR IGNORE INTO "User" ("id", "name", "bio", "avatarUrl", "isAdmin", "passwordHash", "updatedAt") 
+        VALUES ('alice', 'Alice', 'Leitora voraz.', '', 1, '${passwordHash}', CURRENT_TIMESTAMP)
+      `);
+            await (prisma as any).$executeRawUnsafe(`
+        INSERT OR IGNORE INTO "User" ("id", "name", "bio", "avatarUrl", "isAdmin", "passwordHash", "updatedAt") 
+        VALUES ('bruna', 'Bruna', 'Apaixonada por clássicos.', '', 1, '${passwordHash}', CURRENT_TIMESTAMP)
+      `);
+            await (prisma as any).$executeRawUnsafe(`
+        UPDATE "User" SET "isAdmin" = 1, "passwordHash" = '${passwordHash}' WHERE "id" IN ('alice', 'bruna')
       `);
             await (prisma as any).$executeRawUnsafe(`
         CREATE TABLE IF NOT EXISTS "UserCity" (
@@ -93,43 +112,85 @@ export function registerRoutes(app: Express) {
     // --- Auth Routes ---
 
     app.post("/login", async (req, res) => {
-        // Dev-only login by username
-        if (!allowDevUsernameLogin()) {
-            return res.status(404).json({ error: "not found" });
+        const result = LoginSchema.safeParse(req.body);
+        if (!result.success) return res.status(400).json({ error: "Dados inválidos", details: result.error });
+
+        const { username: rawUsername, password } = result.data;
+        const username = rawUsername.toLowerCase();
+        const user = await prisma.user.findUnique({
+            where: { id: username },
+            include: { cities: true }
+        });
+
+        if (!user) return res.status(401).json({ error: "Usuário ou senha inválidos" });
+
+        const valid = await bcrypt.compare(password, user.passwordHash);
+        if (!valid) return res.status(401).json({ error: "Usuário ou senha inválidos" });
+
+        const secret = getSessionSecret();
+        const maxAge = getSessionMaxAgeSeconds();
+        const token = issueSessionToken(user.id, secret, maxAge);
+        setSessionCookie(res, token, maxAge);
+
+        res.json({
+            user: {
+                ...user,
+                cities: user.cities.map(c => c.city)
+            }
+        });
+    });
+
+    app.post("/register", async (req, res) => {
+        const result = RegisterSchema.safeParse(req.body);
+        if (!result.success) return res.status(400).json({ error: "Dados inválidos", details: result.error });
+
+        const { username: rawUsername, name, password, invitationCode } = result.data;
+        const username = rawUsername.toLowerCase();
+
+        // Check if user exists
+        const existing = await prisma.user.findUnique({ where: { id: username } });
+        if (existing) return res.status(400).json({ error: "Nome de usuário já existe" });
+
+        // Check invitation
+        const invitation = await prisma.invitation.findUnique({ where: { id: invitationCode } });
+        if (!invitation || invitation.isUsed) {
+            return res.status(400).json({ error: "Código de convite inválido ou já utilizado" });
         }
 
-        const { username, cities } = LoginSchema.parse(req.body);
-        const existing = await prisma.user.findUnique({ where: { id: username } });
+        const passwordHash = await bcrypt.hash(password, 10);
 
-        let user: any = existing;
-        if (!existing) {
-            user = await prisma.user.create({
+        const user = await prisma.$transaction(async (tx: any) => {
+            const newUser = await tx.user.create({
                 data: {
                     id: username,
-                    name: username,
+                    name,
                     bio: "",
                     avatarUrl: "",
+                    passwordHash,
                     cities: {
-                        create: (cities || []).map((city: string) => ({ city }))
+                        create: [{ city: invitation.city }]
                     }
                 },
                 include: { cities: true }
             });
-        }
 
-        if (!existing) {
-            const env = makeEventEnvelope({ source: "users", type: "user.created", data: { id: user.id } });
-            await publishEvent(env, eventTargets());
-        }
+            await tx.invitation.update({
+                where: { id: invitationCode },
+                data: { isUsed: true, usedBy: username }
+            });
+
+            return newUser;
+        });
 
         const secret = getSessionSecret();
         const maxAge = getSessionMaxAgeSeconds();
-        if (secret) {
-            const token = issueSessionToken(username, secret, maxAge);
-            setSessionCookie(res, token, maxAge);
-        }
+        const token = issueSessionToken(user.id, secret, maxAge);
+        setSessionCookie(res, token, maxAge);
 
-        res.json({ token: username, user });
+        const env = makeEventEnvelope({ source: "users", type: "user.created", data: { id: user.id } });
+        await publishEvent(env, eventTargets());
+
+        res.json({ user: { ...user, cities: user.cities.map((c: any) => c.city) } });
     });
 
     app.post("/logout", async (_req, res) => {
@@ -271,6 +332,7 @@ export function registerRoutes(app: Express) {
                 coverUrl: true,
                 createdAt: true,
                 updatedAt: true,
+                isAdmin: true,
                 cities: { select: { city: true } },
             },
         });
@@ -288,9 +350,87 @@ export function registerRoutes(app: Express) {
             take: 50,
             orderBy: { updatedAt: "desc" },
             where: q ? { OR: [{ id: { contains: q } }, { name: { contains: q } }] } : undefined,
-            select: { id: true, name: true, avatarUrl: true, coverUrl: true, createdAt: true, updatedAt: true, cities: { select: { city: true } } },
+            select: { id: true, name: true, avatarUrl: true, coverUrl: true, createdAt: true, updatedAt: true, isAdmin: true, cities: { select: { city: true } } },
         });
         res.json({ users });
+    });
+
+    // Admin-only User Management
+    app.get("/admin/users", async (req, res) => {
+        const username = getUsername(req);
+        if (!username || !(await assertAdmin(username))) return res.status(403).json({ error: "admin only" });
+
+        const users = await prisma.user.findMany({
+            include: { cities: true },
+            orderBy: { createdAt: "desc" }
+        });
+        res.json({ users: users.map((u: any) => ({ ...u, isAdmin: !!u.isAdmin, cities: u.cities.map((c: any) => c.city) })) });
+    });
+
+    app.put("/admin/users/:id", async (req, res) => {
+        const username = getUsername(req);
+        if (!username || !(await assertAdmin(username))) return res.status(403).json({ error: "admin only" });
+
+        const targetId = String(req.params.id);
+        const result = UserProfileSchema.partial().safeParse(req.body);
+        if (!result.success) return res.status(400).json({ error: "Invalid input", details: result.error });
+
+        const { cities, ...profile } = result.data;
+
+        const user = await prisma.$transaction(async (tx: any) => {
+            const u = await tx.user.update({
+                where: { id: targetId },
+                data: profile,
+                include: { cities: true }
+            });
+
+            if (cities !== undefined) {
+                await tx.userCity.deleteMany({ where: { userId: targetId } });
+                if (cities.length > 0) {
+                    await tx.userCity.createMany({
+                        data: cities.map((city: string) => ({ userId: targetId, city }))
+                    });
+                }
+            }
+
+            return await tx.user.findUnique({
+                where: { id: targetId },
+                include: { cities: true }
+            });
+        });
+
+        res.json({ user: { ...user, cities: (user as any)!.cities.map((c: any) => c.city) } });
+    });
+
+    // Admin-only Invitations
+    app.get("/admin/invitations", async (req, res) => {
+        const username = getUsername(req);
+        if (!username || !(await assertAdmin(username))) return res.status(403).json({ error: "admin only" });
+
+        const invitations = await prisma.invitation.findMany({
+            orderBy: { createdAt: "desc" }
+        });
+        res.json({ invitations });
+    });
+
+    app.post("/admin/invitations", async (req, res) => {
+        const username = getUsername(req);
+        if (!username || !(await assertAdmin(username))) return res.status(403).json({ error: "admin only" });
+
+        const { city } = req.body;
+        if (!city) return res.status(400).json({ error: "Cidade é obrigatória" });
+
+        const id = crypto.randomBytes(4).toString("hex").toUpperCase();
+
+        const invitation = await prisma.invitation.create({
+            data: {
+                id,
+                city,
+                createdBy: username
+            }
+        });
+
+        res.json({ invitation });
     });
 
     app.get("/me", async (req, res) => {
@@ -307,7 +447,7 @@ export function registerRoutes(app: Express) {
     app.put("/me", async (req, res) => {
         const username = getUsername(req);
         if (!username) return res.status(401).json({ error: "missing x-username" });
-        const result = UserProfileSchema.safeParse(req.body);
+        const result = UserProfileSchema.partial().safeParse(req.body);
         if (!result.success) {
             return res.status(400).json({ error: "Invalid input", details: result.error });
         }
@@ -316,17 +456,25 @@ export function registerRoutes(app: Express) {
         const user = await prisma.$transaction(async (tx) => {
             const u = await tx.user.upsert({
                 where: { id: username },
-                create: { id: username, ...profile },
+                create: {
+                    id: username,
+                    name: profile.name || username,
+                    bio: profile.bio || "",
+                    avatarUrl: profile.avatarUrl || "",
+                    ...profile
+                },
                 update: profile,
                 include: { cities: true }
             });
 
-            // Update cities: remove old ones and add new ones
-            await tx.userCity.deleteMany({ where: { userId: username } });
-            if (cities && cities.length > 0) {
-                await tx.userCity.createMany({
-                    data: cities.map(city => ({ userId: username, city }))
-                });
+            if (cities !== undefined) {
+                // Update cities: remove old ones and add new ones
+                await tx.userCity.deleteMany({ where: { userId: username } });
+                if (cities.length > 0) {
+                    await tx.userCity.createMany({
+                        data: cities.map(city => ({ userId: username, city }))
+                    });
+                }
             }
 
             return await tx.user.findUnique({

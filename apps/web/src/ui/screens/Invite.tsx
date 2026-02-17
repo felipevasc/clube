@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Card from "../components/Card";
 import PrimaryButton from "../components/PrimaryButton";
+import ConfirmModal from "../components/ConfirmModal";
 import { api, apiMaybe } from "../../lib/api";
 
 type Group = { id: string; name: string; description?: string | null };
@@ -26,6 +27,7 @@ export default function InviteScreen() {
   const [actionMsg, setActionMsg] = useState("");
   const [actionLoading, setActionLoading] = useState(false);
   const [declined, setDeclined] = useState(false);
+  const [showConfirmDecline, setShowConfirmDecline] = useState(false);
 
   useEffect(() => {
     let alive = true;
@@ -170,21 +172,7 @@ export default function InviteScreen() {
                       </PrimaryButton>
                       <button
                         disabled={actionLoading}
-                        onClick={async () => {
-                          if (actionLoading) return;
-                          const ok = confirm("Recusar este convite?");
-                          if (!ok) return;
-                          setActionLoading(true);
-                          setActionMsg("");
-                          try {
-                            await api<any>(`/invites/${encodeURIComponent(inviteId)}/decline`, { method: "POST" });
-                            setDeclined(true);
-                          } catch (e: any) {
-                            setActionMsg(e?.message || "Não foi possível recusar o convite.");
-                          } finally {
-                            setActionLoading(false);
-                          }
-                        }}
+                        onClick={() => setShowConfirmDecline(true)}
                         className="w-full rounded-2xl px-4 py-3 text-sm font-black bg-white border border-black/10 hover:bg-sun-50 transition"
                       >
                         Recusar
@@ -193,18 +181,40 @@ export default function InviteScreen() {
                   )}
 
                   {me?.pendingRequest ? (
-                    <div className="text-sm text-neutral-700">
+                    <div className="text-sm text-neutral-700 mt-2">
                       Você já tem um pedido pendente neste grupo. Se aceitar o convite, você entra imediatamente.
                     </div>
                   ) : null}
 
-                  {actionMsg ? <div className="text-sm text-neutral-700">{actionMsg}</div> : null}
+                  {actionMsg ? <div className="text-sm text-neutral-700 mt-2">{actionMsg}</div> : null}
                 </div>
               </div>
             )}
           </div>
         </Card>
       </div>
+
+      <ConfirmModal
+        isOpen={showConfirmDecline}
+        title="Recusar Convite"
+        message="Deseja mesmo recusar este convite? Você não poderá entrar neste grupo através deste link."
+        confirmLabel="Recusar"
+        isDestructive
+        onConfirm={async () => {
+          setShowConfirmDecline(false);
+          setActionLoading(true);
+          setActionMsg("");
+          try {
+            await api<any>(`/invites/${encodeURIComponent(inviteId)}/decline`, { method: "POST" });
+            setDeclined(true);
+          } catch (e: any) {
+            setActionMsg(e?.message || "Não foi possível recusar o convite.");
+          } finally {
+            setActionLoading(false);
+          }
+        }}
+        onCancel={() => setShowConfirmDecline(false)}
+      />
     </div>
   );
 }

@@ -46,7 +46,7 @@ export default function FullScreenFeed({
             {/* Snap Container */}
             <div
                 ref={containerRef}
-                className="h-full w-full overflow-y-scroll snap-y snap-mandatory scroll-smooth no-scrollbar"
+                className="h-full w-full overflow-y-scroll overflow-x-hidden snap-y snap-mandatory scroll-smooth no-scrollbar"
                 style={{ scrollSnapType: 'y mandatory' }}
             >
                 {posts.map((post) => (

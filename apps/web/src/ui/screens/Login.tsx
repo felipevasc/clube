@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Card from "../components/Card";
 import PrimaryButton from "../components/PrimaryButton";
 import { api } from "../../lib/api";
+import { LuShield, LuUser, LuKeyRound, LuTicket, LuSearch, LuChevronRight } from "react-icons/lu";
 
 type DevUser = {
   id: string;
@@ -12,247 +13,256 @@ type DevUser = {
 };
 
 export default function Login() {
-  const [username, setU] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [cities, setCities] = useState<string[]>([]);
-  const [selectedUserId, setSelectedUserId] = useState("");
-  const [devUsers, setDevUsers] = useState<DevUser[]>([]);
-  const [devUsersLoading, setDevUsersLoading] = useState(false);
-  const [devUsersError, setDevUsersError] = useState("");
-  const [devUsersQuery, setDevUsersQuery] = useState("");
+  const [invitationCode, setInvitationCode] = useState("");
+
+  const [mode, setMode] = useState<"login" | "register">("login");
+  const [showUserSearch, setShowUserSearch] = useState(false);
+
+  const [users, setUsers] = useState<DevUser[]>([]);
+  const [loadingUsers, setLoadingUsers] = useState(false);
+
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const nav = useNavigate();
   const loc = useLocation();
   const from = useMemo(() => (loc.state as any)?.from || "/", [loc.state]);
-  const urlError = useMemo(() => new URLSearchParams(loc.search).get("error") || "", [loc.search]);
 
-  const googleHref = useMemo(() => `/api/auth/google/start?from=${encodeURIComponent(String(from || "/"))}`, [from]);
-
-  const showDevUsernameLogin = useMemo(() => import.meta.env.DEV, []);
-
-  const filteredDevUsers = useMemo(() => {
-    const q = devUsersQuery.trim().toLowerCase();
-    if (!q) return devUsers;
-    return devUsers.filter((u) => {
-      const id = String(u.id || "").toLowerCase();
-      const name = String(u.name || "").toLowerCase();
-      return id.includes(q) || name.includes(q);
-    });
-  }, [devUsers, devUsersQuery]);
-
-  async function refreshDevUsers() {
-    setDevUsersError("");
-    setDevUsersLoading(true);
+  const refreshUsers = async () => {
+    setLoadingUsers(true);
     try {
-      const out = await api<{ users: DevUser[] }>("/dev/users");
-      setDevUsers(Array.isArray(out?.users) ? out.users : []);
-    } catch (e: any) {
-      setDevUsersError(e?.message || "Erro ao carregar usuarios");
+      const out = await api<{ users: DevUser[] }>("/admin/users");
+      setUsers(Array.isArray(out?.users) ? out.users : []);
+    } catch {
+      // Ignore errors for this dev-helper feature
     } finally {
-      setDevUsersLoading(false);
+      setLoadingUsers(false);
     }
-  }
+  };
 
-  useEffect(() => {
-    if (!showDevUsernameLogin) return;
-    refreshDevUsers();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showDevUsernameLogin]);
+  const handleLogin = async () => {
+    setError("");
+    setLoading(true);
+    try {
+      await api("/login", {
+        method: "POST",
+        body: JSON.stringify({ username, password }),
+      });
+      nav(from, { replace: true });
+    } catch (e: any) {
+      setError(e?.message || "Erro ao entrar");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const errorLabel = useMemo(() => {
-    const e = String(urlError || error || "").trim();
-    if (!e) return "";
-    if (e === "google_not_configured") return "Login com Google ainda não está configurado neste ambiente.";
-    if (e === "session_not_configured") return "Sessão não configurada no servidor.";
-    if (e === "google_invalid_state") return "Não foi possível validar o login. Tente novamente.";
-    if (e === "google_missing_code") return "Não foi possível concluir o login. Tente novamente.";
-    if (e === "google_access_denied") return "Login cancelado.";
-    return e;
-  }, [urlError, error]);
+  const handleRegister = async () => {
+    setError("");
+    setLoading(true);
+    try {
+      await api("/register", {
+        method: "POST",
+        body: JSON.stringify({ username, name, password, invitationCode }),
+      });
+      nav(from, { replace: true });
+    } catch (e: any) {
+      setError(e?.message || "Erro ao cadastrar");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="min-h-dvh grid place-items-center px-4 bg-[radial-gradient(1200px_600px_at_50%_-10%,rgba(255,191,15,0.55),transparent_60%),radial-gradient(900px_500px_at_10%_40%,rgba(255,216,79,0.35),transparent_55%)]">
+    <div className="min-h-dvh grid place-items-center px-4 bg-[url('/images/fundo.png')] bg-cover bg-center overflow-auto py-10">
       <div className="w-full max-w-md">
         <Card>
-          <div className="p-6">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-sun-500 grid place-items-center font-black text-xl">
-                C
+          <div className="p-8">
+            <div className="flex flex-col items-center gap-2 mb-8">
+              <div className="w-16 h-16 rounded-3xl bg-white/40 border-2 border-white/50 grid place-items-center overflow-hidden shadow-xl">
+                <img src="/images/margarida.png" alt="Margarida" className="w-full h-full object-cover" />
               </div>
-              <div>
-                <div className="text-xl font-black tracking-tight">Entrar</div>
-                <div className="text-sm text-neutral-600">Acesse seu clube com uma conta.</div>
+              <div className="text-center">
+                <div className="text-4xl font-black tracking-wide text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]" style={{ fontFamily: 'comic sans ms, sans-serif' }}>
+                  Margarida's
+                </div>
+                <div className="text-xl font-serif italic text-yellow-900 font-bold -mt-2 tracking-widest drop-shadow-sm">
+                  book club
+                </div>
               </div>
             </div>
 
-            <div className="mt-6">
-              <a
-                href={googleHref}
-                className="block w-full text-center rounded-2xl px-4 py-3 text-sm font-black bg-sun-500 hover:bg-sun-400 transition"
+            <div className="flex bg-black/5 rounded-2xl p-1 mb-8">
+              <button
+                onClick={() => setMode("login")}
+                className={`flex-1 py-3 text-sm font-black rounded-xl transition-all ${mode === "login" ? "bg-white text-sun-600 shadow-sm" : "text-neutral-500 hover:text-neutral-700"}`}
               >
-                Continuar com Google
-              </a>
+                Entrar
+              </button>
+              <button
+                onClick={() => setMode("register")}
+                className={`flex-1 py-3 text-sm font-black rounded-xl transition-all ${mode === "register" ? "bg-white text-sun-600 shadow-sm" : "text-neutral-500 hover:text-neutral-700"}`}
+              >
+                Registrar
+              </button>
             </div>
 
-            {errorLabel ? <div className="mt-4 text-sm text-red-600">{errorLabel}</div> : null}
+            {error && <div className="mb-6 p-4 bg-red-50 text-red-600 text-sm font-bold rounded-2xl border border-red-100">{error}</div>}
 
-            {showDevUsernameLogin ? (
-              <div className="mt-6 pt-5 border-t border-black/10">
-                <div className="text-xs font-semibold text-neutral-600">Dev: entrar sem senha</div>
-
-                <label className="mt-3 block text-xs font-semibold text-neutral-600" htmlFor="dev-user-search">
-                  Buscar usuario
-                </label>
-                <div className="mt-2 flex gap-2">
-                  <input
-                    id="dev-user-search"
-                    value={devUsersQuery}
-                    onChange={(e) => setDevUsersQuery(e.target.value)}
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-4 focus:ring-sun-200"
-                    placeholder="Filtrar por nome/username..."
-                    inputMode="text"
-                  />
-                  <button
-                    type="button"
-                    onClick={refreshDevUsers}
-                    disabled={devUsersLoading}
-                    className="shrink-0 rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm font-black hover:bg-neutral-50 transition disabled:opacity-50"
-                    title="Recarregar"
-                  >
-                    {devUsersLoading ? "..." : "R"}
-                  </button>
-                </div>
-
-                {devUsersError ? <div className="mt-2 text-xs text-red-600">{devUsersError}</div> : null}
-
-                <label className="mt-3 block text-xs font-semibold text-neutral-600" htmlFor="dev-user-select">
-                  Escolher usuario
-                </label>
-                <div className="mt-2">
-                  <select
-                    id="dev-user-select"
-                    value={selectedUserId}
-                    onChange={(e) => {
-                      const v = String(e.target.value || "");
-                      setSelectedUserId(v);
-                      setU(v);
-                    }}
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-4 focus:ring-sun-200"
-                  >
-                    <option value="">Selecionar...</option>
-                    {filteredDevUsers.map((u) => (
-                      <option key={u.id} value={u.id}>
-                        {u.name ? `${u.name} (${u.id})` : u.id}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <label className="mt-2 block text-xs font-semibold text-neutral-600" htmlFor="dev-username">
-                  Ou digite um username (cria se nao existir)
-                </label>
-                <div className="mt-2">
-                  <input
-                    id="dev-username"
-                    value={username}
-                    onChange={(e) => {
-                      const v = e.target.value;
-                      setU(v);
-                      const id = v.trim();
-                      setSelectedUserId(devUsers.some((u) => u.id === id) ? id : "");
-                    }}
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-4 focus:ring-sun-200"
-                    autoComplete="username"
-                    inputMode="text"
-                  />
-                </div>
-
-                <label className="mt-2 block text-xs font-semibold text-neutral-600" htmlFor="dev-name">
-                  Nome (opcional)
-                </label>
-                <div className="mt-2">
-                  <input
-                    id="dev-name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-4 focus:ring-sun-200"
-                    autoComplete="name"
-                    inputMode="text"
-                  />
-                </div>
-
-                <div className="mt-3">
-                  <div className="text-xs font-semibold text-neutral-600 mb-2">Cidades</div>
-                  <div className="flex gap-4">
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={cities.includes("FORTALEZA")}
-                        onChange={(e) => {
-                          if (e.target.checked) setCities((p) => [...p, "FORTALEZA"]);
-                          else setCities((p) => p.filter((c) => c !== "FORTALEZA"));
+            <div className="space-y-5">
+              {mode === "login" ? (
+                <>
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="text-xs font-bold text-neutral-600 uppercase tracking-wider ml-1">Usuário</label>
+                      <button
+                        onClick={() => {
+                          setShowUserSearch(true);
+                          refreshUsers();
                         }}
-                        className="rounded border-gray-300 text-sun-500 focus:ring-sun-200"
-                      />
-                      <span className="text-sm">Fortaleza</span>
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer">
+                        className="text-[10px] font-black text-sun-600 hover:underline uppercase"
+                      >
+                        Procurar usuário
+                      </button>
+                    </div>
+                    <div className="relative group">
+                      <LuUser className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 group-focus-within:text-sun-500 transition-colors" size={20} />
                       <input
-                        type="checkbox"
-                        checked={cities.includes("BRASILIA")}
-                        onChange={(e) => {
-                          if (e.target.checked) setCities((p) => [...p, "BRASILIA"]);
-                          else setCities((p) => p.filter((c) => c !== "BRASILIA"));
-                        }}
-                        className="rounded border-gray-300 text-sun-500 focus:ring-sun-200"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value.toLowerCase())}
+                        placeholder="Nome de usuário"
+                        className="w-full pl-12 pr-4 py-4 bg-white rounded-2xl border border-black/5 outline-none focus:ring-4 focus:ring-sun-200 transition-all text-sm font-medium"
                       />
-                      <span className="text-sm">Brasília</span>
-                    </label>
+                    </div>
                   </div>
-                </div>
 
-                <PrimaryButton
-                  disabled={loading}
-                  onClick={async () => {
-                    setError("");
-                    setLoading(true);
-                    try {
-                      const u = username.trim();
-                      await api("/login", {
-                        method: "POST",
-                        body: JSON.stringify({ username: u, cities }),
-                      });
-                      const n = name.trim();
-                      if (n) {
-                        const me = await api<{ user: { bio?: string; avatarUrl?: string } }>("/me");
-                        await api("/me", {
-                          method: "PUT",
-                          body: JSON.stringify({
-                            name: n,
-                            bio: String(me?.user?.bio || ""),
-                            avatarUrl: String(me?.user?.avatarUrl || ""),
-                          }),
-                        });
-                      }
-                      nav(from, { replace: true });
-                    } catch (e: any) {
-                      setError(e?.message || "Erro");
-                    } finally {
-                      setLoading(false);
-                    }
-                  }}
-                >
-                  {loading ? "Entrando..." : "Entrar"}
-                </PrimaryButton>
+                  <div>
+                    <label className="block text-xs font-bold text-neutral-600 mb-2 uppercase tracking-wider ml-1">Senha</label>
+                    <div className="relative group">
+                      <LuKeyRound className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 group-focus-within:text-sun-500 transition-colors" size={20} />
+                      <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Sua senha"
+                        className="w-full pl-12 pr-4 py-4 bg-white rounded-2xl border border-black/5 outline-none focus:ring-4 focus:ring-sun-200 transition-all text-sm font-medium"
+                      />
+                    </div>
+                  </div>
 
-                <div className="mt-2 text-[11px] text-neutral-600">
-                  Dica: usernames aceitam apenas letras, numeros e _ (min 3, max 32).
-                </div>
-              </div>
-            ) : null}
+                  <PrimaryButton loading={loading} onClick={handleLogin}>
+                    Entrar no Clube
+                  </PrimaryButton>
+                </>
+              ) : (
+                <>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-xs font-bold text-neutral-600 mb-2 uppercase tracking-wider ml-1">Convite</label>
+                      <div className="relative group">
+                        <LuTicket className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 group-focus-within:text-sun-500 transition-colors" size={20} />
+                        <input
+                          value={invitationCode}
+                          onChange={(e) => setInvitationCode(e.target.value.toUpperCase())}
+                          placeholder="Código do convite"
+                          className="w-full pl-12 pr-4 py-4 bg-white rounded-2xl border border-black/5 outline-none focus:ring-4 focus:ring-sun-200 transition-all text-sm font-black tracking-widest uppercase"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-neutral-600 mb-2 uppercase tracking-wider ml-1">Usuário</label>
+                      <div className="relative group">
+                        <LuUser className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 group-focus-within:text-sun-500 transition-colors" size={20} />
+                        <input
+                          value={username}
+                          onChange={(e) => setUsername(e.target.value.toLowerCase())}
+                          placeholder="Username"
+                          className="w-full pl-12 pr-4 py-4 bg-white rounded-2xl border border-black/5 outline-none focus:ring-4 focus:ring-sun-200 transition-all text-sm font-medium"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-neutral-600 mb-2 uppercase tracking-wider ml-1">Nome</label>
+                      <input
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="Nome real"
+                        className="w-full px-4 py-4 bg-white rounded-2xl border border-black/5 outline-none focus:ring-4 focus:ring-sun-200 transition-all text-sm font-medium"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-neutral-600 mb-2 uppercase tracking-wider ml-1">Senha</label>
+                      <div className="relative group">
+                        <LuKeyRound className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 group-focus-within:text-sun-500 transition-colors" size={20} />
+                        <input
+                          type="password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          placeholder="Min 6 caracteres"
+                          className="w-full pl-12 pr-4 py-4 bg-white rounded-2xl border border-black/5 outline-none focus:ring-4 focus:ring-sun-200 transition-all text-sm font-medium"
+                        />
+                      </div>
+                    </div>
+
+                    <PrimaryButton loading={loading} onClick={handleRegister}>
+                      Finalizar Cadastro
+                    </PrimaryButton>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </Card>
+
+        {showUserSearch && (
+          <div className="fixed inset-0 z-50 grid place-items-center bg-black/60 backdrop-blur-sm p-4">
+            <div className="w-full max-w-sm bg-white rounded-[2rem] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+              <div className="p-6 border-b border-neutral-100 flex items-center justify-between">
+                <div className="font-black text-neutral-800">Procurar Usuário</div>
+                <button onClick={() => setShowUserSearch(false)} className="text-neutral-400 hover:text-neutral-600 p-2">
+                  <LuSearch size={20} />
+                </button>
+              </div>
+              <div className="max-h-[60vh] overflow-y-auto p-2">
+                {loadingUsers ? (
+                  <div className="p-10 text-center text-neutral-400 font-medium">Carregando usuários...</div>
+                ) : users.length === 0 ? (
+                  <div className="p-10 text-center text-neutral-400 font-medium">Nenhum usuário encontrado</div>
+                ) : (
+                  users.map(u => (
+                    <button
+                      key={u.id}
+                      onClick={() => {
+                        setUsername(u.id);
+                        setShowUserSearch(false);
+                      }}
+                      className="w-full flex items-center gap-4 p-4 hover:bg-sun-50 rounded-2xl transition-all group"
+                    >
+                      <div className="w-10 h-10 rounded-full bg-neutral-100 overflow-hidden shrink-0 border-2 border-white group-hover:border-sun-200 shadow-sm">
+                        {u.avatarUrl ? (
+                          <img src={u.avatarUrl} alt={u.name} className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full grid place-items-center bg-sun-100 text-sun-600 font-black">
+                            {u.name?.[0]?.toUpperCase() || u.id[0]?.toUpperCase()}
+                          </div>
+                        )}
+                      </div>
+                      <div className="text-left">
+                        <div className="font-bold text-neutral-800 group-hover:text-sun-700 transition-colors">{u.name || u.id}</div>
+                        <div className="text-xs text-neutral-400 font-medium">@{u.id}</div>
+                      </div>
+                      <LuChevronRight className="ml-auto text-neutral-300 group-hover:text-sun-400 transition-colors" size={18} />
+                    </button>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

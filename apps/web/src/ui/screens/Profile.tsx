@@ -6,8 +6,10 @@ import Avatar from "../components/Avatar";
 import FeedList from "../components/FeedList";
 import { api, getAuthenticatedUser } from "../../lib/api";
 import { LuArrowLeft, LuPencil, LuUpload, LuImage } from "react-icons/lu";
+import AvatarCropper from "../components/AvatarCropper";
+import { clubColorHex } from "../lib/clubColors";
 
-type User = { id: string; name: string; bio: string; avatarUrl: string; coverUrl?: string };
+type User = { id: string; name: string; bio: string; avatarUrl: string; coverUrl?: string; cities?: string[] };
 
 export default function Profile() {
   const { userId } = useParams();
@@ -24,6 +26,8 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [uploadingCover, setUploadingCover] = useState(false);
+  const [tempAvatarImage, setTempAvatarImage] = useState<string | null>(null);
+  const [activeBookColor, setActiveBookColor] = useState<string | undefined>();
 
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const coverInputRef = useRef<HTMLInputElement>(null);
@@ -38,8 +42,22 @@ export default function Profile() {
       setBio(out.user.bio || "");
       setAvatarUrl(out.user.avatarUrl || "");
       setCoverUrl(out.user.coverUrl || "");
+
+      // Fetch active book color based on user city
+      if (out.user.cities && out.user.cities.length > 0) {
+        const city = out.user.cities[0];
+        const res = await api<{ clubBook: { colorKey: string } | null }>(`/club-books/active?city=${encodeURIComponent(city)}`);
+        if (res.clubBook) {
+          setActiveBookColor(clubColorHex(res.clubBook.colorKey));
+        } else {
+          setActiveBookColor(undefined);
+        }
+      } else {
+        setActiveBookColor(undefined);
+      }
     } catch (e) {
-      console.error("Failed to fetch profile", e);
+      console.error("Failed to fetch profile or active book", e);
+      setActiveBookColor(undefined);
     } finally {
       setLoading(false);
     }
@@ -49,15 +67,18 @@ export default function Profile() {
     refresh();
   }, [userId]);
 
-  const handleUpload = async (file: File, type: "avatar" | "cover") => {
+  const handleUpload = async (file: File | Blob, type: "avatar" | "cover") => {
     const setter = type === "avatar" ? setUploadingAvatar : setUploadingCover;
     setter(true);
     try {
+      const fileName = (file as File).name || (type === "avatar" ? "avatar.jpg" : "cover.jpg");
+      const fileType = file.type || (type === "avatar" ? "image/jpeg" : "application/octet-stream");
+
       const res = await fetch("/api/uploads", {
         method: "POST",
         headers: {
-          "content-type": file.type || "application/octet-stream",
-          "x-file-name": file.name || "arquivo",
+          "content-type": fileType,
+          "x-file-name": fileName,
         },
         body: file,
         credentials: "include",
@@ -103,8 +124,11 @@ export default function Profile() {
         </div>
 
         <div className="px-4 -mt-12 relative flex items-end justify-between">
-          <div className="p-1 rounded-[2rem] bg-white shadow-card">
-            <Avatar user={user} size={80} />
+          <div
+            className="p-1 rounded-full bg-white shadow-card transition-colors duration-500"
+            style={{ backgroundColor: activeBookColor || 'white' }}
+          >
+            <Avatar user={user} size={80} activeBookColor={activeBookColor} />
           </div>
 
           {isMe && (
@@ -170,7 +194,14 @@ export default function Profile() {
                       ref={avatarInputRef}
                       className="hidden"
                       accept="image/*"
-                      onChange={(e) => e.target.files?.[0] && handleUpload(e.target.files[0], "avatar")}
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          const reader = new FileReader();
+                          reader.onload = () => setTempAvatarImage(reader.result as string);
+                          reader.readAsDataURL(file);
+                        }
+                      }}
                     />
                     <button
                       onClick={() => avatarInputRef.current?.click()}
@@ -236,6 +267,17 @@ export default function Profile() {
             </div>
           </Card>
         </div>
+      )}
+
+      {tempAvatarImage && (
+        <AvatarCropper
+          image={tempAvatarImage}
+          onConfirm={(blob) => {
+            handleUpload(blob, "avatar");
+            setTempAvatarImage(null);
+          }}
+          onCancel={() => setTempAvatarImage(null)}
+        />
       )}
     </div>
   );

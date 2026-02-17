@@ -12,3 +12,4 @@ tmp/uploads
 **/tmp/uploads
 uploads
 **/uploads
+.env

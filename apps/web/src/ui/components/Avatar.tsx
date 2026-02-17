@@ -1,16 +1,31 @@
 import type { CSSProperties } from "react";
 
-export default function Avatar({ user, size = 40, className = "" }: { user: { id: string; name: string; avatarUrl?: string }; size?: number; className?: string }) {
+export default function Avatar({
+  user,
+  size = 40,
+  className = "",
+  activeBookColor
+}: {
+  user: { id: string; name: string; avatarUrl?: string };
+  size?: number;
+  className?: string;
+  activeBookColor?: string;
+}) {
   const initial = (user?.name || user?.id || "?").slice(0, 1).toUpperCase();
-  const px = Math.max(28, Math.min(64, Number(size || 40)));
-  const baseStyle: CSSProperties = { width: px, height: px };
-  const cls = `rounded-2xl object-cover border border-black/5 bg-white ${className}`;
+  const px = Number(size || 40);
+  const baseStyle: CSSProperties = {
+    width: px,
+    height: px,
+    borderColor: activeBookColor || 'rgba(0,0,0,0.05)',
+    borderWidth: activeBookColor ? '3px' : '1px'
+  };
+  const cls = `rounded-full object-cover border bg-white ${className}`;
   if (user?.avatarUrl) {
     return <img src={user.avatarUrl} alt={user.name} className={cls} style={baseStyle} referrerPolicy="no-referrer" />;
   }
   return (
     <div
-      className={`rounded-2xl bg-sun-100 border border-black/5 grid place-items-center font-black ${className}`}
+      className={`rounded-full bg-sun-100 border grid place-items-center font-black ${className}`}
       style={baseStyle}
       aria-label={user?.name || user?.id}
     >

@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Login from "./screens/Login";
 import Invite from "./screens/Invite";
@@ -16,11 +16,16 @@ import FilesFolder from "./screens/FilesFolder";
 import Polls from "./screens/Polls";
 import PollsList from "./screens/PollsList";
 import PollDetail from "./screens/PollDetail";
+import Events from "./screens/Events";
+import EventCreate from "./screens/EventCreate";
+import EventDetails from "./screens/EventDetails";
+import UserManagement from "./screens/UserManagement";
 import Shell from "./components/Shell";
 import { apiMaybe } from "../lib/api";
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
   const loc = useLocation();
+  const nav = useNavigate();
   const [state, setState] = useState<"loading" | "authed" | "noauth" | "error">("loading");
 
   useEffect(() => {
@@ -70,6 +75,12 @@ function RequireAuth({ children }: { children: React.ReactNode }) {
           >
             Recarregar
           </button>
+          <button
+            onClick={() => nav("/login")}
+            className="w-full rounded-2xl px-4 py-3 text-sm font-bold text-neutral-600 hover:bg-neutral-100 transition"
+          >
+            Sair
+          </button>
         </div>
       </div>
     );
@@ -109,6 +120,10 @@ export default function App() {
         <Route path="books/:id" element={<BookDetail />} />
         <Route path="books/:id/edit" element={<BookEdit />} />
         <Route path="profile/:userId?" element={<Profile />} />
+        <Route path="encontros" element={<Events />} />
+        <Route path="encontros/novo" element={<EventCreate />} />
+        <Route path="encontros/:id" element={<EventDetails />} />
+        <Route path="usuarios" element={<UserManagement />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

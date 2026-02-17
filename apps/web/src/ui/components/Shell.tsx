@@ -9,12 +9,15 @@ import {
   LuFileText,
   LuChartBarBig,
   LuLogOut,
+  LuCalendarDays,
+  LuUsers,
 } from "react-icons/lu";
 
 interface User {
   id: string;
   name: string;
   avatarUrl?: string;
+  isAdmin: boolean;
   cities: string[];
 }
 
@@ -23,6 +26,7 @@ interface ClubBook {
   title: string;
   coverUrl?: string;
   city: string;
+  colorKey: string;
 }
 
 function Tab({ to, icon: Icon, label }: { to: string; icon: any; label: string }) {
@@ -143,8 +147,9 @@ export default function Shell() {
           <Tab to="/livros" icon={LuLibrary} label="Estante" />
           <Tab to="/mensagens" icon={LuMessageCircle} label="Mensagens" />
           <Tab to="/enquetes" icon={LuChartBarBig} label="Enquetes" />
+          <Tab to="/encontros" icon={LuCalendarDays} label="Encontros" />
           <Tab to="/arquivos" icon={LuFileText} label="Arquivos" />
-
+          {user?.isAdmin && <Tab to="/usuarios" icon={LuUsers} label="Usuários" />}
         </div>
       </nav>
     </div>

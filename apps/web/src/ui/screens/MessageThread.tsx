@@ -7,7 +7,7 @@ import { clubColorHex } from "../lib/clubColors";
 
 type ClubBook = { id: string; bookId: string; title: string; author: string; colorKey: string };
 type Channel = { id: string; name: string; type: string; cityCode?: string | null };
-type User = { id: string; name: string; avatarUrl?: string };
+type User = { id: string; name: string; avatarUrl?: string; isAdmin?: boolean };
 type Msg = { id: string; userId: string; text: string; createdAt: string; fromUserId?: string }; // Adpat to both models
 
 export default function MessageThread() {
@@ -132,6 +132,19 @@ export default function MessageThread() {
       setSending(false);
     }
   };
+  const handleDeleteMessage = async (msgId: string) => {
+    try {
+      let url = "";
+      if (threadType === "book") url = `/club-books/messages/${encodeURIComponent(msgId)}`;
+      else if (threadType === "channel") url = `/channels/messages/${encodeURIComponent(msgId)}`;
+      else if (threadType === "dm") url = `/direct-messages/${encodeURIComponent(msgId)}`;
+
+      await api(url, { method: "DELETE" });
+      setMessages(prev => prev.filter(m => m.id !== msgId));
+    } catch (e: any) {
+      alert("Erro ao remover mensagem: " + e.message);
+    }
+  };
 
   const title = clubBook?.title || channel?.name || targetUser?.name || "...";
   const subtitle = clubBook?.author || (channel ? "Canal de voz" : "Conversa privada");
@@ -162,7 +175,15 @@ export default function MessageThread() {
         <Card>
           <div className="h-full flex flex-col overflow-hidden">
             <div className="flex-1 overflow-y-auto chat-wallpaper p-3 space-y-4">
-              <ChatBubbles messages={messages} usersById={usersById} viewerId={viewerId} accentHex={hex} isGroup={threadType !== "dm"} />
+              <ChatBubbles
+                messages={messages}
+                usersById={usersById}
+                viewerId={viewerId}
+                viewerIsAdmin={viewer?.isAdmin}
+                onDelete={handleDeleteMessage}
+                accentHex={hex}
+                isGroup={threadType !== "dm"}
+              />
             </div>
 
             <div className="p-3 border-t border-black/5 bg-white/80">

@@ -23,8 +23,13 @@ function eventTargets(): string[] {
     const raw = process.env.EVENT_TARGETS || "";
     return raw
         .split(",")
-        .map((s) => s.trim())
+        .map((s: string) => s.trim())
         .filter(Boolean);
+}
+
+async function assertAdmin(username: string): Promise<boolean> {
+    const u = await prisma.user.findUnique({ where: { id: username }, select: { isAdmin: true } });
+    return !!u?.isAdmin;
 }
 
 // Helper to enrich posts with User and ClubBook data (Manual Aggregation for Monolith)
@@ -323,6 +328,21 @@ export function registerRoutes(app: Express) {
         res.json({ ok: true, active, type: active ? "like" : null });
     });
 
+    app.delete("/posts/:id", async (req, res) => {
+        const username = getUsername(req);
+        if (!username) return res.status(401).json({ error: "missing x-username" });
+
+        const isAdmin = await assertAdmin(username);
+        if (!isAdmin) return res.status(403).json({ error: "forbidden" });
+
+        const postId = String(req.params.id);
+        const post = await prisma.post.findUnique({ where: { id: postId } });
+        if (!post) return res.status(404).json({ error: "post not found" });
+
+        await prisma.post.delete({ where: { id: postId } });
+        res.status(204).send();
+    });
+
     app.post("/posts/:id/react", async (req, res) => {
         const username = getUsername(req);
         if (!username) return res.status(401).json({ error: "missing x-username" });
@@ -493,11 +513,11 @@ export function registerRoutes(app: Express) {
         if (!poll) return res.status(404).json({ error: "poll not found" });
 
         const optionIdsRaw = (input as any)?.optionIds
-            ? (input as any).optionIds
+            ? (input as any).optionIds as any[]
             : (input as any)?.optionId
                 ? [(input as any).optionId]
                 : [];
-        const optionIds = Array.from(new Set(optionIdsRaw.map((v: any) => String(v)).filter(Boolean)));
+        const optionIds = Array.from(new Set(optionIdsRaw.map((v: any) => String(v)).filter(Boolean))) as string[];
         if (optionIds.length === 0) return res.status(400).json({ error: "missing optionIds" });
         if (!poll.multiChoice && optionIds.length !== 1) return res.status(400).json({ error: "single_choice_requires_one_option" });
 
@@ -509,7 +529,7 @@ export function registerRoutes(app: Express) {
         const existingVotes = await prisma.pollVote.findMany({ where: { pollId, userId }, select: { id: true } });
         if (existingVotes.length > 0) return res.status(409).json({ error: "already_voted" });
 
-        await prisma.$transaction(async (tx) => {
+        await prisma.$transaction(async (tx: any) => {
             await tx.pollVote.createMany({
                 data: optionIds.map((optionId) => ({ pollId, optionId, userId })),
             });
@@ -518,11 +538,7 @@ export function registerRoutes(app: Express) {
         res.json({ ok: true, action: "added" });
     });
 
-    app.post("/events", async (req, res) => {
-        // Dev hook: accept envelopes and validate shape (no-op for MVP).
-        EventEnvelopeSchema.parse(req.body);
-        res.json({ ok: true });
-    });
+
 
     app.use((err: any, _req: any, res: any, _next: any) => {
         if (err?.name === "ZodError" || Array.isArray(err?.issues)) {

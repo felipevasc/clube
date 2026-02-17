@@ -10,6 +10,7 @@ type ClubBook = {
   bookId: string;
   title: string;
   author: string;
+  coverUrl?: string | null;
   colorKey: string;
   isActive: boolean;
   createdAt?: string;
@@ -66,12 +67,16 @@ export default function Polls() {
             <Link key={b.id} to={`/enquetes/livro/${encodeURIComponent(b.id)}`}>
               <Card>
                 <div className="p-4 flex items-center gap-4 hover:bg-black/[0.02] transition">
-                  <div
-                    className="w-12 h-12 rounded-2xl border border-black/10 grid place-items-center font-black text-lg shrink-0"
-                    style={{ backgroundColor: hexWithAlpha(hex, "40") }}
-                  >
-                    {b.title.slice(0, 1).toUpperCase()}
-                  </div>
+                  {b.coverUrl ? (
+                    <img src={b.coverUrl} alt={b.title} className="w-12 h-12 rounded-2xl object-cover border border-black/10 shrink-0" />
+                  ) : (
+                    <div
+                      className="w-12 h-12 rounded-2xl border border-black/10 grid place-items-center font-black text-lg shrink-0"
+                      style={{ backgroundColor: hexWithAlpha(hex, "40") }}
+                    >
+                      {b.title.slice(0, 1).toUpperCase()}
+                    </div>
+                  )}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       <div className="text-base font-black truncate">{b.title}</div>
@@ -97,12 +102,16 @@ export default function Polls() {
             <Link key={b.id} to={`/enquetes/livro/${encodeURIComponent(b.id)}`}>
               <Card>
                 <div className="p-4 flex items-center gap-4 hover:bg-black/[0.02] transition">
-                  <div
-                    className="w-12 h-12 rounded-2xl border border-black/10 grid place-items-center font-black text-lg shrink-0"
-                    style={{ backgroundColor: hexWithAlpha(hex, "22") }}
-                  >
-                    {b.title.slice(0, 1).toUpperCase()}
-                  </div>
+                  {b.coverUrl ? (
+                    <img src={b.coverUrl} alt={b.title} className="w-12 h-12 rounded-2xl object-cover border border-black/10 shrink-0" />
+                  ) : (
+                    <div
+                      className="w-12 h-12 rounded-2xl border border-black/10 grid place-items-center font-black text-lg shrink-0"
+                      style={{ backgroundColor: hexWithAlpha(hex, "22") }}
+                    >
+                      {b.title.slice(0, 1).toUpperCase()}
+                    </div>
+                  )}
                   <div className="flex-1 min-w-0">
                     <div className="text-base font-black truncate">{b.title}</div>
                     <div className="text-sm text-neutral-600 truncate">{b.author}</div>

@@ -4,7 +4,7 @@ export const UsernameSchema = z
   .string()
   .min(3)
   .max(32)
-  .regex(/^[a-zA-Z0-9_]+$/, "Use apenas letras, numeros e _");
+  .regex(/^[a-zA-Z0-9_.-]+$/, "Use apenas letras, numeros, _ . ou -");
 
 export const MediaUrlSchema = z
   .string()
@@ -15,7 +15,14 @@ export const MediaUrlSchema = z
 
 export const LoginSchema = z.object({
   username: UsernameSchema,
-  cities: z.array(z.string()).optional(),
+  password: z.string().min(6),
+});
+
+export const RegisterSchema = z.object({
+  username: UsernameSchema,
+  name: z.string().min(2).max(60),
+  password: z.string().min(6),
+  invitationCode: z.string().min(4),
 });
 
 export const UserProfileSchema = z.object({
@@ -24,17 +31,30 @@ export const UserProfileSchema = z.object({
   avatarUrl: z.union([MediaUrlSchema, z.literal("")]).optional().default(""),
   coverUrl: z.union([MediaUrlSchema, z.literal("")]).optional().default(""),
   cities: z.array(z.string()).default([]),
+  isAdmin: z.boolean().optional().default(false),
 });
 
 export const BookCreateSchema = z.object({
-  title: z.string().min(1).max(120),
-  author: z.string().min(1).max(80),
-  coverUrl: z.string().max(2000).optional().default(""),
-  synopsis: z.string().max(1000000).optional().default(""),
-  genre: z.string().max(40).optional().default(""),
+  title: z.string().min(1).max(255),
+  author: z.string().min(1).max(255),
+  coverUrl: z.union([MediaUrlSchema, z.literal("")]).optional().default(""),
+  synopsis: z.string().optional(),
+  categoryIds: z.array(z.string()),
+  aiStyleDescription: z.string().optional(),
+  aiStyleImageUrls: z.array(MediaUrlSchema).optional(),
+  indicationComment: z.string().optional(),
 });
 
-export const BookUpdateSchema = BookCreateSchema;
+export const BookUpdateSchema = z.object({
+  title: z.string().min(1).max(255),
+  author: z.string().min(1).max(255),
+  coverUrl: z.union([MediaUrlSchema, z.literal("")]).optional().default(""),
+  synopsis: z.string().optional(),
+  categoryIds: z.array(z.string()),
+  aiStyleDescription: z.string().optional(),
+  aiStyleImageUrls: z.array(MediaUrlSchema).optional(),
+  indicationComment: z.string().optional(),
+});
 
 export const GroupCreateSchema = z.object({
   name: z.string().min(1).max(80),
@@ -111,6 +131,7 @@ export const ClubBookCreateInputSchema = z.object({
   city: CitySchema,
   month: z.number().int().min(1).max(12),
   year: z.number().int().min(2025).max(2100),
+  indicationComment: z.string().optional(),
 });
 
 // Internal: gateway enriches with title/author so services can render labels without extra calls.

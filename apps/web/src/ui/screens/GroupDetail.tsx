@@ -3,6 +3,7 @@ import { NavLink, useParams } from "react-router-dom";
 import Card from "../components/Card";
 import PrimaryButton from "../components/PrimaryButton";
 import { api } from "../../lib/api";
+import ConfirmModal from "../components/ConfirmModal";
 
 type Group = { id: string; name: string; description?: string | null; ownerId: string };
 type Member = { id: string; groupId: string; userId: string; role: string };
@@ -56,6 +57,18 @@ export default function GroupDetail() {
   const [bomCreateAuthor, setBomCreateAuthor] = useState("");
   const [bomCreateLoading, setBomCreateLoading] = useState(false);
   const [bomCreateMsg, setBomCreateMsg] = useState("");
+  const [confirmState, setConfirmState] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    onConfirm: () => void;
+    isDestructive?: boolean;
+  }>({
+    isOpen: false,
+    title: "",
+    message: "",
+    onConfirm: () => { },
+  });
 
   const desc = useMemo(() => (group?.description || "").trim(), [group?.description]);
 
@@ -233,23 +246,30 @@ export default function GroupDetail() {
   const rotateInviteLink = async () => {
     if (!group) return;
     setActionMsg("");
-    const ok = confirm("Trocar o link de convite? O link anterior vai parar de funcionar.");
-    if (!ok) return;
-    try {
-      const out = await api<{ inviteId: string }>(`/groups/${encodeURIComponent(group.id)}/invite/rotate`, {
-        method: "POST",
-      });
-      const link = `${location.origin}/invite/${out.inviteId}`;
-      try {
-        await navigator.clipboard.writeText(link);
-        setActionMsg("Novo link copiado. O anterior foi desativado.");
-      } catch {
-        prompt("Copie o novo link do convite:", link);
-        setActionMsg("Link trocado.");
+    setConfirmState({
+      isOpen: true,
+      title: "Rotacionar link",
+      message: "Trocar o link de convite? O link anterior vai parar de funcionar.",
+      onConfirm: async () => {
+        try {
+          const out = await api<{ inviteId: string }>(`/groups/${encodeURIComponent(group.id)}/invite/rotate`, {
+            method: "POST",
+          });
+          const link = `${location.origin}/invite/${out.inviteId}`;
+          try {
+            await navigator.clipboard.writeText(link);
+            setActionMsg("Novo link copiado. O anterior foi desativado.");
+          } catch {
+            prompt("Copie o novo link do convite:", link);
+            setActionMsg("Link trocado.");
+          }
+        } catch (e: any) {
+          setActionMsg(e?.message || "Não foi possível trocar o link de convite.");
+        } finally {
+          setConfirmState(prev => ({ ...prev, isOpen: false }));
+        }
       }
-    } catch (e: any) {
-      setActionMsg(e?.message || "Não foi possível trocar o link de convite.");
-    }
+    });
   };
 
   const searchBomBooks = async () => {
@@ -319,21 +339,27 @@ export default function GroupDetail() {
     if (!group) return;
     if (actionLoading) return;
     setActionMsg("");
-    const ok = confirm("Sair do grupo? Você poderá pedir para entrar novamente.");
-    if (!ok) return;
-
-    setActionLoading(true);
-    try {
-      const out = await api<any>(`/groups/${encodeURIComponent(group.id)}/leave`, { method: "POST" });
-      if (out?.status === "left") setActionMsg("Você saiu do grupo.");
-      else if (out?.status === "not_member") setActionMsg("Você não é membro deste grupo.");
-      else setActionMsg("Ação concluída.");
-      await refresh();
-    } catch (e: any) {
-      setActionMsg(e?.message || "Não foi possível sair do grupo.");
-    } finally {
-      setActionLoading(false);
-    }
+    setConfirmState({
+      isOpen: true,
+      title: "Sair do grupo",
+      message: "Sair do grupo? Você poderá pedir para entrar novamente.",
+      isDestructive: true,
+      onConfirm: async () => {
+        setActionLoading(true);
+        try {
+          const out = await api<any>(`/groups/${encodeURIComponent(group.id)}/leave`, { method: "POST" });
+          if (out?.status === "left") setActionMsg("Você saiu do grupo.");
+          else if (out?.status === "not_member") setActionMsg("Você não é membro deste grupo.");
+          else setActionMsg("Ação concluída.");
+          await refresh();
+        } catch (e: any) {
+          setActionMsg(e?.message || "Não foi possível sair do grupo.");
+        } finally {
+          setActionLoading(false);
+          setConfirmState(prev => ({ ...prev, isOpen: false }));
+        }
+      }
+    });
   };
 
   return (
@@ -418,22 +444,22 @@ export default function GroupDetail() {
                   </PrimaryButton>
                 )}
 
-	                {me?.isOwner ? (
-	                  <>
-	                    <button
-	                      onClick={shareInviteLink}
-	                      className="w-full rounded-2xl px-4 py-3 text-sm font-black bg-white border border-black/10 hover:bg-sun-50 transition"
-	                    >
-	                      Convidar (copiar link)
-	                    </button>
-	                    <button
-	                      onClick={rotateInviteLink}
-	                      className="w-full rounded-2xl px-4 py-3 text-sm font-black bg-white border border-black/10 hover:bg-sun-50 transition"
-	                    >
-	                      Rotacionar link
-	                    </button>
-	                  </>
-	                ) : null}
+                {me?.isOwner ? (
+                  <>
+                    <button
+                      onClick={shareInviteLink}
+                      className="w-full rounded-2xl px-4 py-3 text-sm font-black bg-white border border-black/10 hover:bg-sun-50 transition"
+                    >
+                      Convidar (copiar link)
+                    </button>
+                    <button
+                      onClick={rotateInviteLink}
+                      className="w-full rounded-2xl px-4 py-3 text-sm font-black bg-white border border-black/10 hover:bg-sun-50 transition"
+                    >
+                      Rotacionar link
+                    </button>
+                  </>
+                ) : null}
 
                 {actionMsg ? <div className="text-sm text-neutral-700">{actionMsg}</div> : null}
               </div>
@@ -527,19 +553,26 @@ export default function GroupDetail() {
                     </div>
                     <button
                       onClick={async () => {
-                        const ok = confirm(`Definir "${b.title}" como livro do mês?`);
-                        if (!ok) return;
-                        setBomMsg("");
-                        try {
-                          await api(`/groups/${encodeURIComponent(groupId)}/book-of-month`, {
-                            method: "POST",
-                            body: JSON.stringify({ bookId: b.id }),
-                          });
-                          setBomOpen(false);
-                          await refresh();
-                        } catch (e: any) {
-                          setBomMsg(e?.message || "Não foi possível definir o livro do mês.");
-                        }
+                        setConfirmState({
+                          isOpen: true,
+                          title: "Definir livro do mês",
+                          message: `Definir "${b.title}" como livro do mês?`,
+                          onConfirm: async () => {
+                            setBomMsg("");
+                            try {
+                              await api(`/groups/${encodeURIComponent(groupId)}/book-of-month`, {
+                                method: "POST",
+                                body: JSON.stringify({ bookId: b.id }),
+                              });
+                              setBomOpen(false);
+                              await refresh();
+                            } catch (e: any) {
+                              setBomMsg(e?.message || "Não foi possível definir o livro do mês.");
+                            } finally {
+                              setConfirmState(prev => ({ ...prev, isOpen: false }));
+                            }
+                          }
+                        });
                       }}
                       className="text-xs font-black px-3 py-2 rounded-xl bg-sun-500 hover:bg-sun-400 transition"
                     >
@@ -719,6 +752,15 @@ export default function GroupDetail() {
           )}
         </div>
       </Card>
+
+      <ConfirmModal
+        isOpen={confirmState.isOpen}
+        title={confirmState.title}
+        message={confirmState.message}
+        isDestructive={confirmState.isDestructive}
+        onConfirm={confirmState.onConfirm}
+        onCancel={() => setConfirmState(prev => ({ ...prev, isOpen: false }))}
+      />
     </div>
   );
 }
