@@ -13,18 +13,19 @@ datasource db {
 // --- USERS ---
 
 model User {
-  id               String     @id
-  name             String
-  bio              String
-  avatarUrl        String
-  coverUrl         String     @default("")
-  isAdmin          Boolean    @default(false)
-  passwordHash     String     @default("")
-  createdAt        DateTime   @default(now())
-  updatedAt        DateTime   @updatedAt
-  cities           UserCity[]
-  createdBooks     Book[]     @relation("BookCreator")
-  createdClubBooks ClubBook[] @relation("ClubBookCreator")
+  id                String     @id
+  name              String
+  bio               String
+  avatarUrl         String
+  coverUrl          String     @default("")
+  isAdmin           Boolean    @default(false)
+  passwordHash      String     @default("")
+  passwordResetCode String?
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+  cities            UserCity[]
+  createdBooks      Book[]     @relation("BookCreator")
+  createdClubBooks  ClubBook[] @relation("ClubBookCreator")
 }
 
 model Invitation {
@@ -60,8 +61,9 @@ model Book {
   indicationComment  String           @default("")
   createdAt          DateTime         @default(now())
 
-  createdByUser User?      @relation("BookCreator", fields: [createdByUserId], references: [id])
+  createdByUser User?        @relation("BookCreator", fields: [createdByUserId], references: [id])
   clubBooks     ClubBook[]
+  pollOptions   PollOption[]
 
   @@unique([title, author])
   @@index([title])
@@ -170,6 +172,7 @@ model ClubBook {
 
   messages  ClubBookMessage[]
   artifacts ClubBookArtifact[]
+  events    ClubEvent[]
 
   @@index([createdAt])
   @@index([isActive])
@@ -298,7 +301,8 @@ model Comment {
 
 model Poll {
   id          String   @id @default(cuid())
-  clubBookId  String
+  clubBookId  String?
+  city        String   @default("FORTALEZA")
   userId      String
   question    String
   description String?
@@ -311,20 +315,25 @@ model Poll {
   votes   PollVote[]
 
   @@index([clubBookId])
+  @@index([city])
   @@index([createdAt])
 }
 
 model PollOption {
   id       String  @id @default(cuid())
   pollId   String
+  type     String  @default("TEXT") // TEXT, BOOK
   text     String
   imageUrl String?
+  bookId   String?
   index    Int
 
   poll  Poll       @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  book  Book?      @relation(fields: [bookId], references: [id])
   votes PollVote[]
 
   @@index([pollId])
+  @@index([bookId])
 }
 
 model PollVote {
@@ -361,6 +370,8 @@ model ClubEvent {
   longitude       Float?
   startAt         DateTime
   endAt           DateTime?
+  clubBookId      String?
+  clubBook        ClubBook? @relation(fields: [clubBookId], references: [id])
   // coverUrl removed
   createdById     String
   createdAt       DateTime  @default(now())

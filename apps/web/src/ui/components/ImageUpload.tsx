@@ -5,35 +5,44 @@ import { api } from "../../lib/api";
 interface ImageUploadProps {
     value?: string;
     onChange: (url: string) => void;
+    onUploads?: (urls: string[]) => void;
     label?: string;
     className?: string;
+    multiple?: boolean;
 }
 
-export function ImageUpload({ value, onChange, label = "Upload Image", className = "" }: ImageUploadProps) {
+export function ImageUpload({ value, onChange, onUploads, label = "Upload Image", className = "", multiple = false }: ImageUploadProps) {
     const [uploading, setUploading] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
+        const files = e.target.files;
+        if (!files || files.length === 0) return;
 
         setUploading(true);
         try {
-            // Upload raw binary
-            const res = await fetch("/api/uploads", {
-                method: "POST",
-                headers: {
-                    "Content-Type": file.type,
-                    "x-file-name": file.name,
-                },
-                body: file,
+            const uploadPromises = Array.from(files).map(async (file) => {
+                const res = await fetch("/api/uploads", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": file.type,
+                        "x-file-name": file.name,
+                    },
+                    body: file,
+                });
+
+                if (!res.ok) throw new Error(`Upload failed for ${file.name}`);
+
+                const data = await res.json();
+                return data.url;
             });
 
-            if (!res.ok) throw new Error("Upload failed");
+            const uploadedUrls = await Promise.all(uploadPromises);
 
-            const data = await res.json();
-            if (data.url) {
-                onChange(data.url);
+            if (multiple && onUploads) {
+                onUploads(uploadedUrls);
+            } else if (uploadedUrls.length > 0) {
+                onChange(uploadedUrls[0]);
             }
         } catch (error) {
             console.error("Upload error:", error);
@@ -72,6 +81,7 @@ export function ImageUpload({ value, onChange, label = "Upload Image", className
                 ref={inputRef}
                 type="file"
                 accept="image/*"
+                multiple={multiple}
                 onChange={handleFileChange}
                 className="hidden"
                 id={`image-upload-${label}`}
@@ -94,7 +104,7 @@ export function ImageUpload({ value, onChange, label = "Upload Image", className
                             <LuImage className="w-6 h-6 text-neutral-400" />
                         </div>
                         <span className="text-sm font-bold">{label}</span>
-                        <span className="text-xs text-neutral-400">JPG, PNG, WebP</span>
+                        <span className="text-xs text-neutral-400">{multiple ? "Selecione uma ou mais fotos" : "JPG, PNG, WebP"}</span>
                     </>
                 )}
             </label>

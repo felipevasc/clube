@@ -114,7 +114,6 @@ export default function App() {
         <Route path="arquivos" element={<Files />} />
         <Route path="arquivos/:id" element={<FilesFolder />} />
         <Route path="enquetes" element={<Polls />} />
-        <Route path="enquetes/livro/:clubBookId" element={<PollsList />} />
         <Route path="enquetes/poll/:pollId" element={<PollDetail />} />
         <Route path="groups/*" element={<Navigate to="/" replace />} />
         <Route path="books/:id" element={<BookDetail />} />

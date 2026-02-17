@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import { api } from "../../lib/api";
 import PrimaryButton from "./PrimaryButton";
 import Avatar from "./Avatar";
+import EmojiPickerButton from "./EmojiPickerButton";
 
 type ClubBook = { id: string; title: string; author: string; colorKey: string; isActive: boolean };
 
@@ -39,6 +40,7 @@ export default function CreatePostModal({
     };
     const [transforming, setTransforming] = useState<Record<string, boolean>>({});
     const fileInputRef = useRef<HTMLInputElement | null>(null);
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
 
     useEffect(() => {
         if (isOpen) {
@@ -199,6 +201,28 @@ export default function CreatePostModal({
         }
     };
 
+    const insertEmoji = (emoji: string) => {
+        const el = textareaRef.current;
+        if (!el) {
+            setText(prev => prev + emoji);
+            return;
+        }
+
+        const start = el.selectionStart || 0;
+        const end = el.selectionEnd || 0;
+        const currentText = text;
+        const before = currentText.substring(0, start);
+        const after = currentText.substring(end);
+
+        const newText = before + emoji + after;
+        setText(newText);
+
+        setTimeout(() => {
+            el.focus();
+            el.setSelectionRange(start + emoji.length, start + emoji.length);
+        }, 0);
+    };
+
     if (!isOpen) return null;
 
     return (
@@ -210,7 +234,7 @@ export default function CreatePostModal({
             />
 
             {/* Modal Card */}
-            <div className="relative w-full max-w-lg bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90dvh] animate-in slide-in-from-bottom-10 fade-in zoom-in-95 duration-200">
+            <div className="relative w-full max-w-lg bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl !overflow-visible flex flex-col max-h-[90dvh] animate-in slide-in-from-bottom-10 fade-in zoom-in-95 duration-200">
 
                 {/* Header */}
                 <div className="px-4 py-3 border-b border-neutral-100 flex items-center justify-between">
@@ -274,13 +298,19 @@ export default function CreatePostModal({
                             <div className="w-10 h-10 rounded-full bg-neutral-100 flex-shrink-0 grid place-items-center">
                                 👤
                             </div>
-                            <textarea
-                                value={text}
-                                onChange={(e) => setText(e.target.value)}
-                                className="flex-1 min-h-[100px] resize-none outline-none text-base placeholder:text-neutral-400 mt-2"
-                                placeholder={clubBookId ? "Escreva seu comentário sobre o livro..." : "No que você está pensando?"}
-                                autoFocus
-                            />
+                            <div className="flex-1 flex flex-col">
+                                <textarea
+                                    ref={textareaRef}
+                                    value={text}
+                                    onChange={(e) => setText(e.target.value)}
+                                    className="w-full min-h-[120px] resize-none outline-none text-base placeholder:text-neutral-400 mt-2"
+                                    placeholder={clubBookId ? "Escreva seu comentário sobre o livro..." : "No que você está pensando?"}
+                                    autoFocus
+                                />
+                                <div className="flex justify-end pr-2">
+                                    <EmojiPickerButton onEmojiSelect={insertEmoji} align="right" />
+                                </div>
+                            </div>
                         </div>
 
                         {/* Image Previews & AI Selection */}

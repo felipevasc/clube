@@ -393,13 +393,17 @@ export function registerRoutes(app: Express) {
 
     app.get("/polls", async (_req, res) => {
         const req = _req as any;
-        const clubBookId = String(req.query?.clubBookId || "").trim();
-        if (!clubBookId) return res.status(400).json({ error: "missing clubBookId" });
+        const city = String(req.query?.city || "FORTALEZA").toUpperCase();
+        const clubBookId = req.query?.clubBookId ? String(req.query.clubBookId).trim() : undefined;
+
         const polls = await prisma.poll.findMany({
-            where: { clubBookId },
+            where: {
+                city,
+                ...(clubBookId ? { clubBookId } : {}),
+            },
             orderBy: { createdAt: "desc" },
             include: {
-                options: { orderBy: { index: "asc" } },
+                options: { orderBy: { index: "asc" }, include: { book: { include: { createdByUser: true } } } },
                 _count: { select: { votes: true } },
             },
         });
@@ -413,7 +417,10 @@ export function registerRoutes(app: Express) {
         const poll = await prisma.poll.findUnique({
             where: { id },
             include: {
-                options: { orderBy: { index: "asc" } },
+                options: {
+                    orderBy: { index: "asc" },
+                    include: { book: { include: { createdByUser: true } } }
+                },
                 votes: userId ? { where: { userId } } : false,
             },
         });
@@ -479,12 +486,14 @@ export function registerRoutes(app: Express) {
     app.post("/polls", async (req, res) => {
         const userId = getUsername(req);
         if (!userId) return res.status(401).json({ error: "unauthorized" });
+
         const input = PollCreateSchema.parse(req.body);
 
         const poll = await prisma.poll.create({
             data: {
                 userId,
                 clubBookId: input.clubBookId,
+                city: input.city,
                 question: input.question,
                 description: input.description,
                 imageUrl: input.imageUrl,
@@ -492,13 +501,15 @@ export function registerRoutes(app: Express) {
                 publicVotes: input.publicVotes,
                 options: {
                     create: input.options.map((o, i) => ({
-                        text: o.text,
+                        type: o.type,
+                        text: o.text || "",
                         imageUrl: o.imageUrl,
+                        bookId: o.bookId,
                         index: i,
                     })),
                 },
             },
-            include: { options: true },
+            include: { options: { include: { book: { include: { createdByUser: true } } } } },
         });
         res.status(201).json({ poll });
     });
@@ -511,6 +522,13 @@ export function registerRoutes(app: Express) {
 
         const poll = await prisma.poll.findUnique({ where: { id: pollId }, include: { options: true } });
         if (!poll) return res.status(404).json({ error: "poll not found" });
+
+        // Permission check: user must belong to the city of the poll
+        const userCities = await prisma.userCity.findMany({ where: { userId } });
+        const hasAccess = userCities.some(uc => uc.city === poll.city);
+        if (!hasAccess) {
+            return res.status(403).json({ error: "Você não tem permissão para votar nesta cidade" });
+        }
 
         const optionIdsRaw = (input as any)?.optionIds
             ? (input as any).optionIds as any[]

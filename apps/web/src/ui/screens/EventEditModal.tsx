@@ -1,9 +1,9 @@
-import { useState, useRef, useMemo } from "react";
+import { useState, useRef, useMemo, useEffect } from "react";
 import { api } from "../../lib/api";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { LuX, LuLoader, LuImage, LuMapPin, LuCalendar, LuType, LuAlignLeft, LuTrash2, LuPlus } from "react-icons/lu";
+import { LuX, LuLoader, LuImage, LuMapPin, LuCalendar, LuType, LuAlignLeft, LuTrash2, LuPlus, LuBookOpen } from "react-icons/lu";
 import { ImageUpload } from "../components/ImageUpload";
 import ConfirmModal from "../components/ConfirmModal";
 
@@ -30,6 +30,7 @@ interface ClubEventDetail {
     startAt: string;
     endAt?: string;
     photos: EventPhoto[];
+    clubBookId?: string;
 }
 
 interface EventEditModalProps {
@@ -59,6 +60,17 @@ export default function EventEditModal({ event, onClose, onUpdated }: EventEditM
     const [title, setTitle] = useState(event.title);
     const [description, setDescription] = useState(event.description);
     const [city, setCity] = useState(event.city as "FORTALEZA" | "BRASILIA");
+
+    // Club Books
+    const [clubBooks, setClubBooks] = useState<any[]>([]);
+    const [selectedClubBookId, setSelectedClubBookId] = useState(event.clubBookId || "");
+    const [showBookPicker, setShowBookPicker] = useState(false);
+
+    useEffect(() => {
+        api(`/club-books?city=${city}`).then((res: any) => {
+            setClubBooks(res.clubBooks || []);
+        }).catch(err => console.error("Failed to fetch club books", err));
+    }, [city]);
 
     // ISO format for datetime-local input: YYYY-MM-DDThh:mm
     const formatForInput = (iso?: string) => iso ? iso.slice(0, 16) : "";
@@ -145,6 +157,7 @@ export default function EventEditModal({ event, onClose, onUpdated }: EventEditM
                 startAt: new Date(startAt).toISOString(),
                 endAt: endAt ? new Date(endAt).toISOString() : undefined,
                 locationPhotos: locationPhotos.filter(p => !!p),
+                clubBookId: selectedClubBookId || undefined,
             };
 
             await api(`/events/${event.id}`, {
@@ -395,8 +408,105 @@ export default function EventEditModal({ event, onClose, onUpdated }: EventEditM
                                 </div>
                             </div>
                         </section>
+
+                        {/* Book Selection */}
+                        <section className="space-y-4">
+                            <div className="flex items-center gap-2 text-sun-600 font-black uppercase text-xs tracking-widest">
+                                <LuAlignLeft size={14} />
+                                <span>Livro do Mês</span>
+                            </div>
+                            <div className="relative">
+                                {!selectedClubBookId ? (
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowBookPicker(!showBookPicker)}
+                                        className="w-full h-14 bg-neutral-50 rounded-2xl border-2 border-dashed border-neutral-200 flex items-center justify-center gap-2 text-neutral-400 hover:border-sun-400 hover:bg-sun-50 hover:text-sun-600 transition-all"
+                                    >
+                                        <LuPlus className="w-5 h-5" />
+                                        <span className="text-sm font-bold">Associar Livro</span>
+                                    </button>
+                                ) : (
+                                    <div className="space-y-2">
+                                        {clubBooks.filter(b => b.id === selectedClubBookId).map(book => (
+                                            <div key={book.id} className="flex items-center gap-4 p-3 bg-white rounded-xl border border-black/5 shadow-sm relative group">
+                                                <div className="w-12 h-16 bg-neutral-200 rounded-md overflow-hidden shrink-0 shadow-sm border border-black/5">
+                                                    {book.coverUrl ? (
+                                                        <img src={book.coverUrl} className="w-full h-full object-cover" />
+                                                    ) : (
+                                                        <div className="w-full h-full flex items-center justify-center bg-neutral-100 text-neutral-300">
+                                                            <LuImage />
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="text-xs font-bold text-sun-600 uppercase mb-0.5">{book.month}/{book.year}</div>
+                                                    <div className="font-bold text-neutral-900 leading-tight truncate">{book.title}</div>
+                                                    <div className="text-xs text-neutral-500 truncate">{book.author}</div>
+                                                </div>
+
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setSelectedClubBookId("")}
+                                                    className="absolute top-2 right-2 w-6 h-6 bg-white text-neutral-400 rounded-full shadow-sm flex items-center justify-center hover:text-red-500 hover:bg-red-50 transition-colors border border-black/5 z-20"
+                                                >
+                                                    <LuTrash2 size={14} />
+                                                </button>
+                                            </div>
+                                        ))}
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowBookPicker(!showBookPicker)}
+                                            className="text-xs font-bold text-neutral-400 hover:text-neutral-600 hover:underline px-1"
+                                        >
+                                            Trocar livro
+                                        </button>
+                                    </div>
+                                )}
+
+                                {/* Custom Popover */}
+                                {showBookPicker && (
+                                    <div className="absolute top-full left-0 right-0 mt-2 z-50 bg-white rounded-2xl shadow-xl border border-neutral-100 p-2 max-h-64 overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-200">
+                                        <div className="px-3 py-2 flex items-center justify-between border-b border-neutral-50 mb-1">
+                                            <span className="text-[10px] font-black text-neutral-400 uppercase tracking-widest">Selecione o Livro</span>
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowBookPicker(false)}
+                                                className="w-5 h-5 rounded-full hover:bg-neutral-100 flex items-center justify-center text-neutral-400"
+                                            >
+                                                <LuX size={12} />
+                                            </button>
+                                        </div>
+                                        <div className="space-y-1">
+                                            {clubBooks.map(b => (
+                                                <button
+                                                    key={b.id}
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setSelectedClubBookId(b.id);
+                                                        setShowBookPicker(false);
+                                                    }}
+                                                    className={`w-full text-left p-2 rounded-xl flex items-center gap-3 transition-colors group ${selectedClubBookId === b.id ? 'bg-sun-50' : 'hover:bg-neutral-50'}`}
+                                                >
+                                                    <div className="w-8 h-10 rounded bg-neutral-100 overflow-hidden shrink-0 border border-black/5">
+                                                        {b.coverUrl ? <img src={b.coverUrl} className="w-full h-full object-cover" /> : null}
+                                                    </div>
+                                                    <div className="flex-1 min-w-0">
+                                                        <div className="flex items-center justify-between">
+                                                            <div className={`text-xs font-bold truncate ${selectedClubBookId === b.id ? 'text-sun-700' : 'text-neutral-900'}`}>{b.title}</div>
+                                                            <div className="text-[10px] font-black text-neutral-400 bg-neutral-100 px-1.5 rounded">{b.month}/{b.year}</div>
+                                                        </div>
+                                                        <div className="text-[10px] text-neutral-500 truncate">{b.author}</div>
+                                                    </div>
+                                                </button>
+                                            ))}
+                                            {clubBooks.length === 0 && <div className="p-4 text-center text-xs text-neutral-400 italic">Nenhum livro disponível.</div>}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </section>
                     </form>
-                </div>
+                </div >
 
                 <footer className="p-8 border-t border-black/5 bg-neutral-50/50 flex flex-wrap gap-4">
                     <button
@@ -425,7 +535,7 @@ export default function EventEditModal({ event, onClose, onUpdated }: EventEditM
                         </button>
                     </div>
                 </footer>
-            </div>
+            </div >
 
             <ConfirmModal
                 isOpen={showConfirmDelete}
@@ -436,6 +546,6 @@ export default function EventEditModal({ event, onClose, onUpdated }: EventEditM
                 onConfirm={handleDelete}
                 onCancel={() => setShowConfirmDelete(false)}
             />
-        </div>
+        </div >
     );
 }

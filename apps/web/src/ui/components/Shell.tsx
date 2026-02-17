@@ -21,13 +21,7 @@ interface User {
   cities: string[];
 }
 
-interface ClubBook {
-  id: string;
-  title: string;
-  coverUrl?: string;
-  city: string;
-  colorKey: string;
-}
+
 
 function Tab({ to, icon: Icon, label }: { to: string; icon: any; label: string }) {
   return (
@@ -58,36 +52,17 @@ function Tab({ to, icon: Icon, label }: { to: string; icon: any; label: string }
 
 export default function Shell() {
   const [user, setUser] = useState<User | null>(null);
-  const [activeBooks, setActiveBooks] = useState<ClubBook[]>([]);
 
   useEffect(() => {
     (async () => {
       try {
         const out = await api<{ user: User }>("/me");
         setUser(out.user);
-
-        if (out.user.cities && out.user.cities.length > 0) {
-          const books = await Promise.all(
-            out.user.cities.map(async (city) => {
-              try {
-                const res = await api<{ clubBook: ClubBook | null }>(`/club-books/active?city=${encodeURIComponent(city)}`);
-                return res.clubBook;
-              } catch {
-                return null;
-              }
-            })
-          );
-          setActiveBooks(books.filter((b): b is ClubBook => !!b));
-        }
       } catch (e) {
         console.error("Failed to fetch current user in shell", e);
       }
     })();
   }, []);
-
-  const subtitle = activeBooks.length > 0
-    ? activeBooks.map(b => b.title).join(" & ")
-    : "Meu Perfil";
 
   return (
     <div className="h-dvh flex flex-col overflow-hidden bg-[radial-gradient(1200px_600px_at_50%_-10%,rgba(255,191,15,0.45),transparent_60%),radial-gradient(900px_500px_at_20%_30%,rgba(255,216,79,0.35),transparent_55%)]">
@@ -97,26 +72,11 @@ export default function Shell() {
             <Avatar user={user || { id: "?", name: "?" }} size={40} />
             <div className="flex-1 min-w-0">
               <div className="text-sm font-black tracking-tight truncate">{user?.name || "Clube"}</div>
-              <div className="text-[10px] text-neutral-500 font-bold uppercase tracking-wider truncate">{subtitle}</div>
+              <div className="text-[10px] text-neutral-500 font-bold uppercase tracking-wider truncate">Margarida's book club</div>
             </div>
           </Link>
 
           <div className="flex items-center gap-3">
-            {activeBooks.length > 0 && (
-              <div className="flex -space-x-3">
-                {activeBooks.map((b, i) => (
-                  <div key={b.id} className="relative w-10 h-10 rounded-xl overflow-hidden border border-white shadow-sm bg-neutral-100" style={{ zIndex: activeBooks.length - i }}>
-                    {b.coverUrl ? (
-                      <img src={b.coverUrl} alt={b.title} className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full grid place-items-center bg-sun-100 font-black text-[10px] text-sun-600">
-                        {b.title.slice(0, 1).toUpperCase()}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
 
             <button
               onClick={async () => {

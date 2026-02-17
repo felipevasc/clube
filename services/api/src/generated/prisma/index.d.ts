@@ -3230,12 +3230,14 @@ export namespace Prisma {
     cities: number
     createdBooks: number
     createdClubBooks: number
+    clubEventPhotos: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     cities?: boolean | UserCountOutputTypeCountCitiesArgs
     createdBooks?: boolean | UserCountOutputTypeCountCreatedBooksArgs
     createdClubBooks?: boolean | UserCountOutputTypeCountCreatedClubBooksArgs
+    clubEventPhotos?: boolean | UserCountOutputTypeCountClubEventPhotosArgs
   }
 
   // Custom InputTypes
@@ -3270,6 +3272,13 @@ export namespace Prisma {
     where?: ClubBookWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountClubEventPhotosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClubEventPhotoWhereInput
+  }
+
 
   /**
    * Count Type BookCountOutputType
@@ -3279,12 +3288,14 @@ export namespace Prisma {
     categories: number
     styleImages: number
     clubBooks: number
+    pollOptions: number
   }
 
   export type BookCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     categories?: boolean | BookCountOutputTypeCountCategoriesArgs
     styleImages?: boolean | BookCountOutputTypeCountStyleImagesArgs
     clubBooks?: boolean | BookCountOutputTypeCountClubBooksArgs
+    pollOptions?: boolean | BookCountOutputTypeCountPollOptionsArgs
   }
 
   // Custom InputTypes
@@ -3317,6 +3328,13 @@ export namespace Prisma {
    */
   export type BookCountOutputTypeCountClubBooksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ClubBookWhereInput
+  }
+
+  /**
+   * BookCountOutputType without action
+   */
+  export type BookCountOutputTypeCountPollOptionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PollOptionWhereInput
   }
 
 
@@ -3416,11 +3434,13 @@ export namespace Prisma {
   export type ClubBookCountOutputType = {
     messages: number
     artifacts: number
+    events: number
   }
 
   export type ClubBookCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     messages?: boolean | ClubBookCountOutputTypeCountMessagesArgs
     artifacts?: boolean | ClubBookCountOutputTypeCountArtifactsArgs
+    events?: boolean | ClubBookCountOutputTypeCountEventsArgs
   }
 
   // Custom InputTypes
@@ -3446,6 +3466,13 @@ export namespace Prisma {
    */
   export type ClubBookCountOutputTypeCountArtifactsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ClubBookArtifactWhereInput
+  }
+
+  /**
+   * ClubBookCountOutputType without action
+   */
+  export type ClubBookCountOutputTypeCountEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClubEventWhereInput
   }
 
 
@@ -3662,6 +3689,7 @@ export namespace Prisma {
     coverUrl: string | null
     isAdmin: boolean | null
     passwordHash: string | null
+    passwordResetCode: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -3674,6 +3702,7 @@ export namespace Prisma {
     coverUrl: string | null
     isAdmin: boolean | null
     passwordHash: string | null
+    passwordResetCode: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -3686,6 +3715,7 @@ export namespace Prisma {
     coverUrl: number
     isAdmin: number
     passwordHash: number
+    passwordResetCode: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -3700,6 +3730,7 @@ export namespace Prisma {
     coverUrl?: true
     isAdmin?: true
     passwordHash?: true
+    passwordResetCode?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3712,6 +3743,7 @@ export namespace Prisma {
     coverUrl?: true
     isAdmin?: true
     passwordHash?: true
+    passwordResetCode?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3724,6 +3756,7 @@ export namespace Prisma {
     coverUrl?: true
     isAdmin?: true
     passwordHash?: true
+    passwordResetCode?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -3809,6 +3842,7 @@ export namespace Prisma {
     coverUrl: string
     isAdmin: boolean
     passwordHash: string
+    passwordResetCode: string | null
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
@@ -3838,11 +3872,13 @@ export namespace Prisma {
     coverUrl?: boolean
     isAdmin?: boolean
     passwordHash?: boolean
+    passwordResetCode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     cities?: boolean | User$citiesArgs<ExtArgs>
     createdBooks?: boolean | User$createdBooksArgs<ExtArgs>
     createdClubBooks?: boolean | User$createdClubBooksArgs<ExtArgs>
+    clubEventPhotos?: boolean | User$clubEventPhotosArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -3854,6 +3890,7 @@ export namespace Prisma {
     coverUrl?: boolean
     isAdmin?: boolean
     passwordHash?: boolean
+    passwordResetCode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -3866,6 +3903,7 @@ export namespace Prisma {
     coverUrl?: boolean
     isAdmin?: boolean
     passwordHash?: boolean
+    passwordResetCode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -3878,15 +3916,17 @@ export namespace Prisma {
     coverUrl?: boolean
     isAdmin?: boolean
     passwordHash?: boolean
+    passwordResetCode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "bio" | "avatarUrl" | "coverUrl" | "isAdmin" | "passwordHash" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "bio" | "avatarUrl" | "coverUrl" | "isAdmin" | "passwordHash" | "passwordResetCode" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     cities?: boolean | User$citiesArgs<ExtArgs>
     createdBooks?: boolean | User$createdBooksArgs<ExtArgs>
     createdClubBooks?: boolean | User$createdClubBooksArgs<ExtArgs>
+    clubEventPhotos?: boolean | User$clubEventPhotosArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -3898,6 +3938,7 @@ export namespace Prisma {
       cities: Prisma.$UserCityPayload<ExtArgs>[]
       createdBooks: Prisma.$BookPayload<ExtArgs>[]
       createdClubBooks: Prisma.$ClubBookPayload<ExtArgs>[]
+      clubEventPhotos: Prisma.$ClubEventPhotoPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3907,6 +3948,7 @@ export namespace Prisma {
       coverUrl: string
       isAdmin: boolean
       passwordHash: string
+      passwordResetCode: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["user"]>
@@ -4306,6 +4348,7 @@ export namespace Prisma {
     cities<T extends User$citiesArgs<ExtArgs> = {}>(args?: Subset<T, User$citiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserCityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     createdBooks<T extends User$createdBooksArgs<ExtArgs> = {}>(args?: Subset<T, User$createdBooksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     createdClubBooks<T extends User$createdClubBooksArgs<ExtArgs> = {}>(args?: Subset<T, User$createdClubBooksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClubBookPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    clubEventPhotos<T extends User$clubEventPhotosArgs<ExtArgs> = {}>(args?: Subset<T, User$clubEventPhotosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClubEventPhotoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4342,6 +4385,7 @@ export namespace Prisma {
     readonly coverUrl: FieldRef<"User", 'String'>
     readonly isAdmin: FieldRef<"User", 'Boolean'>
     readonly passwordHash: FieldRef<"User", 'String'>
+    readonly passwordResetCode: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
   }
@@ -4799,6 +4843,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ClubBookScalarFieldEnum | ClubBookScalarFieldEnum[]
+  }
+
+  /**
+   * User.clubEventPhotos
+   */
+  export type User$clubEventPhotosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEventPhoto
+     */
+    select?: ClubEventPhotoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEventPhoto
+     */
+    omit?: ClubEventPhotoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventPhotoInclude<ExtArgs> | null
+    where?: ClubEventPhotoWhereInput
+    orderBy?: ClubEventPhotoOrderByWithRelationInput | ClubEventPhotoOrderByWithRelationInput[]
+    cursor?: ClubEventPhotoWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ClubEventPhotoScalarFieldEnum | ClubEventPhotoScalarFieldEnum[]
   }
 
   /**
@@ -7056,6 +7124,7 @@ export namespace Prisma {
     styleImages?: boolean | Book$styleImagesArgs<ExtArgs>
     createdByUser?: boolean | Book$createdByUserArgs<ExtArgs>
     clubBooks?: boolean | Book$clubBooksArgs<ExtArgs>
+    pollOptions?: boolean | Book$pollOptionsArgs<ExtArgs>
     _count?: boolean | BookCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["book"]>
 
@@ -7103,6 +7172,7 @@ export namespace Prisma {
     styleImages?: boolean | Book$styleImagesArgs<ExtArgs>
     createdByUser?: boolean | Book$createdByUserArgs<ExtArgs>
     clubBooks?: boolean | Book$clubBooksArgs<ExtArgs>
+    pollOptions?: boolean | Book$pollOptionsArgs<ExtArgs>
     _count?: boolean | BookCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type BookIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7119,6 +7189,7 @@ export namespace Prisma {
       styleImages: Prisma.$BookStyleImagePayload<ExtArgs>[]
       createdByUser: Prisma.$UserPayload<ExtArgs> | null
       clubBooks: Prisma.$ClubBookPayload<ExtArgs>[]
+      pollOptions: Prisma.$PollOptionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -7528,6 +7599,7 @@ export namespace Prisma {
     styleImages<T extends Book$styleImagesArgs<ExtArgs> = {}>(args?: Subset<T, Book$styleImagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookStyleImagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     createdByUser<T extends Book$createdByUserArgs<ExtArgs> = {}>(args?: Subset<T, Book$createdByUserArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     clubBooks<T extends Book$clubBooksArgs<ExtArgs> = {}>(args?: Subset<T, Book$clubBooksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClubBookPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    pollOptions<T extends Book$pollOptionsArgs<ExtArgs> = {}>(args?: Subset<T, Book$pollOptionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PollOptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8048,6 +8120,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ClubBookScalarFieldEnum | ClubBookScalarFieldEnum[]
+  }
+
+  /**
+   * Book.pollOptions
+   */
+  export type Book$pollOptionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PollOption
+     */
+    select?: PollOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PollOption
+     */
+    omit?: PollOptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PollOptionInclude<ExtArgs> | null
+    where?: PollOptionWhereInput
+    orderBy?: PollOptionOrderByWithRelationInput | PollOptionOrderByWithRelationInput[]
+    cursor?: PollOptionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PollOptionScalarFieldEnum | PollOptionScalarFieldEnum[]
   }
 
   /**
@@ -15769,6 +15865,7 @@ export namespace Prisma {
     book?: boolean | BookDefaultArgs<ExtArgs>
     messages?: boolean | ClubBook$messagesArgs<ExtArgs>
     artifacts?: boolean | ClubBook$artifactsArgs<ExtArgs>
+    events?: boolean | ClubBook$eventsArgs<ExtArgs>
     _count?: boolean | ClubBookCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["clubBook"]>
 
@@ -15833,6 +15930,7 @@ export namespace Prisma {
     book?: boolean | BookDefaultArgs<ExtArgs>
     messages?: boolean | ClubBook$messagesArgs<ExtArgs>
     artifacts?: boolean | ClubBook$artifactsArgs<ExtArgs>
+    events?: boolean | ClubBook$eventsArgs<ExtArgs>
     _count?: boolean | ClubBookCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ClubBookIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -15851,6 +15949,7 @@ export namespace Prisma {
       book: Prisma.$BookPayload<ExtArgs>
       messages: Prisma.$ClubBookMessagePayload<ExtArgs>[]
       artifacts: Prisma.$ClubBookArtifactPayload<ExtArgs>[]
+      events: Prisma.$ClubEventPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -16265,6 +16364,7 @@ export namespace Prisma {
     book<T extends BookDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BookDefaultArgs<ExtArgs>>): Prisma__BookClient<$Result.GetResult<Prisma.$BookPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     messages<T extends ClubBook$messagesArgs<ExtArgs> = {}>(args?: Subset<T, ClubBook$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClubBookMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     artifacts<T extends ClubBook$artifactsArgs<ExtArgs> = {}>(args?: Subset<T, ClubBook$artifactsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClubBookArtifactPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    events<T extends ClubBook$eventsArgs<ExtArgs> = {}>(args?: Subset<T, ClubBook$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClubEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -16747,6 +16847,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ClubBookArtifactScalarFieldEnum | ClubBookArtifactScalarFieldEnum[]
+  }
+
+  /**
+   * ClubBook.events
+   */
+  export type ClubBook$eventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubEvent
+     */
+    select?: ClubEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubEvent
+     */
+    omit?: ClubEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventInclude<ExtArgs> | null
+    where?: ClubEventWhereInput
+    orderBy?: ClubEventOrderByWithRelationInput | ClubEventOrderByWithRelationInput[]
+    cursor?: ClubEventWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ClubEventScalarFieldEnum | ClubEventScalarFieldEnum[]
   }
 
   /**
@@ -26409,6 +26533,7 @@ export namespace Prisma {
   export type PollMinAggregateOutputType = {
     id: string | null
     clubBookId: string | null
+    city: string | null
     userId: string | null
     question: string | null
     description: string | null
@@ -26421,6 +26546,7 @@ export namespace Prisma {
   export type PollMaxAggregateOutputType = {
     id: string | null
     clubBookId: string | null
+    city: string | null
     userId: string | null
     question: string | null
     description: string | null
@@ -26433,6 +26559,7 @@ export namespace Prisma {
   export type PollCountAggregateOutputType = {
     id: number
     clubBookId: number
+    city: number
     userId: number
     question: number
     description: number
@@ -26447,6 +26574,7 @@ export namespace Prisma {
   export type PollMinAggregateInputType = {
     id?: true
     clubBookId?: true
+    city?: true
     userId?: true
     question?: true
     description?: true
@@ -26459,6 +26587,7 @@ export namespace Prisma {
   export type PollMaxAggregateInputType = {
     id?: true
     clubBookId?: true
+    city?: true
     userId?: true
     question?: true
     description?: true
@@ -26471,6 +26600,7 @@ export namespace Prisma {
   export type PollCountAggregateInputType = {
     id?: true
     clubBookId?: true
+    city?: true
     userId?: true
     question?: true
     description?: true
@@ -26555,7 +26685,8 @@ export namespace Prisma {
 
   export type PollGroupByOutputType = {
     id: string
-    clubBookId: string
+    clubBookId: string | null
+    city: string
     userId: string
     question: string
     description: string | null
@@ -26585,6 +26716,7 @@ export namespace Prisma {
   export type PollSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     clubBookId?: boolean
+    city?: boolean
     userId?: boolean
     question?: boolean
     description?: boolean
@@ -26600,6 +26732,7 @@ export namespace Prisma {
   export type PollSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     clubBookId?: boolean
+    city?: boolean
     userId?: boolean
     question?: boolean
     description?: boolean
@@ -26612,6 +26745,7 @@ export namespace Prisma {
   export type PollSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     clubBookId?: boolean
+    city?: boolean
     userId?: boolean
     question?: boolean
     description?: boolean
@@ -26624,6 +26758,7 @@ export namespace Prisma {
   export type PollSelectScalar = {
     id?: boolean
     clubBookId?: boolean
+    city?: boolean
     userId?: boolean
     question?: boolean
     description?: boolean
@@ -26633,7 +26768,7 @@ export namespace Prisma {
     createdAt?: boolean
   }
 
-  export type PollOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "clubBookId" | "userId" | "question" | "description" | "imageUrl" | "multiChoice" | "publicVotes" | "createdAt", ExtArgs["result"]["poll"]>
+  export type PollOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "clubBookId" | "city" | "userId" | "question" | "description" | "imageUrl" | "multiChoice" | "publicVotes" | "createdAt", ExtArgs["result"]["poll"]>
   export type PollInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     options?: boolean | Poll$optionsArgs<ExtArgs>
     votes?: boolean | Poll$votesArgs<ExtArgs>
@@ -26650,7 +26785,8 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      clubBookId: string
+      clubBookId: string | null
+      city: string
       userId: string
       question: string
       description: string | null
@@ -27085,6 +27221,7 @@ export namespace Prisma {
   interface PollFieldRefs {
     readonly id: FieldRef<"Poll", 'String'>
     readonly clubBookId: FieldRef<"Poll", 'String'>
+    readonly city: FieldRef<"Poll", 'String'>
     readonly userId: FieldRef<"Poll", 'String'>
     readonly question: FieldRef<"Poll", 'String'>
     readonly description: FieldRef<"Poll", 'String'>
@@ -27567,24 +27704,30 @@ export namespace Prisma {
   export type PollOptionMinAggregateOutputType = {
     id: string | null
     pollId: string | null
+    type: string | null
     text: string | null
     imageUrl: string | null
+    bookId: string | null
     index: number | null
   }
 
   export type PollOptionMaxAggregateOutputType = {
     id: string | null
     pollId: string | null
+    type: string | null
     text: string | null
     imageUrl: string | null
+    bookId: string | null
     index: number | null
   }
 
   export type PollOptionCountAggregateOutputType = {
     id: number
     pollId: number
+    type: number
     text: number
     imageUrl: number
+    bookId: number
     index: number
     _all: number
   }
@@ -27601,24 +27744,30 @@ export namespace Prisma {
   export type PollOptionMinAggregateInputType = {
     id?: true
     pollId?: true
+    type?: true
     text?: true
     imageUrl?: true
+    bookId?: true
     index?: true
   }
 
   export type PollOptionMaxAggregateInputType = {
     id?: true
     pollId?: true
+    type?: true
     text?: true
     imageUrl?: true
+    bookId?: true
     index?: true
   }
 
   export type PollOptionCountAggregateInputType = {
     id?: true
     pollId?: true
+    type?: true
     text?: true
     imageUrl?: true
+    bookId?: true
     index?: true
     _all?: true
   }
@@ -27712,8 +27861,10 @@ export namespace Prisma {
   export type PollOptionGroupByOutputType = {
     id: string
     pollId: string
+    type: string
     text: string
     imageUrl: string | null
+    bookId: string | null
     index: number
     _count: PollOptionCountAggregateOutputType | null
     _avg: PollOptionAvgAggregateOutputType | null
@@ -27739,10 +27890,13 @@ export namespace Prisma {
   export type PollOptionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     pollId?: boolean
+    type?: boolean
     text?: boolean
     imageUrl?: boolean
+    bookId?: boolean
     index?: boolean
     poll?: boolean | PollDefaultArgs<ExtArgs>
+    book?: boolean | PollOption$bookArgs<ExtArgs>
     votes?: boolean | PollOption$votesArgs<ExtArgs>
     _count?: boolean | PollOptionCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["pollOption"]>
@@ -27750,53 +27904,67 @@ export namespace Prisma {
   export type PollOptionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     pollId?: boolean
+    type?: boolean
     text?: boolean
     imageUrl?: boolean
+    bookId?: boolean
     index?: boolean
     poll?: boolean | PollDefaultArgs<ExtArgs>
+    book?: boolean | PollOption$bookArgs<ExtArgs>
   }, ExtArgs["result"]["pollOption"]>
 
   export type PollOptionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     pollId?: boolean
+    type?: boolean
     text?: boolean
     imageUrl?: boolean
+    bookId?: boolean
     index?: boolean
     poll?: boolean | PollDefaultArgs<ExtArgs>
+    book?: boolean | PollOption$bookArgs<ExtArgs>
   }, ExtArgs["result"]["pollOption"]>
 
   export type PollOptionSelectScalar = {
     id?: boolean
     pollId?: boolean
+    type?: boolean
     text?: boolean
     imageUrl?: boolean
+    bookId?: boolean
     index?: boolean
   }
 
-  export type PollOptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "pollId" | "text" | "imageUrl" | "index", ExtArgs["result"]["pollOption"]>
+  export type PollOptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "pollId" | "type" | "text" | "imageUrl" | "bookId" | "index", ExtArgs["result"]["pollOption"]>
   export type PollOptionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     poll?: boolean | PollDefaultArgs<ExtArgs>
+    book?: boolean | PollOption$bookArgs<ExtArgs>
     votes?: boolean | PollOption$votesArgs<ExtArgs>
     _count?: boolean | PollOptionCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PollOptionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     poll?: boolean | PollDefaultArgs<ExtArgs>
+    book?: boolean | PollOption$bookArgs<ExtArgs>
   }
   export type PollOptionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     poll?: boolean | PollDefaultArgs<ExtArgs>
+    book?: boolean | PollOption$bookArgs<ExtArgs>
   }
 
   export type $PollOptionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "PollOption"
     objects: {
       poll: Prisma.$PollPayload<ExtArgs>
+      book: Prisma.$BookPayload<ExtArgs> | null
       votes: Prisma.$PollVotePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       pollId: string
+      type: string
       text: string
       imageUrl: string | null
+      bookId: string | null
       index: number
     }, ExtArgs["result"]["pollOption"]>
     composites: {}
@@ -28193,6 +28361,7 @@ export namespace Prisma {
   export interface Prisma__PollOptionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     poll<T extends PollDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PollDefaultArgs<ExtArgs>>): Prisma__PollClient<$Result.GetResult<Prisma.$PollPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    book<T extends PollOption$bookArgs<ExtArgs> = {}>(args?: Subset<T, PollOption$bookArgs<ExtArgs>>): Prisma__BookClient<$Result.GetResult<Prisma.$BookPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     votes<T extends PollOption$votesArgs<ExtArgs> = {}>(args?: Subset<T, PollOption$votesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PollVotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -28225,8 +28394,10 @@ export namespace Prisma {
   interface PollOptionFieldRefs {
     readonly id: FieldRef<"PollOption", 'String'>
     readonly pollId: FieldRef<"PollOption", 'String'>
+    readonly type: FieldRef<"PollOption", 'String'>
     readonly text: FieldRef<"PollOption", 'String'>
     readonly imageUrl: FieldRef<"PollOption", 'String'>
+    readonly bookId: FieldRef<"PollOption", 'String'>
     readonly index: FieldRef<"PollOption", 'Int'>
   }
     
@@ -28619,6 +28790,25 @@ export namespace Prisma {
      * Limit how many PollOptions to delete.
      */
     limit?: number
+  }
+
+  /**
+   * PollOption.book
+   */
+  export type PollOption$bookArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Book
+     */
+    select?: BookSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Book
+     */
+    omit?: BookOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookInclude<ExtArgs> | null
+    where?: BookWhereInput
   }
 
   /**
@@ -29766,6 +29956,7 @@ export namespace Prisma {
     longitude: number | null
     startAt: Date | null
     endAt: Date | null
+    clubBookId: string | null
     createdById: string | null
     createdAt: Date | null
   }
@@ -29786,6 +29977,7 @@ export namespace Prisma {
     longitude: number | null
     startAt: Date | null
     endAt: Date | null
+    clubBookId: string | null
     createdById: string | null
     createdAt: Date | null
   }
@@ -29806,6 +29998,7 @@ export namespace Prisma {
     longitude: number
     startAt: number
     endAt: number
+    clubBookId: number
     createdById: number
     createdAt: number
     _all: number
@@ -29838,6 +30031,7 @@ export namespace Prisma {
     longitude?: true
     startAt?: true
     endAt?: true
+    clubBookId?: true
     createdById?: true
     createdAt?: true
   }
@@ -29858,6 +30052,7 @@ export namespace Prisma {
     longitude?: true
     startAt?: true
     endAt?: true
+    clubBookId?: true
     createdById?: true
     createdAt?: true
   }
@@ -29878,6 +30073,7 @@ export namespace Prisma {
     longitude?: true
     startAt?: true
     endAt?: true
+    clubBookId?: true
     createdById?: true
     createdAt?: true
     _all?: true
@@ -29985,6 +30181,7 @@ export namespace Prisma {
     longitude: number | null
     startAt: Date
     endAt: Date | null
+    clubBookId: string | null
     createdById: string
     createdAt: Date
     _count: ClubEventCountAggregateOutputType | null
@@ -30024,8 +30221,10 @@ export namespace Prisma {
     longitude?: boolean
     startAt?: boolean
     endAt?: boolean
+    clubBookId?: boolean
     createdById?: boolean
     createdAt?: boolean
+    clubBook?: boolean | ClubEvent$clubBookArgs<ExtArgs>
     participants?: boolean | ClubEvent$participantsArgs<ExtArgs>
     photos?: boolean | ClubEvent$photosArgs<ExtArgs>
     _count?: boolean | ClubEventCountOutputTypeDefaultArgs<ExtArgs>
@@ -30047,8 +30246,10 @@ export namespace Prisma {
     longitude?: boolean
     startAt?: boolean
     endAt?: boolean
+    clubBookId?: boolean
     createdById?: boolean
     createdAt?: boolean
+    clubBook?: boolean | ClubEvent$clubBookArgs<ExtArgs>
   }, ExtArgs["result"]["clubEvent"]>
 
   export type ClubEventSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -30067,8 +30268,10 @@ export namespace Prisma {
     longitude?: boolean
     startAt?: boolean
     endAt?: boolean
+    clubBookId?: boolean
     createdById?: boolean
     createdAt?: boolean
+    clubBook?: boolean | ClubEvent$clubBookArgs<ExtArgs>
   }, ExtArgs["result"]["clubEvent"]>
 
   export type ClubEventSelectScalar = {
@@ -30087,22 +30290,29 @@ export namespace Prisma {
     longitude?: boolean
     startAt?: boolean
     endAt?: boolean
+    clubBookId?: boolean
     createdById?: boolean
     createdAt?: boolean
   }
 
-  export type ClubEventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "city" | "location" | "addressStreet" | "addressNumber" | "addressDistrict" | "addressCity" | "addressState" | "addressZip" | "latitude" | "longitude" | "startAt" | "endAt" | "createdById" | "createdAt", ExtArgs["result"]["clubEvent"]>
+  export type ClubEventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "city" | "location" | "addressStreet" | "addressNumber" | "addressDistrict" | "addressCity" | "addressState" | "addressZip" | "latitude" | "longitude" | "startAt" | "endAt" | "clubBookId" | "createdById" | "createdAt", ExtArgs["result"]["clubEvent"]>
   export type ClubEventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    clubBook?: boolean | ClubEvent$clubBookArgs<ExtArgs>
     participants?: boolean | ClubEvent$participantsArgs<ExtArgs>
     photos?: boolean | ClubEvent$photosArgs<ExtArgs>
     _count?: boolean | ClubEventCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type ClubEventIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type ClubEventIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type ClubEventIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    clubBook?: boolean | ClubEvent$clubBookArgs<ExtArgs>
+  }
+  export type ClubEventIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    clubBook?: boolean | ClubEvent$clubBookArgs<ExtArgs>
+  }
 
   export type $ClubEventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ClubEvent"
     objects: {
+      clubBook: Prisma.$ClubBookPayload<ExtArgs> | null
       participants: Prisma.$ClubEventParticipantPayload<ExtArgs>[]
       photos: Prisma.$ClubEventPhotoPayload<ExtArgs>[]
     }
@@ -30122,6 +30332,7 @@ export namespace Prisma {
       longitude: number | null
       startAt: Date
       endAt: Date | null
+      clubBookId: string | null
       createdById: string
       createdAt: Date
     }, ExtArgs["result"]["clubEvent"]>
@@ -30518,6 +30729,7 @@ export namespace Prisma {
    */
   export interface Prisma__ClubEventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    clubBook<T extends ClubEvent$clubBookArgs<ExtArgs> = {}>(args?: Subset<T, ClubEvent$clubBookArgs<ExtArgs>>): Prisma__ClubBookClient<$Result.GetResult<Prisma.$ClubBookPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     participants<T extends ClubEvent$participantsArgs<ExtArgs> = {}>(args?: Subset<T, ClubEvent$participantsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClubEventParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     photos<T extends ClubEvent$photosArgs<ExtArgs> = {}>(args?: Subset<T, ClubEvent$photosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClubEventPhotoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -30564,6 +30776,7 @@ export namespace Prisma {
     readonly longitude: FieldRef<"ClubEvent", 'Float'>
     readonly startAt: FieldRef<"ClubEvent", 'DateTime'>
     readonly endAt: FieldRef<"ClubEvent", 'DateTime'>
+    readonly clubBookId: FieldRef<"ClubEvent", 'String'>
     readonly createdById: FieldRef<"ClubEvent", 'String'>
     readonly createdAt: FieldRef<"ClubEvent", 'DateTime'>
   }
@@ -30813,6 +31026,10 @@ export namespace Prisma {
      * The data used to create many ClubEvents.
      */
     data: ClubEventCreateManyInput | ClubEventCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -30883,6 +31100,10 @@ export namespace Prisma {
      * Limit how many ClubEvents to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubEventIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -30949,6 +31170,25 @@ export namespace Prisma {
      * Limit how many ClubEvents to delete.
      */
     limit?: number
+  }
+
+  /**
+   * ClubEvent.clubBook
+   */
+  export type ClubEvent$clubBookArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClubBook
+     */
+    select?: ClubBookSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClubBook
+     */
+    omit?: ClubBookOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClubBookInclude<ExtArgs> | null
+    where?: ClubBookWhereInput
   }
 
   /**
@@ -32255,6 +32495,7 @@ export namespace Prisma {
     type?: boolean
     createdAt?: boolean
     event?: boolean | ClubEventDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["clubEventPhoto"]>
 
   export type ClubEventPhotoSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -32266,6 +32507,7 @@ export namespace Prisma {
     type?: boolean
     createdAt?: boolean
     event?: boolean | ClubEventDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["clubEventPhoto"]>
 
   export type ClubEventPhotoSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -32277,6 +32519,7 @@ export namespace Prisma {
     type?: boolean
     createdAt?: boolean
     event?: boolean | ClubEventDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["clubEventPhoto"]>
 
   export type ClubEventPhotoSelectScalar = {
@@ -32292,18 +32535,22 @@ export namespace Prisma {
   export type ClubEventPhotoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventId" | "userId" | "url" | "caption" | "type" | "createdAt", ExtArgs["result"]["clubEventPhoto"]>
   export type ClubEventPhotoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     event?: boolean | ClubEventDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type ClubEventPhotoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     event?: boolean | ClubEventDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type ClubEventPhotoIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     event?: boolean | ClubEventDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
 
   export type $ClubEventPhotoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ClubEventPhoto"
     objects: {
       event: Prisma.$ClubEventPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -32708,6 +32955,7 @@ export namespace Prisma {
   export interface Prisma__ClubEventPhotoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     event<T extends ClubEventDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClubEventDefaultArgs<ExtArgs>>): Prisma__ClubEventClient<$Result.GetResult<Prisma.$ClubEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -33175,6 +33423,7 @@ export namespace Prisma {
     coverUrl: 'coverUrl',
     isAdmin: 'isAdmin',
     passwordHash: 'passwordHash',
+    passwordResetCode: 'passwordResetCode',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -33414,6 +33663,7 @@ export namespace Prisma {
   export const PollScalarFieldEnum: {
     id: 'id',
     clubBookId: 'clubBookId',
+    city: 'city',
     userId: 'userId',
     question: 'question',
     description: 'description',
@@ -33429,8 +33679,10 @@ export namespace Prisma {
   export const PollOptionScalarFieldEnum: {
     id: 'id',
     pollId: 'pollId',
+    type: 'type',
     text: 'text',
     imageUrl: 'imageUrl',
+    bookId: 'bookId',
     index: 'index'
   };
 
@@ -33464,6 +33716,7 @@ export namespace Prisma {
     longitude: 'longitude',
     startAt: 'startAt',
     endAt: 'endAt',
+    clubBookId: 'clubBookId',
     createdById: 'createdById',
     createdAt: 'createdAt'
   };
@@ -33565,11 +33818,13 @@ export namespace Prisma {
     coverUrl?: StringFilter<"User"> | string
     isAdmin?: BoolFilter<"User"> | boolean
     passwordHash?: StringFilter<"User"> | string
+    passwordResetCode?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     cities?: UserCityListRelationFilter
     createdBooks?: BookListRelationFilter
     createdClubBooks?: ClubBookListRelationFilter
+    clubEventPhotos?: ClubEventPhotoListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -33580,11 +33835,13 @@ export namespace Prisma {
     coverUrl?: SortOrder
     isAdmin?: SortOrder
     passwordHash?: SortOrder
+    passwordResetCode?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     cities?: UserCityOrderByRelationAggregateInput
     createdBooks?: BookOrderByRelationAggregateInput
     createdClubBooks?: ClubBookOrderByRelationAggregateInput
+    clubEventPhotos?: ClubEventPhotoOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -33598,11 +33855,13 @@ export namespace Prisma {
     coverUrl?: StringFilter<"User"> | string
     isAdmin?: BoolFilter<"User"> | boolean
     passwordHash?: StringFilter<"User"> | string
+    passwordResetCode?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     cities?: UserCityListRelationFilter
     createdBooks?: BookListRelationFilter
     createdClubBooks?: ClubBookListRelationFilter
+    clubEventPhotos?: ClubEventPhotoListRelationFilter
   }, "id">
 
   export type UserOrderByWithAggregationInput = {
@@ -33613,6 +33872,7 @@ export namespace Prisma {
     coverUrl?: SortOrder
     isAdmin?: SortOrder
     passwordHash?: SortOrder
+    passwordResetCode?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -33631,6 +33891,7 @@ export namespace Prisma {
     coverUrl?: StringWithAggregatesFilter<"User"> | string
     isAdmin?: BoolWithAggregatesFilter<"User"> | boolean
     passwordHash?: StringWithAggregatesFilter<"User"> | string
+    passwordResetCode?: StringNullableWithAggregatesFilter<"User"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
@@ -33755,6 +34016,7 @@ export namespace Prisma {
     styleImages?: BookStyleImageListRelationFilter
     createdByUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     clubBooks?: ClubBookListRelationFilter
+    pollOptions?: PollOptionListRelationFilter
   }
 
   export type BookOrderByWithRelationInput = {
@@ -33771,6 +34033,7 @@ export namespace Prisma {
     styleImages?: BookStyleImageOrderByRelationAggregateInput
     createdByUser?: UserOrderByWithRelationInput
     clubBooks?: ClubBookOrderByRelationAggregateInput
+    pollOptions?: PollOptionOrderByRelationAggregateInput
   }
 
   export type BookWhereUniqueInput = Prisma.AtLeast<{
@@ -33791,6 +34054,7 @@ export namespace Prisma {
     styleImages?: BookStyleImageListRelationFilter
     createdByUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     clubBooks?: ClubBookListRelationFilter
+    pollOptions?: PollOptionListRelationFilter
   }, "id" | "title_author">
 
   export type BookOrderByWithAggregationInput = {
@@ -34211,6 +34475,7 @@ export namespace Prisma {
     book?: XOR<BookScalarRelationFilter, BookWhereInput>
     messages?: ClubBookMessageListRelationFilter
     artifacts?: ClubBookArtifactListRelationFilter
+    events?: ClubEventListRelationFilter
   }
 
   export type ClubBookOrderByWithRelationInput = {
@@ -34232,6 +34497,7 @@ export namespace Prisma {
     book?: BookOrderByWithRelationInput
     messages?: ClubBookMessageOrderByRelationAggregateInput
     artifacts?: ClubBookArtifactOrderByRelationAggregateInput
+    events?: ClubEventOrderByRelationAggregateInput
   }
 
   export type ClubBookWhereUniqueInput = Prisma.AtLeast<{
@@ -34256,6 +34522,7 @@ export namespace Prisma {
     book?: XOR<BookScalarRelationFilter, BookWhereInput>
     messages?: ClubBookMessageListRelationFilter
     artifacts?: ClubBookArtifactListRelationFilter
+    events?: ClubEventListRelationFilter
   }, "id">
 
   export type ClubBookOrderByWithAggregationInput = {
@@ -34823,7 +35090,8 @@ export namespace Prisma {
     OR?: PollWhereInput[]
     NOT?: PollWhereInput | PollWhereInput[]
     id?: StringFilter<"Poll"> | string
-    clubBookId?: StringFilter<"Poll"> | string
+    clubBookId?: StringNullableFilter<"Poll"> | string | null
+    city?: StringFilter<"Poll"> | string
     userId?: StringFilter<"Poll"> | string
     question?: StringFilter<"Poll"> | string
     description?: StringNullableFilter<"Poll"> | string | null
@@ -34837,7 +35105,8 @@ export namespace Prisma {
 
   export type PollOrderByWithRelationInput = {
     id?: SortOrder
-    clubBookId?: SortOrder
+    clubBookId?: SortOrderInput | SortOrder
+    city?: SortOrder
     userId?: SortOrder
     question?: SortOrder
     description?: SortOrderInput | SortOrder
@@ -34854,7 +35123,8 @@ export namespace Prisma {
     AND?: PollWhereInput | PollWhereInput[]
     OR?: PollWhereInput[]
     NOT?: PollWhereInput | PollWhereInput[]
-    clubBookId?: StringFilter<"Poll"> | string
+    clubBookId?: StringNullableFilter<"Poll"> | string | null
+    city?: StringFilter<"Poll"> | string
     userId?: StringFilter<"Poll"> | string
     question?: StringFilter<"Poll"> | string
     description?: StringNullableFilter<"Poll"> | string | null
@@ -34868,7 +35138,8 @@ export namespace Prisma {
 
   export type PollOrderByWithAggregationInput = {
     id?: SortOrder
-    clubBookId?: SortOrder
+    clubBookId?: SortOrderInput | SortOrder
+    city?: SortOrder
     userId?: SortOrder
     question?: SortOrder
     description?: SortOrderInput | SortOrder
@@ -34886,7 +35157,8 @@ export namespace Prisma {
     OR?: PollScalarWhereWithAggregatesInput[]
     NOT?: PollScalarWhereWithAggregatesInput | PollScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Poll"> | string
-    clubBookId?: StringWithAggregatesFilter<"Poll"> | string
+    clubBookId?: StringNullableWithAggregatesFilter<"Poll"> | string | null
+    city?: StringWithAggregatesFilter<"Poll"> | string
     userId?: StringWithAggregatesFilter<"Poll"> | string
     question?: StringWithAggregatesFilter<"Poll"> | string
     description?: StringNullableWithAggregatesFilter<"Poll"> | string | null
@@ -34902,20 +35174,26 @@ export namespace Prisma {
     NOT?: PollOptionWhereInput | PollOptionWhereInput[]
     id?: StringFilter<"PollOption"> | string
     pollId?: StringFilter<"PollOption"> | string
+    type?: StringFilter<"PollOption"> | string
     text?: StringFilter<"PollOption"> | string
     imageUrl?: StringNullableFilter<"PollOption"> | string | null
+    bookId?: StringNullableFilter<"PollOption"> | string | null
     index?: IntFilter<"PollOption"> | number
     poll?: XOR<PollScalarRelationFilter, PollWhereInput>
+    book?: XOR<BookNullableScalarRelationFilter, BookWhereInput> | null
     votes?: PollVoteListRelationFilter
   }
 
   export type PollOptionOrderByWithRelationInput = {
     id?: SortOrder
     pollId?: SortOrder
+    type?: SortOrder
     text?: SortOrder
     imageUrl?: SortOrderInput | SortOrder
+    bookId?: SortOrderInput | SortOrder
     index?: SortOrder
     poll?: PollOrderByWithRelationInput
+    book?: BookOrderByWithRelationInput
     votes?: PollVoteOrderByRelationAggregateInput
   }
 
@@ -34925,18 +35203,23 @@ export namespace Prisma {
     OR?: PollOptionWhereInput[]
     NOT?: PollOptionWhereInput | PollOptionWhereInput[]
     pollId?: StringFilter<"PollOption"> | string
+    type?: StringFilter<"PollOption"> | string
     text?: StringFilter<"PollOption"> | string
     imageUrl?: StringNullableFilter<"PollOption"> | string | null
+    bookId?: StringNullableFilter<"PollOption"> | string | null
     index?: IntFilter<"PollOption"> | number
     poll?: XOR<PollScalarRelationFilter, PollWhereInput>
+    book?: XOR<BookNullableScalarRelationFilter, BookWhereInput> | null
     votes?: PollVoteListRelationFilter
   }, "id">
 
   export type PollOptionOrderByWithAggregationInput = {
     id?: SortOrder
     pollId?: SortOrder
+    type?: SortOrder
     text?: SortOrder
     imageUrl?: SortOrderInput | SortOrder
+    bookId?: SortOrderInput | SortOrder
     index?: SortOrder
     _count?: PollOptionCountOrderByAggregateInput
     _avg?: PollOptionAvgOrderByAggregateInput
@@ -34951,8 +35234,10 @@ export namespace Prisma {
     NOT?: PollOptionScalarWhereWithAggregatesInput | PollOptionScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"PollOption"> | string
     pollId?: StringWithAggregatesFilter<"PollOption"> | string
+    type?: StringWithAggregatesFilter<"PollOption"> | string
     text?: StringWithAggregatesFilter<"PollOption"> | string
     imageUrl?: StringNullableWithAggregatesFilter<"PollOption"> | string | null
+    bookId?: StringNullableWithAggregatesFilter<"PollOption"> | string | null
     index?: IntWithAggregatesFilter<"PollOption"> | number
   }
 
@@ -35034,8 +35319,10 @@ export namespace Prisma {
     longitude?: FloatNullableFilter<"ClubEvent"> | number | null
     startAt?: DateTimeFilter<"ClubEvent"> | Date | string
     endAt?: DateTimeNullableFilter<"ClubEvent"> | Date | string | null
+    clubBookId?: StringNullableFilter<"ClubEvent"> | string | null
     createdById?: StringFilter<"ClubEvent"> | string
     createdAt?: DateTimeFilter<"ClubEvent"> | Date | string
+    clubBook?: XOR<ClubBookNullableScalarRelationFilter, ClubBookWhereInput> | null
     participants?: ClubEventParticipantListRelationFilter
     photos?: ClubEventPhotoListRelationFilter
   }
@@ -35056,8 +35343,10 @@ export namespace Prisma {
     longitude?: SortOrderInput | SortOrder
     startAt?: SortOrder
     endAt?: SortOrderInput | SortOrder
+    clubBookId?: SortOrderInput | SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
+    clubBook?: ClubBookOrderByWithRelationInput
     participants?: ClubEventParticipantOrderByRelationAggregateInput
     photos?: ClubEventPhotoOrderByRelationAggregateInput
   }
@@ -35081,8 +35370,10 @@ export namespace Prisma {
     longitude?: FloatNullableFilter<"ClubEvent"> | number | null
     startAt?: DateTimeFilter<"ClubEvent"> | Date | string
     endAt?: DateTimeNullableFilter<"ClubEvent"> | Date | string | null
+    clubBookId?: StringNullableFilter<"ClubEvent"> | string | null
     createdById?: StringFilter<"ClubEvent"> | string
     createdAt?: DateTimeFilter<"ClubEvent"> | Date | string
+    clubBook?: XOR<ClubBookNullableScalarRelationFilter, ClubBookWhereInput> | null
     participants?: ClubEventParticipantListRelationFilter
     photos?: ClubEventPhotoListRelationFilter
   }, "id">
@@ -35103,6 +35394,7 @@ export namespace Prisma {
     longitude?: SortOrderInput | SortOrder
     startAt?: SortOrder
     endAt?: SortOrderInput | SortOrder
+    clubBookId?: SortOrderInput | SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     _count?: ClubEventCountOrderByAggregateInput
@@ -35131,6 +35423,7 @@ export namespace Prisma {
     longitude?: FloatNullableWithAggregatesFilter<"ClubEvent"> | number | null
     startAt?: DateTimeWithAggregatesFilter<"ClubEvent"> | Date | string
     endAt?: DateTimeNullableWithAggregatesFilter<"ClubEvent"> | Date | string | null
+    clubBookId?: StringNullableWithAggregatesFilter<"ClubEvent"> | string | null
     createdById?: StringWithAggregatesFilter<"ClubEvent"> | string
     createdAt?: DateTimeWithAggregatesFilter<"ClubEvent"> | Date | string
   }
@@ -35203,6 +35496,7 @@ export namespace Prisma {
     type?: StringFilter<"ClubEventPhoto"> | string
     createdAt?: DateTimeFilter<"ClubEventPhoto"> | Date | string
     event?: XOR<ClubEventScalarRelationFilter, ClubEventWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type ClubEventPhotoOrderByWithRelationInput = {
@@ -35214,6 +35508,7 @@ export namespace Prisma {
     type?: SortOrder
     createdAt?: SortOrder
     event?: ClubEventOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
   }
 
   export type ClubEventPhotoWhereUniqueInput = Prisma.AtLeast<{
@@ -35228,6 +35523,7 @@ export namespace Prisma {
     type?: StringFilter<"ClubEventPhoto"> | string
     createdAt?: DateTimeFilter<"ClubEventPhoto"> | Date | string
     event?: XOR<ClubEventScalarRelationFilter, ClubEventWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id">
 
   export type ClubEventPhotoOrderByWithAggregationInput = {
@@ -35264,11 +35560,13 @@ export namespace Prisma {
     coverUrl?: string
     isAdmin?: boolean
     passwordHash?: string
+    passwordResetCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     cities?: UserCityCreateNestedManyWithoutUserInput
     createdBooks?: BookCreateNestedManyWithoutCreatedByUserInput
     createdClubBooks?: ClubBookCreateNestedManyWithoutCreatedByUserInput
+    clubEventPhotos?: ClubEventPhotoCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -35279,11 +35577,13 @@ export namespace Prisma {
     coverUrl?: string
     isAdmin?: boolean
     passwordHash?: string
+    passwordResetCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     cities?: UserCityUncheckedCreateNestedManyWithoutUserInput
     createdBooks?: BookUncheckedCreateNestedManyWithoutCreatedByUserInput
     createdClubBooks?: ClubBookUncheckedCreateNestedManyWithoutCreatedByUserInput
+    clubEventPhotos?: ClubEventPhotoUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -35294,11 +35594,13 @@ export namespace Prisma {
     coverUrl?: StringFieldUpdateOperationsInput | string
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     passwordHash?: StringFieldUpdateOperationsInput | string
+    passwordResetCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cities?: UserCityUpdateManyWithoutUserNestedInput
     createdBooks?: BookUpdateManyWithoutCreatedByUserNestedInput
     createdClubBooks?: ClubBookUpdateManyWithoutCreatedByUserNestedInput
+    clubEventPhotos?: ClubEventPhotoUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -35309,11 +35611,13 @@ export namespace Prisma {
     coverUrl?: StringFieldUpdateOperationsInput | string
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     passwordHash?: StringFieldUpdateOperationsInput | string
+    passwordResetCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cities?: UserCityUncheckedUpdateManyWithoutUserNestedInput
     createdBooks?: BookUncheckedUpdateManyWithoutCreatedByUserNestedInput
     createdClubBooks?: ClubBookUncheckedUpdateManyWithoutCreatedByUserNestedInput
+    clubEventPhotos?: ClubEventPhotoUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -35324,6 +35628,7 @@ export namespace Prisma {
     coverUrl?: string
     isAdmin?: boolean
     passwordHash?: string
+    passwordResetCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -35336,6 +35641,7 @@ export namespace Prisma {
     coverUrl?: StringFieldUpdateOperationsInput | string
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     passwordHash?: StringFieldUpdateOperationsInput | string
+    passwordResetCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -35348,6 +35654,7 @@ export namespace Prisma {
     coverUrl?: StringFieldUpdateOperationsInput | string
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     passwordHash?: StringFieldUpdateOperationsInput | string
+    passwordResetCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -35469,6 +35776,7 @@ export namespace Prisma {
     styleImages?: BookStyleImageCreateNestedManyWithoutBookInput
     createdByUser?: UserCreateNestedOneWithoutCreatedBooksInput
     clubBooks?: ClubBookCreateNestedManyWithoutBookInput
+    pollOptions?: PollOptionCreateNestedManyWithoutBookInput
   }
 
   export type BookUncheckedCreateInput = {
@@ -35484,6 +35792,7 @@ export namespace Prisma {
     categories?: CategoryUncheckedCreateNestedManyWithoutBooksInput
     styleImages?: BookStyleImageUncheckedCreateNestedManyWithoutBookInput
     clubBooks?: ClubBookUncheckedCreateNestedManyWithoutBookInput
+    pollOptions?: PollOptionUncheckedCreateNestedManyWithoutBookInput
   }
 
   export type BookUpdateInput = {
@@ -35499,6 +35808,7 @@ export namespace Prisma {
     styleImages?: BookStyleImageUpdateManyWithoutBookNestedInput
     createdByUser?: UserUpdateOneWithoutCreatedBooksNestedInput
     clubBooks?: ClubBookUpdateManyWithoutBookNestedInput
+    pollOptions?: PollOptionUpdateManyWithoutBookNestedInput
   }
 
   export type BookUncheckedUpdateInput = {
@@ -35514,6 +35824,7 @@ export namespace Prisma {
     categories?: CategoryUncheckedUpdateManyWithoutBooksNestedInput
     styleImages?: BookStyleImageUncheckedUpdateManyWithoutBookNestedInput
     clubBooks?: ClubBookUncheckedUpdateManyWithoutBookNestedInput
+    pollOptions?: PollOptionUncheckedUpdateManyWithoutBookNestedInput
   }
 
   export type BookCreateManyInput = {
@@ -35933,6 +36244,7 @@ export namespace Prisma {
     book: BookCreateNestedOneWithoutClubBooksInput
     messages?: ClubBookMessageCreateNestedManyWithoutClubBookInput
     artifacts?: ClubBookArtifactCreateNestedManyWithoutClubBookInput
+    events?: ClubEventCreateNestedManyWithoutClubBookInput
   }
 
   export type ClubBookUncheckedCreateInput = {
@@ -35952,6 +36264,7 @@ export namespace Prisma {
     activatedAt?: Date | string | null
     messages?: ClubBookMessageUncheckedCreateNestedManyWithoutClubBookInput
     artifacts?: ClubBookArtifactUncheckedCreateNestedManyWithoutClubBookInput
+    events?: ClubEventUncheckedCreateNestedManyWithoutClubBookInput
   }
 
   export type ClubBookUpdateInput = {
@@ -35971,6 +36284,7 @@ export namespace Prisma {
     book?: BookUpdateOneRequiredWithoutClubBooksNestedInput
     messages?: ClubBookMessageUpdateManyWithoutClubBookNestedInput
     artifacts?: ClubBookArtifactUpdateManyWithoutClubBookNestedInput
+    events?: ClubEventUpdateManyWithoutClubBookNestedInput
   }
 
   export type ClubBookUncheckedUpdateInput = {
@@ -35990,6 +36304,7 @@ export namespace Prisma {
     activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     messages?: ClubBookMessageUncheckedUpdateManyWithoutClubBookNestedInput
     artifacts?: ClubBookArtifactUncheckedUpdateManyWithoutClubBookNestedInput
+    events?: ClubEventUncheckedUpdateManyWithoutClubBookNestedInput
   }
 
   export type ClubBookCreateManyInput = {
@@ -36578,7 +36893,8 @@ export namespace Prisma {
 
   export type PollCreateInput = {
     id?: string
-    clubBookId: string
+    clubBookId?: string | null
+    city?: string
     userId: string
     question: string
     description?: string | null
@@ -36592,7 +36908,8 @@ export namespace Prisma {
 
   export type PollUncheckedCreateInput = {
     id?: string
-    clubBookId: string
+    clubBookId?: string | null
+    city?: string
     userId: string
     question: string
     description?: string | null
@@ -36606,7 +36923,8 @@ export namespace Prisma {
 
   export type PollUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    clubBookId?: StringFieldUpdateOperationsInput | string
+    clubBookId?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     question?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -36620,7 +36938,8 @@ export namespace Prisma {
 
   export type PollUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    clubBookId?: StringFieldUpdateOperationsInput | string
+    clubBookId?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     question?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -36634,7 +36953,8 @@ export namespace Prisma {
 
   export type PollCreateManyInput = {
     id?: string
-    clubBookId: string
+    clubBookId?: string | null
+    city?: string
     userId: string
     question: string
     description?: string | null
@@ -36646,7 +36966,8 @@ export namespace Prisma {
 
   export type PollUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    clubBookId?: StringFieldUpdateOperationsInput | string
+    clubBookId?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     question?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -36658,7 +36979,8 @@ export namespace Prisma {
 
   export type PollUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    clubBookId?: StringFieldUpdateOperationsInput | string
+    clubBookId?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     question?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -36670,36 +36992,44 @@ export namespace Prisma {
 
   export type PollOptionCreateInput = {
     id?: string
+    type?: string
     text: string
     imageUrl?: string | null
     index: number
     poll: PollCreateNestedOneWithoutOptionsInput
+    book?: BookCreateNestedOneWithoutPollOptionsInput
     votes?: PollVoteCreateNestedManyWithoutOptionInput
   }
 
   export type PollOptionUncheckedCreateInput = {
     id?: string
     pollId: string
+    type?: string
     text: string
     imageUrl?: string | null
+    bookId?: string | null
     index: number
     votes?: PollVoteUncheckedCreateNestedManyWithoutOptionInput
   }
 
   export type PollOptionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
     text?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     index?: IntFieldUpdateOperationsInput | number
     poll?: PollUpdateOneRequiredWithoutOptionsNestedInput
+    book?: BookUpdateOneWithoutPollOptionsNestedInput
     votes?: PollVoteUpdateManyWithoutOptionNestedInput
   }
 
   export type PollOptionUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     pollId?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
     text?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bookId?: NullableStringFieldUpdateOperationsInput | string | null
     index?: IntFieldUpdateOperationsInput | number
     votes?: PollVoteUncheckedUpdateManyWithoutOptionNestedInput
   }
@@ -36707,13 +37037,16 @@ export namespace Prisma {
   export type PollOptionCreateManyInput = {
     id?: string
     pollId: string
+    type?: string
     text: string
     imageUrl?: string | null
+    bookId?: string | null
     index: number
   }
 
   export type PollOptionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
     text?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     index?: IntFieldUpdateOperationsInput | number
@@ -36722,8 +37055,10 @@ export namespace Prisma {
   export type PollOptionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     pollId?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
     text?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bookId?: NullableStringFieldUpdateOperationsInput | string | null
     index?: IntFieldUpdateOperationsInput | number
   }
 
@@ -36799,6 +37134,7 @@ export namespace Prisma {
     endAt?: Date | string | null
     createdById: string
     createdAt?: Date | string
+    clubBook?: ClubBookCreateNestedOneWithoutEventsInput
     participants?: ClubEventParticipantCreateNestedManyWithoutEventInput
     photos?: ClubEventPhotoCreateNestedManyWithoutEventInput
   }
@@ -36819,6 +37155,7 @@ export namespace Prisma {
     longitude?: number | null
     startAt: Date | string
     endAt?: Date | string | null
+    clubBookId?: string | null
     createdById: string
     createdAt?: Date | string
     participants?: ClubEventParticipantUncheckedCreateNestedManyWithoutEventInput
@@ -36843,6 +37180,7 @@ export namespace Prisma {
     endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clubBook?: ClubBookUpdateOneWithoutEventsNestedInput
     participants?: ClubEventParticipantUpdateManyWithoutEventNestedInput
     photos?: ClubEventPhotoUpdateManyWithoutEventNestedInput
   }
@@ -36863,6 +37201,7 @@ export namespace Prisma {
     longitude?: NullableFloatFieldUpdateOperationsInput | number | null
     startAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clubBookId?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     participants?: ClubEventParticipantUncheckedUpdateManyWithoutEventNestedInput
@@ -36885,6 +37224,7 @@ export namespace Prisma {
     longitude?: number | null
     startAt: Date | string
     endAt?: Date | string | null
+    clubBookId?: string | null
     createdById: string
     createdAt?: Date | string
   }
@@ -36925,6 +37265,7 @@ export namespace Prisma {
     longitude?: NullableFloatFieldUpdateOperationsInput | number | null
     startAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clubBookId?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -36986,12 +37327,12 @@ export namespace Prisma {
 
   export type ClubEventPhotoCreateInput = {
     id?: string
-    userId: string
     url: string
     caption?: string | null
     type?: string
     createdAt?: Date | string
     event: ClubEventCreateNestedOneWithoutPhotosInput
+    user: UserCreateNestedOneWithoutClubEventPhotosInput
   }
 
   export type ClubEventPhotoUncheckedCreateInput = {
@@ -37006,12 +37347,12 @@ export namespace Prisma {
 
   export type ClubEventPhotoUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     caption?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     event?: ClubEventUpdateOneRequiredWithoutPhotosNestedInput
+    user?: UserUpdateOneRequiredWithoutClubEventPhotosNestedInput
   }
 
   export type ClubEventPhotoUncheckedUpdateInput = {
@@ -37036,7 +37377,6 @@ export namespace Prisma {
 
   export type ClubEventPhotoUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     caption?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
@@ -37072,6 +37412,20 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[]
@@ -37101,6 +37455,17 @@ export namespace Prisma {
     none?: ClubBookWhereInput
   }
 
+  export type ClubEventPhotoListRelationFilter = {
+    every?: ClubEventPhotoWhereInput
+    some?: ClubEventPhotoWhereInput
+    none?: ClubEventPhotoWhereInput
+  }
+
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
+  }
+
   export type UserCityOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -37113,6 +37478,10 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type ClubEventPhotoOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -37121,6 +37490,7 @@ export namespace Prisma {
     coverUrl?: SortOrder
     isAdmin?: SortOrder
     passwordHash?: SortOrder
+    passwordResetCode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -37133,6 +37503,7 @@ export namespace Prisma {
     coverUrl?: SortOrder
     isAdmin?: SortOrder
     passwordHash?: SortOrder
+    passwordResetCode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -37145,6 +37516,7 @@ export namespace Prisma {
     coverUrl?: SortOrder
     isAdmin?: SortOrder
     passwordHash?: SortOrder
+    passwordResetCode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -37174,6 +37546,23 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[]
@@ -37186,25 +37575,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
-  export type StringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | null
-    notIn?: string[] | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
   }
 
   export type InvitationCountOrderByAggregateInput = {
@@ -37232,23 +37602,6 @@ export namespace Prisma {
     isUsed?: SortOrder
     usedBy?: SortOrder
     createdAt?: SortOrder
-  }
-
-  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | null
-    notIn?: string[] | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type UserScalarRelationFilter = {
@@ -37296,11 +37649,21 @@ export namespace Prisma {
     isNot?: UserWhereInput | null
   }
 
+  export type PollOptionListRelationFilter = {
+    every?: PollOptionWhereInput
+    some?: PollOptionWhereInput
+    none?: PollOptionWhereInput
+  }
+
   export type CategoryOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type BookStyleImageOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PollOptionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -37604,11 +37967,21 @@ export namespace Prisma {
     none?: ClubBookArtifactWhereInput
   }
 
+  export type ClubEventListRelationFilter = {
+    every?: ClubEventWhereInput
+    some?: ClubEventWhereInput
+    none?: ClubEventWhereInput
+  }
+
   export type ClubBookMessageOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type ClubBookArtifactOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ClubEventOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -37990,20 +38363,10 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
-  export type PollOptionListRelationFilter = {
-    every?: PollOptionWhereInput
-    some?: PollOptionWhereInput
-    none?: PollOptionWhereInput
-  }
-
   export type PollVoteListRelationFilter = {
     every?: PollVoteWhereInput
     some?: PollVoteWhereInput
     none?: PollVoteWhereInput
-  }
-
-  export type PollOptionOrderByRelationAggregateInput = {
-    _count?: SortOrder
   }
 
   export type PollVoteOrderByRelationAggregateInput = {
@@ -38013,6 +38376,7 @@ export namespace Prisma {
   export type PollCountOrderByAggregateInput = {
     id?: SortOrder
     clubBookId?: SortOrder
+    city?: SortOrder
     userId?: SortOrder
     question?: SortOrder
     description?: SortOrder
@@ -38025,6 +38389,7 @@ export namespace Prisma {
   export type PollMaxOrderByAggregateInput = {
     id?: SortOrder
     clubBookId?: SortOrder
+    city?: SortOrder
     userId?: SortOrder
     question?: SortOrder
     description?: SortOrder
@@ -38037,6 +38402,7 @@ export namespace Prisma {
   export type PollMinOrderByAggregateInput = {
     id?: SortOrder
     clubBookId?: SortOrder
+    city?: SortOrder
     userId?: SortOrder
     question?: SortOrder
     description?: SortOrder
@@ -38051,11 +38417,18 @@ export namespace Prisma {
     isNot?: PollWhereInput
   }
 
+  export type BookNullableScalarRelationFilter = {
+    is?: BookWhereInput | null
+    isNot?: BookWhereInput | null
+  }
+
   export type PollOptionCountOrderByAggregateInput = {
     id?: SortOrder
     pollId?: SortOrder
+    type?: SortOrder
     text?: SortOrder
     imageUrl?: SortOrder
+    bookId?: SortOrder
     index?: SortOrder
   }
 
@@ -38066,16 +38439,20 @@ export namespace Prisma {
   export type PollOptionMaxOrderByAggregateInput = {
     id?: SortOrder
     pollId?: SortOrder
+    type?: SortOrder
     text?: SortOrder
     imageUrl?: SortOrder
+    bookId?: SortOrder
     index?: SortOrder
   }
 
   export type PollOptionMinOrderByAggregateInput = {
     id?: SortOrder
     pollId?: SortOrder
+    type?: SortOrder
     text?: SortOrder
     imageUrl?: SortOrder
+    bookId?: SortOrder
     index?: SortOrder
   }
 
@@ -38129,23 +38506,18 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
+  export type ClubBookNullableScalarRelationFilter = {
+    is?: ClubBookWhereInput | null
+    isNot?: ClubBookWhereInput | null
+  }
+
   export type ClubEventParticipantListRelationFilter = {
     every?: ClubEventParticipantWhereInput
     some?: ClubEventParticipantWhereInput
     none?: ClubEventParticipantWhereInput
   }
 
-  export type ClubEventPhotoListRelationFilter = {
-    every?: ClubEventPhotoWhereInput
-    some?: ClubEventPhotoWhereInput
-    none?: ClubEventPhotoWhereInput
-  }
-
   export type ClubEventParticipantOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type ClubEventPhotoOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -38165,6 +38537,7 @@ export namespace Prisma {
     longitude?: SortOrder
     startAt?: SortOrder
     endAt?: SortOrder
+    clubBookId?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
   }
@@ -38190,6 +38563,7 @@ export namespace Prisma {
     longitude?: SortOrder
     startAt?: SortOrder
     endAt?: SortOrder
+    clubBookId?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
   }
@@ -38210,6 +38584,7 @@ export namespace Prisma {
     longitude?: SortOrder
     startAt?: SortOrder
     endAt?: SortOrder
+    clubBookId?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
   }
@@ -38320,6 +38695,13 @@ export namespace Prisma {
     connect?: ClubBookWhereUniqueInput | ClubBookWhereUniqueInput[]
   }
 
+  export type ClubEventPhotoCreateNestedManyWithoutUserInput = {
+    create?: XOR<ClubEventPhotoCreateWithoutUserInput, ClubEventPhotoUncheckedCreateWithoutUserInput> | ClubEventPhotoCreateWithoutUserInput[] | ClubEventPhotoUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ClubEventPhotoCreateOrConnectWithoutUserInput | ClubEventPhotoCreateOrConnectWithoutUserInput[]
+    createMany?: ClubEventPhotoCreateManyUserInputEnvelope
+    connect?: ClubEventPhotoWhereUniqueInput | ClubEventPhotoWhereUniqueInput[]
+  }
+
   export type UserCityUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<UserCityCreateWithoutUserInput, UserCityUncheckedCreateWithoutUserInput> | UserCityCreateWithoutUserInput[] | UserCityUncheckedCreateWithoutUserInput[]
     connectOrCreate?: UserCityCreateOrConnectWithoutUserInput | UserCityCreateOrConnectWithoutUserInput[]
@@ -38341,12 +38723,23 @@ export namespace Prisma {
     connect?: ClubBookWhereUniqueInput | ClubBookWhereUniqueInput[]
   }
 
+  export type ClubEventPhotoUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ClubEventPhotoCreateWithoutUserInput, ClubEventPhotoUncheckedCreateWithoutUserInput> | ClubEventPhotoCreateWithoutUserInput[] | ClubEventPhotoUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ClubEventPhotoCreateOrConnectWithoutUserInput | ClubEventPhotoCreateOrConnectWithoutUserInput[]
+    createMany?: ClubEventPhotoCreateManyUserInputEnvelope
+    connect?: ClubEventPhotoWhereUniqueInput | ClubEventPhotoWhereUniqueInput[]
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
 
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -38395,6 +38788,20 @@ export namespace Prisma {
     deleteMany?: ClubBookScalarWhereInput | ClubBookScalarWhereInput[]
   }
 
+  export type ClubEventPhotoUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ClubEventPhotoCreateWithoutUserInput, ClubEventPhotoUncheckedCreateWithoutUserInput> | ClubEventPhotoCreateWithoutUserInput[] | ClubEventPhotoUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ClubEventPhotoCreateOrConnectWithoutUserInput | ClubEventPhotoCreateOrConnectWithoutUserInput[]
+    upsert?: ClubEventPhotoUpsertWithWhereUniqueWithoutUserInput | ClubEventPhotoUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ClubEventPhotoCreateManyUserInputEnvelope
+    set?: ClubEventPhotoWhereUniqueInput | ClubEventPhotoWhereUniqueInput[]
+    disconnect?: ClubEventPhotoWhereUniqueInput | ClubEventPhotoWhereUniqueInput[]
+    delete?: ClubEventPhotoWhereUniqueInput | ClubEventPhotoWhereUniqueInput[]
+    connect?: ClubEventPhotoWhereUniqueInput | ClubEventPhotoWhereUniqueInput[]
+    update?: ClubEventPhotoUpdateWithWhereUniqueWithoutUserInput | ClubEventPhotoUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ClubEventPhotoUpdateManyWithWhereWithoutUserInput | ClubEventPhotoUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ClubEventPhotoScalarWhereInput | ClubEventPhotoScalarWhereInput[]
+  }
+
   export type UserCityUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<UserCityCreateWithoutUserInput, UserCityUncheckedCreateWithoutUserInput> | UserCityCreateWithoutUserInput[] | UserCityUncheckedCreateWithoutUserInput[]
     connectOrCreate?: UserCityCreateOrConnectWithoutUserInput | UserCityCreateOrConnectWithoutUserInput[]
@@ -38437,8 +38844,18 @@ export namespace Prisma {
     deleteMany?: ClubBookScalarWhereInput | ClubBookScalarWhereInput[]
   }
 
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
+  export type ClubEventPhotoUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ClubEventPhotoCreateWithoutUserInput, ClubEventPhotoUncheckedCreateWithoutUserInput> | ClubEventPhotoCreateWithoutUserInput[] | ClubEventPhotoUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ClubEventPhotoCreateOrConnectWithoutUserInput | ClubEventPhotoCreateOrConnectWithoutUserInput[]
+    upsert?: ClubEventPhotoUpsertWithWhereUniqueWithoutUserInput | ClubEventPhotoUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ClubEventPhotoCreateManyUserInputEnvelope
+    set?: ClubEventPhotoWhereUniqueInput | ClubEventPhotoWhereUniqueInput[]
+    disconnect?: ClubEventPhotoWhereUniqueInput | ClubEventPhotoWhereUniqueInput[]
+    delete?: ClubEventPhotoWhereUniqueInput | ClubEventPhotoWhereUniqueInput[]
+    connect?: ClubEventPhotoWhereUniqueInput | ClubEventPhotoWhereUniqueInput[]
+    update?: ClubEventPhotoUpdateWithWhereUniqueWithoutUserInput | ClubEventPhotoUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ClubEventPhotoUpdateManyWithWhereWithoutUserInput | ClubEventPhotoUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ClubEventPhotoScalarWhereInput | ClubEventPhotoScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutCitiesInput = {
@@ -38481,6 +38898,13 @@ export namespace Prisma {
     connect?: ClubBookWhereUniqueInput | ClubBookWhereUniqueInput[]
   }
 
+  export type PollOptionCreateNestedManyWithoutBookInput = {
+    create?: XOR<PollOptionCreateWithoutBookInput, PollOptionUncheckedCreateWithoutBookInput> | PollOptionCreateWithoutBookInput[] | PollOptionUncheckedCreateWithoutBookInput[]
+    connectOrCreate?: PollOptionCreateOrConnectWithoutBookInput | PollOptionCreateOrConnectWithoutBookInput[]
+    createMany?: PollOptionCreateManyBookInputEnvelope
+    connect?: PollOptionWhereUniqueInput | PollOptionWhereUniqueInput[]
+  }
+
   export type CategoryUncheckedCreateNestedManyWithoutBooksInput = {
     create?: XOR<CategoryCreateWithoutBooksInput, CategoryUncheckedCreateWithoutBooksInput> | CategoryCreateWithoutBooksInput[] | CategoryUncheckedCreateWithoutBooksInput[]
     connectOrCreate?: CategoryCreateOrConnectWithoutBooksInput | CategoryCreateOrConnectWithoutBooksInput[]
@@ -38499,6 +38923,13 @@ export namespace Prisma {
     connectOrCreate?: ClubBookCreateOrConnectWithoutBookInput | ClubBookCreateOrConnectWithoutBookInput[]
     createMany?: ClubBookCreateManyBookInputEnvelope
     connect?: ClubBookWhereUniqueInput | ClubBookWhereUniqueInput[]
+  }
+
+  export type PollOptionUncheckedCreateNestedManyWithoutBookInput = {
+    create?: XOR<PollOptionCreateWithoutBookInput, PollOptionUncheckedCreateWithoutBookInput> | PollOptionCreateWithoutBookInput[] | PollOptionUncheckedCreateWithoutBookInput[]
+    connectOrCreate?: PollOptionCreateOrConnectWithoutBookInput | PollOptionCreateOrConnectWithoutBookInput[]
+    createMany?: PollOptionCreateManyBookInputEnvelope
+    connect?: PollOptionWhereUniqueInput | PollOptionWhereUniqueInput[]
   }
 
   export type CategoryUpdateManyWithoutBooksNestedInput = {
@@ -38552,6 +38983,20 @@ export namespace Prisma {
     deleteMany?: ClubBookScalarWhereInput | ClubBookScalarWhereInput[]
   }
 
+  export type PollOptionUpdateManyWithoutBookNestedInput = {
+    create?: XOR<PollOptionCreateWithoutBookInput, PollOptionUncheckedCreateWithoutBookInput> | PollOptionCreateWithoutBookInput[] | PollOptionUncheckedCreateWithoutBookInput[]
+    connectOrCreate?: PollOptionCreateOrConnectWithoutBookInput | PollOptionCreateOrConnectWithoutBookInput[]
+    upsert?: PollOptionUpsertWithWhereUniqueWithoutBookInput | PollOptionUpsertWithWhereUniqueWithoutBookInput[]
+    createMany?: PollOptionCreateManyBookInputEnvelope
+    set?: PollOptionWhereUniqueInput | PollOptionWhereUniqueInput[]
+    disconnect?: PollOptionWhereUniqueInput | PollOptionWhereUniqueInput[]
+    delete?: PollOptionWhereUniqueInput | PollOptionWhereUniqueInput[]
+    connect?: PollOptionWhereUniqueInput | PollOptionWhereUniqueInput[]
+    update?: PollOptionUpdateWithWhereUniqueWithoutBookInput | PollOptionUpdateWithWhereUniqueWithoutBookInput[]
+    updateMany?: PollOptionUpdateManyWithWhereWithoutBookInput | PollOptionUpdateManyWithWhereWithoutBookInput[]
+    deleteMany?: PollOptionScalarWhereInput | PollOptionScalarWhereInput[]
+  }
+
   export type CategoryUncheckedUpdateManyWithoutBooksNestedInput = {
     create?: XOR<CategoryCreateWithoutBooksInput, CategoryUncheckedCreateWithoutBooksInput> | CategoryCreateWithoutBooksInput[] | CategoryUncheckedCreateWithoutBooksInput[]
     connectOrCreate?: CategoryCreateOrConnectWithoutBooksInput | CategoryCreateOrConnectWithoutBooksInput[]
@@ -38591,6 +39036,20 @@ export namespace Prisma {
     update?: ClubBookUpdateWithWhereUniqueWithoutBookInput | ClubBookUpdateWithWhereUniqueWithoutBookInput[]
     updateMany?: ClubBookUpdateManyWithWhereWithoutBookInput | ClubBookUpdateManyWithWhereWithoutBookInput[]
     deleteMany?: ClubBookScalarWhereInput | ClubBookScalarWhereInput[]
+  }
+
+  export type PollOptionUncheckedUpdateManyWithoutBookNestedInput = {
+    create?: XOR<PollOptionCreateWithoutBookInput, PollOptionUncheckedCreateWithoutBookInput> | PollOptionCreateWithoutBookInput[] | PollOptionUncheckedCreateWithoutBookInput[]
+    connectOrCreate?: PollOptionCreateOrConnectWithoutBookInput | PollOptionCreateOrConnectWithoutBookInput[]
+    upsert?: PollOptionUpsertWithWhereUniqueWithoutBookInput | PollOptionUpsertWithWhereUniqueWithoutBookInput[]
+    createMany?: PollOptionCreateManyBookInputEnvelope
+    set?: PollOptionWhereUniqueInput | PollOptionWhereUniqueInput[]
+    disconnect?: PollOptionWhereUniqueInput | PollOptionWhereUniqueInput[]
+    delete?: PollOptionWhereUniqueInput | PollOptionWhereUniqueInput[]
+    connect?: PollOptionWhereUniqueInput | PollOptionWhereUniqueInput[]
+    update?: PollOptionUpdateWithWhereUniqueWithoutBookInput | PollOptionUpdateWithWhereUniqueWithoutBookInput[]
+    updateMany?: PollOptionUpdateManyWithWhereWithoutBookInput | PollOptionUpdateManyWithWhereWithoutBookInput[]
+    deleteMany?: PollOptionScalarWhereInput | PollOptionScalarWhereInput[]
   }
 
   export type BookCreateNestedOneWithoutStyleImagesInput = {
@@ -38899,6 +39358,13 @@ export namespace Prisma {
     connect?: ClubBookArtifactWhereUniqueInput | ClubBookArtifactWhereUniqueInput[]
   }
 
+  export type ClubEventCreateNestedManyWithoutClubBookInput = {
+    create?: XOR<ClubEventCreateWithoutClubBookInput, ClubEventUncheckedCreateWithoutClubBookInput> | ClubEventCreateWithoutClubBookInput[] | ClubEventUncheckedCreateWithoutClubBookInput[]
+    connectOrCreate?: ClubEventCreateOrConnectWithoutClubBookInput | ClubEventCreateOrConnectWithoutClubBookInput[]
+    createMany?: ClubEventCreateManyClubBookInputEnvelope
+    connect?: ClubEventWhereUniqueInput | ClubEventWhereUniqueInput[]
+  }
+
   export type ClubBookMessageUncheckedCreateNestedManyWithoutClubBookInput = {
     create?: XOR<ClubBookMessageCreateWithoutClubBookInput, ClubBookMessageUncheckedCreateWithoutClubBookInput> | ClubBookMessageCreateWithoutClubBookInput[] | ClubBookMessageUncheckedCreateWithoutClubBookInput[]
     connectOrCreate?: ClubBookMessageCreateOrConnectWithoutClubBookInput | ClubBookMessageCreateOrConnectWithoutClubBookInput[]
@@ -38911,6 +39377,13 @@ export namespace Prisma {
     connectOrCreate?: ClubBookArtifactCreateOrConnectWithoutClubBookInput | ClubBookArtifactCreateOrConnectWithoutClubBookInput[]
     createMany?: ClubBookArtifactCreateManyClubBookInputEnvelope
     connect?: ClubBookArtifactWhereUniqueInput | ClubBookArtifactWhereUniqueInput[]
+  }
+
+  export type ClubEventUncheckedCreateNestedManyWithoutClubBookInput = {
+    create?: XOR<ClubEventCreateWithoutClubBookInput, ClubEventUncheckedCreateWithoutClubBookInput> | ClubEventCreateWithoutClubBookInput[] | ClubEventUncheckedCreateWithoutClubBookInput[]
+    connectOrCreate?: ClubEventCreateOrConnectWithoutClubBookInput | ClubEventCreateOrConnectWithoutClubBookInput[]
+    createMany?: ClubEventCreateManyClubBookInputEnvelope
+    connect?: ClubEventWhereUniqueInput | ClubEventWhereUniqueInput[]
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -38965,6 +39438,20 @@ export namespace Prisma {
     deleteMany?: ClubBookArtifactScalarWhereInput | ClubBookArtifactScalarWhereInput[]
   }
 
+  export type ClubEventUpdateManyWithoutClubBookNestedInput = {
+    create?: XOR<ClubEventCreateWithoutClubBookInput, ClubEventUncheckedCreateWithoutClubBookInput> | ClubEventCreateWithoutClubBookInput[] | ClubEventUncheckedCreateWithoutClubBookInput[]
+    connectOrCreate?: ClubEventCreateOrConnectWithoutClubBookInput | ClubEventCreateOrConnectWithoutClubBookInput[]
+    upsert?: ClubEventUpsertWithWhereUniqueWithoutClubBookInput | ClubEventUpsertWithWhereUniqueWithoutClubBookInput[]
+    createMany?: ClubEventCreateManyClubBookInputEnvelope
+    set?: ClubEventWhereUniqueInput | ClubEventWhereUniqueInput[]
+    disconnect?: ClubEventWhereUniqueInput | ClubEventWhereUniqueInput[]
+    delete?: ClubEventWhereUniqueInput | ClubEventWhereUniqueInput[]
+    connect?: ClubEventWhereUniqueInput | ClubEventWhereUniqueInput[]
+    update?: ClubEventUpdateWithWhereUniqueWithoutClubBookInput | ClubEventUpdateWithWhereUniqueWithoutClubBookInput[]
+    updateMany?: ClubEventUpdateManyWithWhereWithoutClubBookInput | ClubEventUpdateManyWithWhereWithoutClubBookInput[]
+    deleteMany?: ClubEventScalarWhereInput | ClubEventScalarWhereInput[]
+  }
+
   export type ClubBookMessageUncheckedUpdateManyWithoutClubBookNestedInput = {
     create?: XOR<ClubBookMessageCreateWithoutClubBookInput, ClubBookMessageUncheckedCreateWithoutClubBookInput> | ClubBookMessageCreateWithoutClubBookInput[] | ClubBookMessageUncheckedCreateWithoutClubBookInput[]
     connectOrCreate?: ClubBookMessageCreateOrConnectWithoutClubBookInput | ClubBookMessageCreateOrConnectWithoutClubBookInput[]
@@ -38991,6 +39478,20 @@ export namespace Prisma {
     update?: ClubBookArtifactUpdateWithWhereUniqueWithoutClubBookInput | ClubBookArtifactUpdateWithWhereUniqueWithoutClubBookInput[]
     updateMany?: ClubBookArtifactUpdateManyWithWhereWithoutClubBookInput | ClubBookArtifactUpdateManyWithWhereWithoutClubBookInput[]
     deleteMany?: ClubBookArtifactScalarWhereInput | ClubBookArtifactScalarWhereInput[]
+  }
+
+  export type ClubEventUncheckedUpdateManyWithoutClubBookNestedInput = {
+    create?: XOR<ClubEventCreateWithoutClubBookInput, ClubEventUncheckedCreateWithoutClubBookInput> | ClubEventCreateWithoutClubBookInput[] | ClubEventUncheckedCreateWithoutClubBookInput[]
+    connectOrCreate?: ClubEventCreateOrConnectWithoutClubBookInput | ClubEventCreateOrConnectWithoutClubBookInput[]
+    upsert?: ClubEventUpsertWithWhereUniqueWithoutClubBookInput | ClubEventUpsertWithWhereUniqueWithoutClubBookInput[]
+    createMany?: ClubEventCreateManyClubBookInputEnvelope
+    set?: ClubEventWhereUniqueInput | ClubEventWhereUniqueInput[]
+    disconnect?: ClubEventWhereUniqueInput | ClubEventWhereUniqueInput[]
+    delete?: ClubEventWhereUniqueInput | ClubEventWhereUniqueInput[]
+    connect?: ClubEventWhereUniqueInput | ClubEventWhereUniqueInput[]
+    update?: ClubEventUpdateWithWhereUniqueWithoutClubBookInput | ClubEventUpdateWithWhereUniqueWithoutClubBookInput[]
+    updateMany?: ClubEventUpdateManyWithWhereWithoutClubBookInput | ClubEventUpdateManyWithWhereWithoutClubBookInput[]
+    deleteMany?: ClubEventScalarWhereInput | ClubEventScalarWhereInput[]
   }
 
   export type ClubBookCreateNestedOneWithoutMessagesInput = {
@@ -39335,6 +39836,12 @@ export namespace Prisma {
     connect?: PollWhereUniqueInput
   }
 
+  export type BookCreateNestedOneWithoutPollOptionsInput = {
+    create?: XOR<BookCreateWithoutPollOptionsInput, BookUncheckedCreateWithoutPollOptionsInput>
+    connectOrCreate?: BookCreateOrConnectWithoutPollOptionsInput
+    connect?: BookWhereUniqueInput
+  }
+
   export type PollVoteCreateNestedManyWithoutOptionInput = {
     create?: XOR<PollVoteCreateWithoutOptionInput, PollVoteUncheckedCreateWithoutOptionInput> | PollVoteCreateWithoutOptionInput[] | PollVoteUncheckedCreateWithoutOptionInput[]
     connectOrCreate?: PollVoteCreateOrConnectWithoutOptionInput | PollVoteCreateOrConnectWithoutOptionInput[]
@@ -39355,6 +39862,16 @@ export namespace Prisma {
     upsert?: PollUpsertWithoutOptionsInput
     connect?: PollWhereUniqueInput
     update?: XOR<XOR<PollUpdateToOneWithWhereWithoutOptionsInput, PollUpdateWithoutOptionsInput>, PollUncheckedUpdateWithoutOptionsInput>
+  }
+
+  export type BookUpdateOneWithoutPollOptionsNestedInput = {
+    create?: XOR<BookCreateWithoutPollOptionsInput, BookUncheckedCreateWithoutPollOptionsInput>
+    connectOrCreate?: BookCreateOrConnectWithoutPollOptionsInput
+    upsert?: BookUpsertWithoutPollOptionsInput
+    disconnect?: BookWhereInput | boolean
+    delete?: BookWhereInput | boolean
+    connect?: BookWhereUniqueInput
+    update?: XOR<XOR<BookUpdateToOneWithWhereWithoutPollOptionsInput, BookUpdateWithoutPollOptionsInput>, BookUncheckedUpdateWithoutPollOptionsInput>
   }
 
   export type PollVoteUpdateManyWithoutOptionNestedInput = {
@@ -39413,6 +39930,12 @@ export namespace Prisma {
     update?: XOR<XOR<PollOptionUpdateToOneWithWhereWithoutVotesInput, PollOptionUpdateWithoutVotesInput>, PollOptionUncheckedUpdateWithoutVotesInput>
   }
 
+  export type ClubBookCreateNestedOneWithoutEventsInput = {
+    create?: XOR<ClubBookCreateWithoutEventsInput, ClubBookUncheckedCreateWithoutEventsInput>
+    connectOrCreate?: ClubBookCreateOrConnectWithoutEventsInput
+    connect?: ClubBookWhereUniqueInput
+  }
+
   export type ClubEventParticipantCreateNestedManyWithoutEventInput = {
     create?: XOR<ClubEventParticipantCreateWithoutEventInput, ClubEventParticipantUncheckedCreateWithoutEventInput> | ClubEventParticipantCreateWithoutEventInput[] | ClubEventParticipantUncheckedCreateWithoutEventInput[]
     connectOrCreate?: ClubEventParticipantCreateOrConnectWithoutEventInput | ClubEventParticipantCreateOrConnectWithoutEventInput[]
@@ -39447,6 +39970,16 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type ClubBookUpdateOneWithoutEventsNestedInput = {
+    create?: XOR<ClubBookCreateWithoutEventsInput, ClubBookUncheckedCreateWithoutEventsInput>
+    connectOrCreate?: ClubBookCreateOrConnectWithoutEventsInput
+    upsert?: ClubBookUpsertWithoutEventsInput
+    disconnect?: ClubBookWhereInput | boolean
+    delete?: ClubBookWhereInput | boolean
+    connect?: ClubBookWhereUniqueInput
+    update?: XOR<XOR<ClubBookUpdateToOneWithWhereWithoutEventsInput, ClubBookUpdateWithoutEventsInput>, ClubBookUncheckedUpdateWithoutEventsInput>
   }
 
   export type ClubEventParticipantUpdateManyWithoutEventNestedInput = {
@@ -39525,12 +40058,26 @@ export namespace Prisma {
     connect?: ClubEventWhereUniqueInput
   }
 
+  export type UserCreateNestedOneWithoutClubEventPhotosInput = {
+    create?: XOR<UserCreateWithoutClubEventPhotosInput, UserUncheckedCreateWithoutClubEventPhotosInput>
+    connectOrCreate?: UserCreateOrConnectWithoutClubEventPhotosInput
+    connect?: UserWhereUniqueInput
+  }
+
   export type ClubEventUpdateOneRequiredWithoutPhotosNestedInput = {
     create?: XOR<ClubEventCreateWithoutPhotosInput, ClubEventUncheckedCreateWithoutPhotosInput>
     connectOrCreate?: ClubEventCreateOrConnectWithoutPhotosInput
     upsert?: ClubEventUpsertWithoutPhotosInput
     connect?: ClubEventWhereUniqueInput
     update?: XOR<XOR<ClubEventUpdateToOneWithWhereWithoutPhotosInput, ClubEventUpdateWithoutPhotosInput>, ClubEventUncheckedUpdateWithoutPhotosInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutClubEventPhotosNestedInput = {
+    create?: XOR<UserCreateWithoutClubEventPhotosInput, UserUncheckedCreateWithoutClubEventPhotosInput>
+    connectOrCreate?: UserCreateOrConnectWithoutClubEventPhotosInput
+    upsert?: UserUpsertWithoutClubEventPhotosInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutClubEventPhotosInput, UserUpdateWithoutClubEventPhotosInput>, UserUncheckedUpdateWithoutClubEventPhotosInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -39550,6 +40097,20 @@ export namespace Prisma {
   export type NestedBoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
   export type NestedDateTimeFilter<$PrismaModel = never> = {
@@ -39599,34 +40160,6 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
-  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[]
-    notIn?: Date[] | string[]
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
-  export type NestedStringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | null
-    notIn?: string[] | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | null
@@ -39653,6 +40186,20 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[]
+    notIn?: Date[] | string[]
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
@@ -39765,6 +40312,7 @@ export namespace Prisma {
     categories?: CategoryCreateNestedManyWithoutBooksInput
     styleImages?: BookStyleImageCreateNestedManyWithoutBookInput
     clubBooks?: ClubBookCreateNestedManyWithoutBookInput
+    pollOptions?: PollOptionCreateNestedManyWithoutBookInput
   }
 
   export type BookUncheckedCreateWithoutCreatedByUserInput = {
@@ -39779,6 +40327,7 @@ export namespace Prisma {
     categories?: CategoryUncheckedCreateNestedManyWithoutBooksInput
     styleImages?: BookStyleImageUncheckedCreateNestedManyWithoutBookInput
     clubBooks?: ClubBookUncheckedCreateNestedManyWithoutBookInput
+    pollOptions?: PollOptionUncheckedCreateNestedManyWithoutBookInput
   }
 
   export type BookCreateOrConnectWithoutCreatedByUserInput = {
@@ -39806,6 +40355,7 @@ export namespace Prisma {
     book: BookCreateNestedOneWithoutClubBooksInput
     messages?: ClubBookMessageCreateNestedManyWithoutClubBookInput
     artifacts?: ClubBookArtifactCreateNestedManyWithoutClubBookInput
+    events?: ClubEventCreateNestedManyWithoutClubBookInput
   }
 
   export type ClubBookUncheckedCreateWithoutCreatedByUserInput = {
@@ -39824,6 +40374,7 @@ export namespace Prisma {
     activatedAt?: Date | string | null
     messages?: ClubBookMessageUncheckedCreateNestedManyWithoutClubBookInput
     artifacts?: ClubBookArtifactUncheckedCreateNestedManyWithoutClubBookInput
+    events?: ClubEventUncheckedCreateNestedManyWithoutClubBookInput
   }
 
   export type ClubBookCreateOrConnectWithoutCreatedByUserInput = {
@@ -39833,6 +40384,33 @@ export namespace Prisma {
 
   export type ClubBookCreateManyCreatedByUserInputEnvelope = {
     data: ClubBookCreateManyCreatedByUserInput | ClubBookCreateManyCreatedByUserInput[]
+  }
+
+  export type ClubEventPhotoCreateWithoutUserInput = {
+    id?: string
+    url: string
+    caption?: string | null
+    type?: string
+    createdAt?: Date | string
+    event: ClubEventCreateNestedOneWithoutPhotosInput
+  }
+
+  export type ClubEventPhotoUncheckedCreateWithoutUserInput = {
+    id?: string
+    eventId: string
+    url: string
+    caption?: string | null
+    type?: string
+    createdAt?: Date | string
+  }
+
+  export type ClubEventPhotoCreateOrConnectWithoutUserInput = {
+    where: ClubEventPhotoWhereUniqueInput
+    create: XOR<ClubEventPhotoCreateWithoutUserInput, ClubEventPhotoUncheckedCreateWithoutUserInput>
+  }
+
+  export type ClubEventPhotoCreateManyUserInputEnvelope = {
+    data: ClubEventPhotoCreateManyUserInput | ClubEventPhotoCreateManyUserInput[]
   }
 
   export type UserCityUpsertWithWhereUniqueWithoutUserInput = {
@@ -39927,6 +40505,35 @@ export namespace Prisma {
     activatedAt?: DateTimeNullableFilter<"ClubBook"> | Date | string | null
   }
 
+  export type ClubEventPhotoUpsertWithWhereUniqueWithoutUserInput = {
+    where: ClubEventPhotoWhereUniqueInput
+    update: XOR<ClubEventPhotoUpdateWithoutUserInput, ClubEventPhotoUncheckedUpdateWithoutUserInput>
+    create: XOR<ClubEventPhotoCreateWithoutUserInput, ClubEventPhotoUncheckedCreateWithoutUserInput>
+  }
+
+  export type ClubEventPhotoUpdateWithWhereUniqueWithoutUserInput = {
+    where: ClubEventPhotoWhereUniqueInput
+    data: XOR<ClubEventPhotoUpdateWithoutUserInput, ClubEventPhotoUncheckedUpdateWithoutUserInput>
+  }
+
+  export type ClubEventPhotoUpdateManyWithWhereWithoutUserInput = {
+    where: ClubEventPhotoScalarWhereInput
+    data: XOR<ClubEventPhotoUpdateManyMutationInput, ClubEventPhotoUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type ClubEventPhotoScalarWhereInput = {
+    AND?: ClubEventPhotoScalarWhereInput | ClubEventPhotoScalarWhereInput[]
+    OR?: ClubEventPhotoScalarWhereInput[]
+    NOT?: ClubEventPhotoScalarWhereInput | ClubEventPhotoScalarWhereInput[]
+    id?: StringFilter<"ClubEventPhoto"> | string
+    eventId?: StringFilter<"ClubEventPhoto"> | string
+    userId?: StringFilter<"ClubEventPhoto"> | string
+    url?: StringFilter<"ClubEventPhoto"> | string
+    caption?: StringNullableFilter<"ClubEventPhoto"> | string | null
+    type?: StringFilter<"ClubEventPhoto"> | string
+    createdAt?: DateTimeFilter<"ClubEventPhoto"> | Date | string
+  }
+
   export type UserCreateWithoutCitiesInput = {
     id: string
     name: string
@@ -39935,10 +40542,12 @@ export namespace Prisma {
     coverUrl?: string
     isAdmin?: boolean
     passwordHash?: string
+    passwordResetCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBooks?: BookCreateNestedManyWithoutCreatedByUserInput
     createdClubBooks?: ClubBookCreateNestedManyWithoutCreatedByUserInput
+    clubEventPhotos?: ClubEventPhotoCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCitiesInput = {
@@ -39949,10 +40558,12 @@ export namespace Prisma {
     coverUrl?: string
     isAdmin?: boolean
     passwordHash?: string
+    passwordResetCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBooks?: BookUncheckedCreateNestedManyWithoutCreatedByUserInput
     createdClubBooks?: ClubBookUncheckedCreateNestedManyWithoutCreatedByUserInput
+    clubEventPhotos?: ClubEventPhotoUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCitiesInput = {
@@ -39979,10 +40590,12 @@ export namespace Prisma {
     coverUrl?: StringFieldUpdateOperationsInput | string
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     passwordHash?: StringFieldUpdateOperationsInput | string
+    passwordResetCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBooks?: BookUpdateManyWithoutCreatedByUserNestedInput
     createdClubBooks?: ClubBookUpdateManyWithoutCreatedByUserNestedInput
+    clubEventPhotos?: ClubEventPhotoUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCitiesInput = {
@@ -39993,10 +40606,12 @@ export namespace Prisma {
     coverUrl?: StringFieldUpdateOperationsInput | string
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     passwordHash?: StringFieldUpdateOperationsInput | string
+    passwordResetCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBooks?: BookUncheckedUpdateManyWithoutCreatedByUserNestedInput
     createdClubBooks?: ClubBookUncheckedUpdateManyWithoutCreatedByUserNestedInput
+    clubEventPhotos?: ClubEventPhotoUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CategoryCreateWithoutBooksInput = {
@@ -40041,10 +40656,12 @@ export namespace Prisma {
     coverUrl?: string
     isAdmin?: boolean
     passwordHash?: string
+    passwordResetCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     cities?: UserCityCreateNestedManyWithoutUserInput
     createdClubBooks?: ClubBookCreateNestedManyWithoutCreatedByUserInput
+    clubEventPhotos?: ClubEventPhotoCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedBooksInput = {
@@ -40055,10 +40672,12 @@ export namespace Prisma {
     coverUrl?: string
     isAdmin?: boolean
     passwordHash?: string
+    passwordResetCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     cities?: UserCityUncheckedCreateNestedManyWithoutUserInput
     createdClubBooks?: ClubBookUncheckedCreateNestedManyWithoutCreatedByUserInput
+    clubEventPhotos?: ClubEventPhotoUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedBooksInput = {
@@ -40082,6 +40701,7 @@ export namespace Prisma {
     createdByUser: UserCreateNestedOneWithoutCreatedClubBooksInput
     messages?: ClubBookMessageCreateNestedManyWithoutClubBookInput
     artifacts?: ClubBookArtifactCreateNestedManyWithoutClubBookInput
+    events?: ClubEventCreateNestedManyWithoutClubBookInput
   }
 
   export type ClubBookUncheckedCreateWithoutBookInput = {
@@ -40100,6 +40720,7 @@ export namespace Prisma {
     activatedAt?: Date | string | null
     messages?: ClubBookMessageUncheckedCreateNestedManyWithoutClubBookInput
     artifacts?: ClubBookArtifactUncheckedCreateNestedManyWithoutClubBookInput
+    events?: ClubEventUncheckedCreateNestedManyWithoutClubBookInput
   }
 
   export type ClubBookCreateOrConnectWithoutBookInput = {
@@ -40109,6 +40730,35 @@ export namespace Prisma {
 
   export type ClubBookCreateManyBookInputEnvelope = {
     data: ClubBookCreateManyBookInput | ClubBookCreateManyBookInput[]
+  }
+
+  export type PollOptionCreateWithoutBookInput = {
+    id?: string
+    type?: string
+    text: string
+    imageUrl?: string | null
+    index: number
+    poll: PollCreateNestedOneWithoutOptionsInput
+    votes?: PollVoteCreateNestedManyWithoutOptionInput
+  }
+
+  export type PollOptionUncheckedCreateWithoutBookInput = {
+    id?: string
+    pollId: string
+    type?: string
+    text: string
+    imageUrl?: string | null
+    index: number
+    votes?: PollVoteUncheckedCreateNestedManyWithoutOptionInput
+  }
+
+  export type PollOptionCreateOrConnectWithoutBookInput = {
+    where: PollOptionWhereUniqueInput
+    create: XOR<PollOptionCreateWithoutBookInput, PollOptionUncheckedCreateWithoutBookInput>
+  }
+
+  export type PollOptionCreateManyBookInputEnvelope = {
+    data: PollOptionCreateManyBookInput | PollOptionCreateManyBookInput[]
   }
 
   export type CategoryUpsertWithWhereUniqueWithoutBooksInput = {
@@ -40179,10 +40829,12 @@ export namespace Prisma {
     coverUrl?: StringFieldUpdateOperationsInput | string
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     passwordHash?: StringFieldUpdateOperationsInput | string
+    passwordResetCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cities?: UserCityUpdateManyWithoutUserNestedInput
     createdClubBooks?: ClubBookUpdateManyWithoutCreatedByUserNestedInput
+    clubEventPhotos?: ClubEventPhotoUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedBooksInput = {
@@ -40193,10 +40845,12 @@ export namespace Prisma {
     coverUrl?: StringFieldUpdateOperationsInput | string
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     passwordHash?: StringFieldUpdateOperationsInput | string
+    passwordResetCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cities?: UserCityUncheckedUpdateManyWithoutUserNestedInput
     createdClubBooks?: ClubBookUncheckedUpdateManyWithoutCreatedByUserNestedInput
+    clubEventPhotos?: ClubEventPhotoUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ClubBookUpsertWithWhereUniqueWithoutBookInput = {
@@ -40215,6 +40869,35 @@ export namespace Prisma {
     data: XOR<ClubBookUpdateManyMutationInput, ClubBookUncheckedUpdateManyWithoutBookInput>
   }
 
+  export type PollOptionUpsertWithWhereUniqueWithoutBookInput = {
+    where: PollOptionWhereUniqueInput
+    update: XOR<PollOptionUpdateWithoutBookInput, PollOptionUncheckedUpdateWithoutBookInput>
+    create: XOR<PollOptionCreateWithoutBookInput, PollOptionUncheckedCreateWithoutBookInput>
+  }
+
+  export type PollOptionUpdateWithWhereUniqueWithoutBookInput = {
+    where: PollOptionWhereUniqueInput
+    data: XOR<PollOptionUpdateWithoutBookInput, PollOptionUncheckedUpdateWithoutBookInput>
+  }
+
+  export type PollOptionUpdateManyWithWhereWithoutBookInput = {
+    where: PollOptionScalarWhereInput
+    data: XOR<PollOptionUpdateManyMutationInput, PollOptionUncheckedUpdateManyWithoutBookInput>
+  }
+
+  export type PollOptionScalarWhereInput = {
+    AND?: PollOptionScalarWhereInput | PollOptionScalarWhereInput[]
+    OR?: PollOptionScalarWhereInput[]
+    NOT?: PollOptionScalarWhereInput | PollOptionScalarWhereInput[]
+    id?: StringFilter<"PollOption"> | string
+    pollId?: StringFilter<"PollOption"> | string
+    type?: StringFilter<"PollOption"> | string
+    text?: StringFilter<"PollOption"> | string
+    imageUrl?: StringNullableFilter<"PollOption"> | string | null
+    bookId?: StringNullableFilter<"PollOption"> | string | null
+    index?: IntFilter<"PollOption"> | number
+  }
+
   export type BookCreateWithoutStyleImagesInput = {
     id?: string
     title: string
@@ -40227,6 +40910,7 @@ export namespace Prisma {
     categories?: CategoryCreateNestedManyWithoutBooksInput
     createdByUser?: UserCreateNestedOneWithoutCreatedBooksInput
     clubBooks?: ClubBookCreateNestedManyWithoutBookInput
+    pollOptions?: PollOptionCreateNestedManyWithoutBookInput
   }
 
   export type BookUncheckedCreateWithoutStyleImagesInput = {
@@ -40241,6 +40925,7 @@ export namespace Prisma {
     createdAt?: Date | string
     categories?: CategoryUncheckedCreateNestedManyWithoutBooksInput
     clubBooks?: ClubBookUncheckedCreateNestedManyWithoutBookInput
+    pollOptions?: PollOptionUncheckedCreateNestedManyWithoutBookInput
   }
 
   export type BookCreateOrConnectWithoutStyleImagesInput = {
@@ -40271,6 +40956,7 @@ export namespace Prisma {
     categories?: CategoryUpdateManyWithoutBooksNestedInput
     createdByUser?: UserUpdateOneWithoutCreatedBooksNestedInput
     clubBooks?: ClubBookUpdateManyWithoutBookNestedInput
+    pollOptions?: PollOptionUpdateManyWithoutBookNestedInput
   }
 
   export type BookUncheckedUpdateWithoutStyleImagesInput = {
@@ -40285,6 +40971,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categories?: CategoryUncheckedUpdateManyWithoutBooksNestedInput
     clubBooks?: ClubBookUncheckedUpdateManyWithoutBookNestedInput
+    pollOptions?: PollOptionUncheckedUpdateManyWithoutBookNestedInput
   }
 
   export type BookCreateWithoutCategoriesInput = {
@@ -40299,6 +40986,7 @@ export namespace Prisma {
     styleImages?: BookStyleImageCreateNestedManyWithoutBookInput
     createdByUser?: UserCreateNestedOneWithoutCreatedBooksInput
     clubBooks?: ClubBookCreateNestedManyWithoutBookInput
+    pollOptions?: PollOptionCreateNestedManyWithoutBookInput
   }
 
   export type BookUncheckedCreateWithoutCategoriesInput = {
@@ -40313,6 +41001,7 @@ export namespace Prisma {
     createdAt?: Date | string
     styleImages?: BookStyleImageUncheckedCreateNestedManyWithoutBookInput
     clubBooks?: ClubBookUncheckedCreateNestedManyWithoutBookInput
+    pollOptions?: PollOptionUncheckedCreateNestedManyWithoutBookInput
   }
 
   export type BookCreateOrConnectWithoutCategoriesInput = {
@@ -40781,10 +41470,12 @@ export namespace Prisma {
     coverUrl?: string
     isAdmin?: boolean
     passwordHash?: string
+    passwordResetCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     cities?: UserCityCreateNestedManyWithoutUserInput
     createdBooks?: BookCreateNestedManyWithoutCreatedByUserInput
+    clubEventPhotos?: ClubEventPhotoCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedClubBooksInput = {
@@ -40795,10 +41486,12 @@ export namespace Prisma {
     coverUrl?: string
     isAdmin?: boolean
     passwordHash?: string
+    passwordResetCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     cities?: UserCityUncheckedCreateNestedManyWithoutUserInput
     createdBooks?: BookUncheckedCreateNestedManyWithoutCreatedByUserInput
+    clubEventPhotos?: ClubEventPhotoUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedClubBooksInput = {
@@ -40818,6 +41511,7 @@ export namespace Prisma {
     categories?: CategoryCreateNestedManyWithoutBooksInput
     styleImages?: BookStyleImageCreateNestedManyWithoutBookInput
     createdByUser?: UserCreateNestedOneWithoutCreatedBooksInput
+    pollOptions?: PollOptionCreateNestedManyWithoutBookInput
   }
 
   export type BookUncheckedCreateWithoutClubBooksInput = {
@@ -40832,6 +41526,7 @@ export namespace Prisma {
     createdAt?: Date | string
     categories?: CategoryUncheckedCreateNestedManyWithoutBooksInput
     styleImages?: BookStyleImageUncheckedCreateNestedManyWithoutBookInput
+    pollOptions?: PollOptionUncheckedCreateNestedManyWithoutBookInput
   }
 
   export type BookCreateOrConnectWithoutClubBooksInput = {
@@ -40891,6 +41586,59 @@ export namespace Prisma {
     data: ClubBookArtifactCreateManyClubBookInput | ClubBookArtifactCreateManyClubBookInput[]
   }
 
+  export type ClubEventCreateWithoutClubBookInput = {
+    id?: string
+    title: string
+    description: string
+    city?: string
+    location: string
+    addressStreet?: string | null
+    addressNumber?: string | null
+    addressDistrict?: string | null
+    addressCity?: string | null
+    addressState?: string | null
+    addressZip?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    startAt: Date | string
+    endAt?: Date | string | null
+    createdById: string
+    createdAt?: Date | string
+    participants?: ClubEventParticipantCreateNestedManyWithoutEventInput
+    photos?: ClubEventPhotoCreateNestedManyWithoutEventInput
+  }
+
+  export type ClubEventUncheckedCreateWithoutClubBookInput = {
+    id?: string
+    title: string
+    description: string
+    city?: string
+    location: string
+    addressStreet?: string | null
+    addressNumber?: string | null
+    addressDistrict?: string | null
+    addressCity?: string | null
+    addressState?: string | null
+    addressZip?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    startAt: Date | string
+    endAt?: Date | string | null
+    createdById: string
+    createdAt?: Date | string
+    participants?: ClubEventParticipantUncheckedCreateNestedManyWithoutEventInput
+    photos?: ClubEventPhotoUncheckedCreateNestedManyWithoutEventInput
+  }
+
+  export type ClubEventCreateOrConnectWithoutClubBookInput = {
+    where: ClubEventWhereUniqueInput
+    create: XOR<ClubEventCreateWithoutClubBookInput, ClubEventUncheckedCreateWithoutClubBookInput>
+  }
+
+  export type ClubEventCreateManyClubBookInputEnvelope = {
+    data: ClubEventCreateManyClubBookInput | ClubEventCreateManyClubBookInput[]
+  }
+
   export type UserUpsertWithoutCreatedClubBooksInput = {
     update: XOR<UserUpdateWithoutCreatedClubBooksInput, UserUncheckedUpdateWithoutCreatedClubBooksInput>
     create: XOR<UserCreateWithoutCreatedClubBooksInput, UserUncheckedCreateWithoutCreatedClubBooksInput>
@@ -40910,10 +41658,12 @@ export namespace Prisma {
     coverUrl?: StringFieldUpdateOperationsInput | string
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     passwordHash?: StringFieldUpdateOperationsInput | string
+    passwordResetCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cities?: UserCityUpdateManyWithoutUserNestedInput
     createdBooks?: BookUpdateManyWithoutCreatedByUserNestedInput
+    clubEventPhotos?: ClubEventPhotoUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedClubBooksInput = {
@@ -40924,10 +41674,12 @@ export namespace Prisma {
     coverUrl?: StringFieldUpdateOperationsInput | string
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     passwordHash?: StringFieldUpdateOperationsInput | string
+    passwordResetCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cities?: UserCityUncheckedUpdateManyWithoutUserNestedInput
     createdBooks?: BookUncheckedUpdateManyWithoutCreatedByUserNestedInput
+    clubEventPhotos?: ClubEventPhotoUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BookUpsertWithoutClubBooksInput = {
@@ -40953,6 +41705,7 @@ export namespace Prisma {
     categories?: CategoryUpdateManyWithoutBooksNestedInput
     styleImages?: BookStyleImageUpdateManyWithoutBookNestedInput
     createdByUser?: UserUpdateOneWithoutCreatedBooksNestedInput
+    pollOptions?: PollOptionUpdateManyWithoutBookNestedInput
   }
 
   export type BookUncheckedUpdateWithoutClubBooksInput = {
@@ -40967,6 +41720,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categories?: CategoryUncheckedUpdateManyWithoutBooksNestedInput
     styleImages?: BookStyleImageUncheckedUpdateManyWithoutBookNestedInput
+    pollOptions?: PollOptionUncheckedUpdateManyWithoutBookNestedInput
   }
 
   export type ClubBookMessageUpsertWithWhereUniqueWithoutClubBookInput = {
@@ -41026,6 +41780,46 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"ClubBookArtifact"> | Date | string
   }
 
+  export type ClubEventUpsertWithWhereUniqueWithoutClubBookInput = {
+    where: ClubEventWhereUniqueInput
+    update: XOR<ClubEventUpdateWithoutClubBookInput, ClubEventUncheckedUpdateWithoutClubBookInput>
+    create: XOR<ClubEventCreateWithoutClubBookInput, ClubEventUncheckedCreateWithoutClubBookInput>
+  }
+
+  export type ClubEventUpdateWithWhereUniqueWithoutClubBookInput = {
+    where: ClubEventWhereUniqueInput
+    data: XOR<ClubEventUpdateWithoutClubBookInput, ClubEventUncheckedUpdateWithoutClubBookInput>
+  }
+
+  export type ClubEventUpdateManyWithWhereWithoutClubBookInput = {
+    where: ClubEventScalarWhereInput
+    data: XOR<ClubEventUpdateManyMutationInput, ClubEventUncheckedUpdateManyWithoutClubBookInput>
+  }
+
+  export type ClubEventScalarWhereInput = {
+    AND?: ClubEventScalarWhereInput | ClubEventScalarWhereInput[]
+    OR?: ClubEventScalarWhereInput[]
+    NOT?: ClubEventScalarWhereInput | ClubEventScalarWhereInput[]
+    id?: StringFilter<"ClubEvent"> | string
+    title?: StringFilter<"ClubEvent"> | string
+    description?: StringFilter<"ClubEvent"> | string
+    city?: StringFilter<"ClubEvent"> | string
+    location?: StringFilter<"ClubEvent"> | string
+    addressStreet?: StringNullableFilter<"ClubEvent"> | string | null
+    addressNumber?: StringNullableFilter<"ClubEvent"> | string | null
+    addressDistrict?: StringNullableFilter<"ClubEvent"> | string | null
+    addressCity?: StringNullableFilter<"ClubEvent"> | string | null
+    addressState?: StringNullableFilter<"ClubEvent"> | string | null
+    addressZip?: StringNullableFilter<"ClubEvent"> | string | null
+    latitude?: FloatNullableFilter<"ClubEvent"> | number | null
+    longitude?: FloatNullableFilter<"ClubEvent"> | number | null
+    startAt?: DateTimeFilter<"ClubEvent"> | Date | string
+    endAt?: DateTimeNullableFilter<"ClubEvent"> | Date | string | null
+    clubBookId?: StringNullableFilter<"ClubEvent"> | string | null
+    createdById?: StringFilter<"ClubEvent"> | string
+    createdAt?: DateTimeFilter<"ClubEvent"> | Date | string
+  }
+
   export type ClubBookCreateWithoutMessagesInput = {
     id?: string
     title: string
@@ -41042,6 +41836,7 @@ export namespace Prisma {
     createdByUser: UserCreateNestedOneWithoutCreatedClubBooksInput
     book: BookCreateNestedOneWithoutClubBooksInput
     artifacts?: ClubBookArtifactCreateNestedManyWithoutClubBookInput
+    events?: ClubEventCreateNestedManyWithoutClubBookInput
   }
 
   export type ClubBookUncheckedCreateWithoutMessagesInput = {
@@ -41060,6 +41855,7 @@ export namespace Prisma {
     createdAt?: Date | string
     activatedAt?: Date | string | null
     artifacts?: ClubBookArtifactUncheckedCreateNestedManyWithoutClubBookInput
+    events?: ClubEventUncheckedCreateNestedManyWithoutClubBookInput
   }
 
   export type ClubBookCreateOrConnectWithoutMessagesInput = {
@@ -41094,6 +41890,7 @@ export namespace Prisma {
     createdByUser?: UserUpdateOneRequiredWithoutCreatedClubBooksNestedInput
     book?: BookUpdateOneRequiredWithoutClubBooksNestedInput
     artifacts?: ClubBookArtifactUpdateManyWithoutClubBookNestedInput
+    events?: ClubEventUpdateManyWithoutClubBookNestedInput
   }
 
   export type ClubBookUncheckedUpdateWithoutMessagesInput = {
@@ -41112,6 +41909,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     artifacts?: ClubBookArtifactUncheckedUpdateManyWithoutClubBookNestedInput
+    events?: ClubEventUncheckedUpdateManyWithoutClubBookNestedInput
   }
 
   export type ClubBookCreateWithoutArtifactsInput = {
@@ -41130,6 +41928,7 @@ export namespace Prisma {
     createdByUser: UserCreateNestedOneWithoutCreatedClubBooksInput
     book: BookCreateNestedOneWithoutClubBooksInput
     messages?: ClubBookMessageCreateNestedManyWithoutClubBookInput
+    events?: ClubEventCreateNestedManyWithoutClubBookInput
   }
 
   export type ClubBookUncheckedCreateWithoutArtifactsInput = {
@@ -41148,6 +41947,7 @@ export namespace Prisma {
     createdAt?: Date | string
     activatedAt?: Date | string | null
     messages?: ClubBookMessageUncheckedCreateNestedManyWithoutClubBookInput
+    events?: ClubEventUncheckedCreateNestedManyWithoutClubBookInput
   }
 
   export type ClubBookCreateOrConnectWithoutArtifactsInput = {
@@ -41182,6 +41982,7 @@ export namespace Prisma {
     createdByUser?: UserUpdateOneRequiredWithoutCreatedClubBooksNestedInput
     book?: BookUpdateOneRequiredWithoutClubBooksNestedInput
     messages?: ClubBookMessageUpdateManyWithoutClubBookNestedInput
+    events?: ClubEventUpdateManyWithoutClubBookNestedInput
   }
 
   export type ClubBookUncheckedUpdateWithoutArtifactsInput = {
@@ -41200,6 +42001,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     messages?: ClubBookMessageUncheckedUpdateManyWithoutClubBookNestedInput
+    events?: ClubEventUncheckedUpdateManyWithoutClubBookNestedInput
   }
 
   export type ChannelMessageCreateWithoutChannelInput = {
@@ -41629,16 +42431,20 @@ export namespace Prisma {
 
   export type PollOptionCreateWithoutPollInput = {
     id?: string
+    type?: string
     text: string
     imageUrl?: string | null
     index: number
+    book?: BookCreateNestedOneWithoutPollOptionsInput
     votes?: PollVoteCreateNestedManyWithoutOptionInput
   }
 
   export type PollOptionUncheckedCreateWithoutPollInput = {
     id?: string
+    type?: string
     text: string
     imageUrl?: string | null
+    bookId?: string | null
     index: number
     votes?: PollVoteUncheckedCreateNestedManyWithoutOptionInput
   }
@@ -41691,17 +42497,6 @@ export namespace Prisma {
     data: XOR<PollOptionUpdateManyMutationInput, PollOptionUncheckedUpdateManyWithoutPollInput>
   }
 
-  export type PollOptionScalarWhereInput = {
-    AND?: PollOptionScalarWhereInput | PollOptionScalarWhereInput[]
-    OR?: PollOptionScalarWhereInput[]
-    NOT?: PollOptionScalarWhereInput | PollOptionScalarWhereInput[]
-    id?: StringFilter<"PollOption"> | string
-    pollId?: StringFilter<"PollOption"> | string
-    text?: StringFilter<"PollOption"> | string
-    imageUrl?: StringNullableFilter<"PollOption"> | string | null
-    index?: IntFilter<"PollOption"> | number
-  }
-
   export type PollVoteUpsertWithWhereUniqueWithoutPollInput = {
     where: PollVoteWhereUniqueInput
     update: XOR<PollVoteUpdateWithoutPollInput, PollVoteUncheckedUpdateWithoutPollInput>
@@ -41731,7 +42526,8 @@ export namespace Prisma {
 
   export type PollCreateWithoutOptionsInput = {
     id?: string
-    clubBookId: string
+    clubBookId?: string | null
+    city?: string
     userId: string
     question: string
     description?: string | null
@@ -41744,7 +42540,8 @@ export namespace Prisma {
 
   export type PollUncheckedCreateWithoutOptionsInput = {
     id?: string
-    clubBookId: string
+    clubBookId?: string | null
+    city?: string
     userId: string
     question: string
     description?: string | null
@@ -41758,6 +42555,41 @@ export namespace Prisma {
   export type PollCreateOrConnectWithoutOptionsInput = {
     where: PollWhereUniqueInput
     create: XOR<PollCreateWithoutOptionsInput, PollUncheckedCreateWithoutOptionsInput>
+  }
+
+  export type BookCreateWithoutPollOptionsInput = {
+    id?: string
+    title: string
+    author: string
+    coverUrl?: string
+    synopsis?: string
+    aiStyleDescription?: string
+    indicationComment?: string
+    createdAt?: Date | string
+    categories?: CategoryCreateNestedManyWithoutBooksInput
+    styleImages?: BookStyleImageCreateNestedManyWithoutBookInput
+    createdByUser?: UserCreateNestedOneWithoutCreatedBooksInput
+    clubBooks?: ClubBookCreateNestedManyWithoutBookInput
+  }
+
+  export type BookUncheckedCreateWithoutPollOptionsInput = {
+    id?: string
+    title: string
+    author: string
+    coverUrl?: string
+    synopsis?: string
+    aiStyleDescription?: string
+    createdByUserId?: string | null
+    indicationComment?: string
+    createdAt?: Date | string
+    categories?: CategoryUncheckedCreateNestedManyWithoutBooksInput
+    styleImages?: BookStyleImageUncheckedCreateNestedManyWithoutBookInput
+    clubBooks?: ClubBookUncheckedCreateNestedManyWithoutBookInput
+  }
+
+  export type BookCreateOrConnectWithoutPollOptionsInput = {
+    where: BookWhereUniqueInput
+    create: XOR<BookCreateWithoutPollOptionsInput, BookUncheckedCreateWithoutPollOptionsInput>
   }
 
   export type PollVoteCreateWithoutOptionInput = {
@@ -41796,7 +42628,8 @@ export namespace Prisma {
 
   export type PollUpdateWithoutOptionsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    clubBookId?: StringFieldUpdateOperationsInput | string
+    clubBookId?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     question?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -41809,7 +42642,8 @@ export namespace Prisma {
 
   export type PollUncheckedUpdateWithoutOptionsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    clubBookId?: StringFieldUpdateOperationsInput | string
+    clubBookId?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     question?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -41818,6 +42652,47 @@ export namespace Prisma {
     publicVotes?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     votes?: PollVoteUncheckedUpdateManyWithoutPollNestedInput
+  }
+
+  export type BookUpsertWithoutPollOptionsInput = {
+    update: XOR<BookUpdateWithoutPollOptionsInput, BookUncheckedUpdateWithoutPollOptionsInput>
+    create: XOR<BookCreateWithoutPollOptionsInput, BookUncheckedCreateWithoutPollOptionsInput>
+    where?: BookWhereInput
+  }
+
+  export type BookUpdateToOneWithWhereWithoutPollOptionsInput = {
+    where?: BookWhereInput
+    data: XOR<BookUpdateWithoutPollOptionsInput, BookUncheckedUpdateWithoutPollOptionsInput>
+  }
+
+  export type BookUpdateWithoutPollOptionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    author?: StringFieldUpdateOperationsInput | string
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    synopsis?: StringFieldUpdateOperationsInput | string
+    aiStyleDescription?: StringFieldUpdateOperationsInput | string
+    indicationComment?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categories?: CategoryUpdateManyWithoutBooksNestedInput
+    styleImages?: BookStyleImageUpdateManyWithoutBookNestedInput
+    createdByUser?: UserUpdateOneWithoutCreatedBooksNestedInput
+    clubBooks?: ClubBookUpdateManyWithoutBookNestedInput
+  }
+
+  export type BookUncheckedUpdateWithoutPollOptionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    author?: StringFieldUpdateOperationsInput | string
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    synopsis?: StringFieldUpdateOperationsInput | string
+    aiStyleDescription?: StringFieldUpdateOperationsInput | string
+    createdByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    indicationComment?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categories?: CategoryUncheckedUpdateManyWithoutBooksNestedInput
+    styleImages?: BookStyleImageUncheckedUpdateManyWithoutBookNestedInput
+    clubBooks?: ClubBookUncheckedUpdateManyWithoutBookNestedInput
   }
 
   export type PollVoteUpsertWithWhereUniqueWithoutOptionInput = {
@@ -41838,7 +42713,8 @@ export namespace Prisma {
 
   export type PollCreateWithoutVotesInput = {
     id?: string
-    clubBookId: string
+    clubBookId?: string | null
+    city?: string
     userId: string
     question: string
     description?: string | null
@@ -41851,7 +42727,8 @@ export namespace Prisma {
 
   export type PollUncheckedCreateWithoutVotesInput = {
     id?: string
-    clubBookId: string
+    clubBookId?: string | null
+    city?: string
     userId: string
     question: string
     description?: string | null
@@ -41869,17 +42746,21 @@ export namespace Prisma {
 
   export type PollOptionCreateWithoutVotesInput = {
     id?: string
+    type?: string
     text: string
     imageUrl?: string | null
     index: number
     poll: PollCreateNestedOneWithoutOptionsInput
+    book?: BookCreateNestedOneWithoutPollOptionsInput
   }
 
   export type PollOptionUncheckedCreateWithoutVotesInput = {
     id?: string
     pollId: string
+    type?: string
     text: string
     imageUrl?: string | null
+    bookId?: string | null
     index: number
   }
 
@@ -41901,7 +42782,8 @@ export namespace Prisma {
 
   export type PollUpdateWithoutVotesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    clubBookId?: StringFieldUpdateOperationsInput | string
+    clubBookId?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     question?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -41914,7 +42796,8 @@ export namespace Prisma {
 
   export type PollUncheckedUpdateWithoutVotesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    clubBookId?: StringFieldUpdateOperationsInput | string
+    clubBookId?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     question?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -41938,18 +42821,65 @@ export namespace Prisma {
 
   export type PollOptionUpdateWithoutVotesInput = {
     id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
     text?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     index?: IntFieldUpdateOperationsInput | number
     poll?: PollUpdateOneRequiredWithoutOptionsNestedInput
+    book?: BookUpdateOneWithoutPollOptionsNestedInput
   }
 
   export type PollOptionUncheckedUpdateWithoutVotesInput = {
     id?: StringFieldUpdateOperationsInput | string
     pollId?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
     text?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bookId?: NullableStringFieldUpdateOperationsInput | string | null
     index?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type ClubBookCreateWithoutEventsInput = {
+    id?: string
+    title: string
+    author: string
+    coverUrl?: string
+    colorKey: string
+    city?: string
+    month: number
+    year: number
+    isActive?: boolean
+    indicationComment?: string
+    createdAt?: Date | string
+    activatedAt?: Date | string | null
+    createdByUser: UserCreateNestedOneWithoutCreatedClubBooksInput
+    book: BookCreateNestedOneWithoutClubBooksInput
+    messages?: ClubBookMessageCreateNestedManyWithoutClubBookInput
+    artifacts?: ClubBookArtifactCreateNestedManyWithoutClubBookInput
+  }
+
+  export type ClubBookUncheckedCreateWithoutEventsInput = {
+    id?: string
+    bookId: string
+    title: string
+    author: string
+    coverUrl?: string
+    colorKey: string
+    city?: string
+    month: number
+    year: number
+    isActive?: boolean
+    createdByUserId: string
+    indicationComment?: string
+    createdAt?: Date | string
+    activatedAt?: Date | string | null
+    messages?: ClubBookMessageUncheckedCreateNestedManyWithoutClubBookInput
+    artifacts?: ClubBookArtifactUncheckedCreateNestedManyWithoutClubBookInput
+  }
+
+  export type ClubBookCreateOrConnectWithoutEventsInput = {
+    where: ClubBookWhereUniqueInput
+    create: XOR<ClubBookCreateWithoutEventsInput, ClubBookUncheckedCreateWithoutEventsInput>
   }
 
   export type ClubEventParticipantCreateWithoutEventInput = {
@@ -41977,11 +42907,11 @@ export namespace Prisma {
 
   export type ClubEventPhotoCreateWithoutEventInput = {
     id?: string
-    userId: string
     url: string
     caption?: string | null
     type?: string
     createdAt?: Date | string
+    user: UserCreateNestedOneWithoutClubEventPhotosInput
   }
 
   export type ClubEventPhotoUncheckedCreateWithoutEventInput = {
@@ -42000,6 +42930,55 @@ export namespace Prisma {
 
   export type ClubEventPhotoCreateManyEventInputEnvelope = {
     data: ClubEventPhotoCreateManyEventInput | ClubEventPhotoCreateManyEventInput[]
+  }
+
+  export type ClubBookUpsertWithoutEventsInput = {
+    update: XOR<ClubBookUpdateWithoutEventsInput, ClubBookUncheckedUpdateWithoutEventsInput>
+    create: XOR<ClubBookCreateWithoutEventsInput, ClubBookUncheckedCreateWithoutEventsInput>
+    where?: ClubBookWhereInput
+  }
+
+  export type ClubBookUpdateToOneWithWhereWithoutEventsInput = {
+    where?: ClubBookWhereInput
+    data: XOR<ClubBookUpdateWithoutEventsInput, ClubBookUncheckedUpdateWithoutEventsInput>
+  }
+
+  export type ClubBookUpdateWithoutEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    author?: StringFieldUpdateOperationsInput | string
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    colorKey?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    month?: IntFieldUpdateOperationsInput | number
+    year?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    indicationComment?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdByUser?: UserUpdateOneRequiredWithoutCreatedClubBooksNestedInput
+    book?: BookUpdateOneRequiredWithoutClubBooksNestedInput
+    messages?: ClubBookMessageUpdateManyWithoutClubBookNestedInput
+    artifacts?: ClubBookArtifactUpdateManyWithoutClubBookNestedInput
+  }
+
+  export type ClubBookUncheckedUpdateWithoutEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bookId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    author?: StringFieldUpdateOperationsInput | string
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    colorKey?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    month?: IntFieldUpdateOperationsInput | number
+    year?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdByUserId?: StringFieldUpdateOperationsInput | string
+    indicationComment?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    messages?: ClubBookMessageUncheckedUpdateManyWithoutClubBookNestedInput
+    artifacts?: ClubBookArtifactUncheckedUpdateManyWithoutClubBookNestedInput
   }
 
   export type ClubEventParticipantUpsertWithWhereUniqueWithoutEventInput = {
@@ -42045,19 +43024,6 @@ export namespace Prisma {
     data: XOR<ClubEventPhotoUpdateManyMutationInput, ClubEventPhotoUncheckedUpdateManyWithoutEventInput>
   }
 
-  export type ClubEventPhotoScalarWhereInput = {
-    AND?: ClubEventPhotoScalarWhereInput | ClubEventPhotoScalarWhereInput[]
-    OR?: ClubEventPhotoScalarWhereInput[]
-    NOT?: ClubEventPhotoScalarWhereInput | ClubEventPhotoScalarWhereInput[]
-    id?: StringFilter<"ClubEventPhoto"> | string
-    eventId?: StringFilter<"ClubEventPhoto"> | string
-    userId?: StringFilter<"ClubEventPhoto"> | string
-    url?: StringFilter<"ClubEventPhoto"> | string
-    caption?: StringNullableFilter<"ClubEventPhoto"> | string | null
-    type?: StringFilter<"ClubEventPhoto"> | string
-    createdAt?: DateTimeFilter<"ClubEventPhoto"> | Date | string
-  }
-
   export type ClubEventCreateWithoutParticipantsInput = {
     id?: string
     title: string
@@ -42076,6 +43042,7 @@ export namespace Prisma {
     endAt?: Date | string | null
     createdById: string
     createdAt?: Date | string
+    clubBook?: ClubBookCreateNestedOneWithoutEventsInput
     photos?: ClubEventPhotoCreateNestedManyWithoutEventInput
   }
 
@@ -42095,6 +43062,7 @@ export namespace Prisma {
     longitude?: number | null
     startAt: Date | string
     endAt?: Date | string | null
+    clubBookId?: string | null
     createdById: string
     createdAt?: Date | string
     photos?: ClubEventPhotoUncheckedCreateNestedManyWithoutEventInput
@@ -42134,6 +43102,7 @@ export namespace Prisma {
     endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clubBook?: ClubBookUpdateOneWithoutEventsNestedInput
     photos?: ClubEventPhotoUpdateManyWithoutEventNestedInput
   }
 
@@ -42153,6 +43122,7 @@ export namespace Prisma {
     longitude?: NullableFloatFieldUpdateOperationsInput | number | null
     startAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clubBookId?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     photos?: ClubEventPhotoUncheckedUpdateManyWithoutEventNestedInput
@@ -42176,6 +43146,7 @@ export namespace Prisma {
     endAt?: Date | string | null
     createdById: string
     createdAt?: Date | string
+    clubBook?: ClubBookCreateNestedOneWithoutEventsInput
     participants?: ClubEventParticipantCreateNestedManyWithoutEventInput
   }
 
@@ -42195,6 +43166,7 @@ export namespace Prisma {
     longitude?: number | null
     startAt: Date | string
     endAt?: Date | string | null
+    clubBookId?: string | null
     createdById: string
     createdAt?: Date | string
     participants?: ClubEventParticipantUncheckedCreateNestedManyWithoutEventInput
@@ -42203,6 +43175,43 @@ export namespace Prisma {
   export type ClubEventCreateOrConnectWithoutPhotosInput = {
     where: ClubEventWhereUniqueInput
     create: XOR<ClubEventCreateWithoutPhotosInput, ClubEventUncheckedCreateWithoutPhotosInput>
+  }
+
+  export type UserCreateWithoutClubEventPhotosInput = {
+    id: string
+    name: string
+    bio: string
+    avatarUrl: string
+    coverUrl?: string
+    isAdmin?: boolean
+    passwordHash?: string
+    passwordResetCode?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cities?: UserCityCreateNestedManyWithoutUserInput
+    createdBooks?: BookCreateNestedManyWithoutCreatedByUserInput
+    createdClubBooks?: ClubBookCreateNestedManyWithoutCreatedByUserInput
+  }
+
+  export type UserUncheckedCreateWithoutClubEventPhotosInput = {
+    id: string
+    name: string
+    bio: string
+    avatarUrl: string
+    coverUrl?: string
+    isAdmin?: boolean
+    passwordHash?: string
+    passwordResetCode?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cities?: UserCityUncheckedCreateNestedManyWithoutUserInput
+    createdBooks?: BookUncheckedCreateNestedManyWithoutCreatedByUserInput
+    createdClubBooks?: ClubBookUncheckedCreateNestedManyWithoutCreatedByUserInput
+  }
+
+  export type UserCreateOrConnectWithoutClubEventPhotosInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutClubEventPhotosInput, UserUncheckedCreateWithoutClubEventPhotosInput>
   }
 
   export type ClubEventUpsertWithoutPhotosInput = {
@@ -42234,6 +43243,7 @@ export namespace Prisma {
     endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clubBook?: ClubBookUpdateOneWithoutEventsNestedInput
     participants?: ClubEventParticipantUpdateManyWithoutEventNestedInput
   }
 
@@ -42253,9 +43263,53 @@ export namespace Prisma {
     longitude?: NullableFloatFieldUpdateOperationsInput | number | null
     startAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clubBookId?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     participants?: ClubEventParticipantUncheckedUpdateManyWithoutEventNestedInput
+  }
+
+  export type UserUpsertWithoutClubEventPhotosInput = {
+    update: XOR<UserUpdateWithoutClubEventPhotosInput, UserUncheckedUpdateWithoutClubEventPhotosInput>
+    create: XOR<UserCreateWithoutClubEventPhotosInput, UserUncheckedCreateWithoutClubEventPhotosInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutClubEventPhotosInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutClubEventPhotosInput, UserUncheckedUpdateWithoutClubEventPhotosInput>
+  }
+
+  export type UserUpdateWithoutClubEventPhotosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    bio?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: StringFieldUpdateOperationsInput | string
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    passwordResetCode?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cities?: UserCityUpdateManyWithoutUserNestedInput
+    createdBooks?: BookUpdateManyWithoutCreatedByUserNestedInput
+    createdClubBooks?: ClubBookUpdateManyWithoutCreatedByUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutClubEventPhotosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    bio?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: StringFieldUpdateOperationsInput | string
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    passwordResetCode?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cities?: UserCityUncheckedUpdateManyWithoutUserNestedInput
+    createdBooks?: BookUncheckedUpdateManyWithoutCreatedByUserNestedInput
+    createdClubBooks?: ClubBookUncheckedUpdateManyWithoutCreatedByUserNestedInput
   }
 
   export type UserCityCreateManyUserInput = {
@@ -42290,6 +43344,15 @@ export namespace Prisma {
     activatedAt?: Date | string | null
   }
 
+  export type ClubEventPhotoCreateManyUserInput = {
+    id?: string
+    eventId: string
+    url: string
+    caption?: string | null
+    type?: string
+    createdAt?: Date | string
+  }
+
   export type UserCityUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
@@ -42317,6 +43380,7 @@ export namespace Prisma {
     categories?: CategoryUpdateManyWithoutBooksNestedInput
     styleImages?: BookStyleImageUpdateManyWithoutBookNestedInput
     clubBooks?: ClubBookUpdateManyWithoutBookNestedInput
+    pollOptions?: PollOptionUpdateManyWithoutBookNestedInput
   }
 
   export type BookUncheckedUpdateWithoutCreatedByUserInput = {
@@ -42331,6 +43395,7 @@ export namespace Prisma {
     categories?: CategoryUncheckedUpdateManyWithoutBooksNestedInput
     styleImages?: BookStyleImageUncheckedUpdateManyWithoutBookNestedInput
     clubBooks?: ClubBookUncheckedUpdateManyWithoutBookNestedInput
+    pollOptions?: PollOptionUncheckedUpdateManyWithoutBookNestedInput
   }
 
   export type BookUncheckedUpdateManyWithoutCreatedByUserInput = {
@@ -42360,6 +43425,7 @@ export namespace Prisma {
     book?: BookUpdateOneRequiredWithoutClubBooksNestedInput
     messages?: ClubBookMessageUpdateManyWithoutClubBookNestedInput
     artifacts?: ClubBookArtifactUpdateManyWithoutClubBookNestedInput
+    events?: ClubEventUpdateManyWithoutClubBookNestedInput
   }
 
   export type ClubBookUncheckedUpdateWithoutCreatedByUserInput = {
@@ -42378,6 +43444,7 @@ export namespace Prisma {
     activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     messages?: ClubBookMessageUncheckedUpdateManyWithoutClubBookNestedInput
     artifacts?: ClubBookArtifactUncheckedUpdateManyWithoutClubBookNestedInput
+    events?: ClubEventUncheckedUpdateManyWithoutClubBookNestedInput
   }
 
   export type ClubBookUncheckedUpdateManyWithoutCreatedByUserInput = {
@@ -42394,6 +43461,33 @@ export namespace Prisma {
     indicationComment?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ClubEventPhotoUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    caption?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    event?: ClubEventUpdateOneRequiredWithoutPhotosNestedInput
+  }
+
+  export type ClubEventPhotoUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventId?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    caption?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClubEventPhotoUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventId?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    caption?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type BookStyleImageCreateManyBookInput = {
@@ -42415,6 +43509,15 @@ export namespace Prisma {
     indicationComment?: string
     createdAt?: Date | string
     activatedAt?: Date | string | null
+  }
+
+  export type PollOptionCreateManyBookInput = {
+    id?: string
+    pollId: string
+    type?: string
+    text: string
+    imageUrl?: string | null
+    index: number
   }
 
   export type CategoryUpdateWithoutBooksInput = {
@@ -42463,6 +43566,7 @@ export namespace Prisma {
     createdByUser?: UserUpdateOneRequiredWithoutCreatedClubBooksNestedInput
     messages?: ClubBookMessageUpdateManyWithoutClubBookNestedInput
     artifacts?: ClubBookArtifactUpdateManyWithoutClubBookNestedInput
+    events?: ClubEventUpdateManyWithoutClubBookNestedInput
   }
 
   export type ClubBookUncheckedUpdateWithoutBookInput = {
@@ -42481,6 +43585,7 @@ export namespace Prisma {
     activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     messages?: ClubBookMessageUncheckedUpdateManyWithoutClubBookNestedInput
     artifacts?: ClubBookArtifactUncheckedUpdateManyWithoutClubBookNestedInput
+    events?: ClubEventUncheckedUpdateManyWithoutClubBookNestedInput
   }
 
   export type ClubBookUncheckedUpdateManyWithoutBookInput = {
@@ -42499,6 +43604,35 @@ export namespace Prisma {
     activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type PollOptionUpdateWithoutBookInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    index?: IntFieldUpdateOperationsInput | number
+    poll?: PollUpdateOneRequiredWithoutOptionsNestedInput
+    votes?: PollVoteUpdateManyWithoutOptionNestedInput
+  }
+
+  export type PollOptionUncheckedUpdateWithoutBookInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    pollId?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    index?: IntFieldUpdateOperationsInput | number
+    votes?: PollVoteUncheckedUpdateManyWithoutOptionNestedInput
+  }
+
+  export type PollOptionUncheckedUpdateManyWithoutBookInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    pollId?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    index?: IntFieldUpdateOperationsInput | number
+  }
+
   export type BookUpdateWithoutCategoriesInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
@@ -42511,6 +43645,7 @@ export namespace Prisma {
     styleImages?: BookStyleImageUpdateManyWithoutBookNestedInput
     createdByUser?: UserUpdateOneWithoutCreatedBooksNestedInput
     clubBooks?: ClubBookUpdateManyWithoutBookNestedInput
+    pollOptions?: PollOptionUpdateManyWithoutBookNestedInput
   }
 
   export type BookUncheckedUpdateWithoutCategoriesInput = {
@@ -42525,6 +43660,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     styleImages?: BookStyleImageUncheckedUpdateManyWithoutBookNestedInput
     clubBooks?: ClubBookUncheckedUpdateManyWithoutBookNestedInput
+    pollOptions?: PollOptionUncheckedUpdateManyWithoutBookNestedInput
   }
 
   export type BookUncheckedUpdateManyWithoutCategoriesInput = {
@@ -42664,6 +43800,26 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type ClubEventCreateManyClubBookInput = {
+    id?: string
+    title: string
+    description: string
+    city?: string
+    location: string
+    addressStreet?: string | null
+    addressNumber?: string | null
+    addressDistrict?: string | null
+    addressCity?: string | null
+    addressState?: string | null
+    addressZip?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    startAt: Date | string
+    endAt?: Date | string | null
+    createdById: string
+    createdAt?: Date | string
+  }
+
   export type ClubBookMessageUpdateWithoutClubBookInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
@@ -42712,6 +43868,70 @@ export namespace Prisma {
     size?: IntFieldUpdateOperationsInput | number
     url?: StringFieldUpdateOperationsInput | string
     uploadedByUserId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClubEventUpdateWithoutClubBookInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressState?: NullableStringFieldUpdateOperationsInput | string | null
+    addressZip?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    participants?: ClubEventParticipantUpdateManyWithoutEventNestedInput
+    photos?: ClubEventPhotoUpdateManyWithoutEventNestedInput
+  }
+
+  export type ClubEventUncheckedUpdateWithoutClubBookInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressState?: NullableStringFieldUpdateOperationsInput | string | null
+    addressZip?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    participants?: ClubEventParticipantUncheckedUpdateManyWithoutEventNestedInput
+    photos?: ClubEventPhotoUncheckedUpdateManyWithoutEventNestedInput
+  }
+
+  export type ClubEventUncheckedUpdateManyWithoutClubBookInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressState?: NullableStringFieldUpdateOperationsInput | string | null
+    addressZip?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -42825,8 +44045,10 @@ export namespace Prisma {
 
   export type PollOptionCreateManyPollInput = {
     id?: string
+    type?: string
     text: string
     imageUrl?: string | null
+    bookId?: string | null
     index: number
   }
 
@@ -42839,24 +44061,30 @@ export namespace Prisma {
 
   export type PollOptionUpdateWithoutPollInput = {
     id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
     text?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     index?: IntFieldUpdateOperationsInput | number
+    book?: BookUpdateOneWithoutPollOptionsNestedInput
     votes?: PollVoteUpdateManyWithoutOptionNestedInput
   }
 
   export type PollOptionUncheckedUpdateWithoutPollInput = {
     id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
     text?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bookId?: NullableStringFieldUpdateOperationsInput | string | null
     index?: IntFieldUpdateOperationsInput | number
     votes?: PollVoteUncheckedUpdateManyWithoutOptionNestedInput
   }
 
   export type PollOptionUncheckedUpdateManyWithoutPollInput = {
     id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
     text?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bookId?: NullableStringFieldUpdateOperationsInput | string | null
     index?: IntFieldUpdateOperationsInput | number
   }
 
@@ -42948,11 +44176,11 @@ export namespace Prisma {
 
   export type ClubEventPhotoUpdateWithoutEventInput = {
     id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     caption?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutClubEventPhotosNestedInput
   }
 
   export type ClubEventPhotoUncheckedUpdateWithoutEventInput = {

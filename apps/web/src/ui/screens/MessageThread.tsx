@@ -4,6 +4,7 @@ import Card from "../components/Card";
 import ChatBubbles from "../components/ChatBubbles";
 import { api } from "../../lib/api";
 import { clubColorHex } from "../lib/clubColors";
+import EmojiPickerButton from "../components/EmojiPickerButton";
 
 type ClubBook = { id: string; bookId: string; title: string; author: string; colorKey: string };
 type Channel = { id: string; name: string; type: string; cityCode?: string | null };
@@ -31,6 +32,7 @@ export default function MessageThread() {
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const [usersById, setUsersById] = useState<Record<string, User>>({});
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const viewerId = viewer?.id || "";
 
@@ -132,6 +134,30 @@ export default function MessageThread() {
       setSending(false);
     }
   };
+
+  const insertEmoji = (emoji: string) => {
+    const el = textareaRef.current;
+    if (!el) {
+      setChatText(prev => prev + emoji);
+      return;
+    }
+
+    const start = el.selectionStart;
+    const end = el.selectionEnd;
+    const text = chatText;
+    const before = text.substring(0, start);
+    const after = text.substring(end);
+
+    const newText = before + emoji + after;
+    setChatText(newText);
+
+    // Reset cursor position after React re-renders
+    setTimeout(() => {
+      el.focus();
+      el.setSelectionRange(start + emoji.length, start + emoji.length);
+    }, 0);
+  };
+
   const handleDeleteMessage = async (msgId: string) => {
     try {
       let url = "";
@@ -172,8 +198,8 @@ export default function MessageThread() {
       </div>
 
       <div className="flex-1 min-h-0 flex flex-col">
-        <Card>
-          <div className="h-full flex flex-col overflow-hidden">
+        <Card className="!overflow-visible">
+          <div className="h-full flex flex-col !overflow-visible">
             <div className="flex-1 overflow-y-auto chat-wallpaper p-3 space-y-4">
               <ChatBubbles
                 messages={messages}
@@ -187,18 +213,26 @@ export default function MessageThread() {
             </div>
 
             <div className="p-3 border-t border-black/5 bg-white/80">
-              <div className="flex gap-2">
+              <div className="flex gap-2 items-end">
+                <EmojiPickerButton onEmojiSelect={insertEmoji} />
                 <textarea
+                  ref={textareaRef}
                   value={chatText}
                   onChange={e => setChatText(e.target.value)}
-                  className="flex-1 bg-white border border-black/10 rounded-2xl p-2 text-sm outline-none resize-none"
+                  className="flex-1 bg-white border border-black/10 rounded-2xl p-2.5 text-sm outline-none resize-none min-h-[44px] max-h-[120px]"
                   placeholder="Escreva sua mensagem..."
                   rows={1}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      sendMessage();
+                    }
+                  }}
                 />
                 <button
                   onClick={sendMessage}
                   disabled={sending || !chatText.trim()}
-                  className="w-12 h-12 rounded-2xl bg-sun-500 flex items-center justify-center disabled:opacity-50"
+                  className="w-11 h-11 shrink-0 rounded-2xl bg-sun-500 flex items-center justify-center disabled:opacity-50 hover:bg-sun-600 transition-colors"
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
                 </button>

@@ -402,6 +402,63 @@ export function registerRoutes(app: Express) {
         res.json({ user: { ...user, cities: (user as any)!.cities.map((c: any) => c.city) } });
     });
 
+    app.delete("/admin/users/:id", async (req, res) => {
+        const username = getUsername(req);
+        if (!username || !(await assertAdmin(username))) return res.status(403).json({ error: "admin only" });
+
+        const targetId = String(req.params.id);
+        if (targetId === username) return res.status(400).json({ error: "Não é possível remover a si mesmo" });
+
+        try {
+            await prisma.user.delete({ where: { id: targetId } });
+            res.json({ ok: true });
+        } catch (e) {
+            console.error("[admin delete user error]", e);
+            res.status(500).json({ error: "Erro ao remover usuário. Verifique se ele possui dependências." });
+        }
+    });
+
+    app.post("/admin/users/:id/reset-password", async (req, res) => {
+        const username = getUsername(req);
+        if (!username || !(await assertAdmin(username))) return res.status(403).json({ error: "admin only" });
+
+        const targetId = String(req.params.id);
+        const resetCode = crypto.randomBytes(4).toString("hex").toUpperCase();
+
+        await prisma.user.update({
+            where: { id: targetId },
+            data: { passwordResetCode: resetCode } as any
+        });
+
+        res.json({ resetCode });
+    });
+
+    app.post("/users/reset-password", async (req, res) => {
+        const { username: rawUsername, resetCode, newPassword } = req.body;
+        if (!rawUsername || !resetCode || !newPassword) {
+            return res.status(400).json({ error: "Dados incompletos" });
+        }
+
+        const username = rawUsername.toLowerCase();
+        const user = await prisma.user.findUnique({ where: { id: username } });
+
+        if (!user || (user as any).passwordResetCode !== resetCode) {
+            return res.status(400).json({ error: "Código de reset inválido ou usuário não encontrado" });
+        }
+
+        const passwordHash = await bcrypt.hash(newPassword, 10);
+
+        await prisma.user.update({
+            where: { id: username },
+            data: {
+                passwordHash,
+                passwordResetCode: null
+            } as any
+        });
+
+        res.json({ ok: true });
+    });
+
     // Admin-only Invitations
     app.get("/admin/invitations", async (req, res) => {
         const username = getUsername(req);

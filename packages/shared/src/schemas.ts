@@ -178,9 +178,13 @@ export const EventEnvelopeSchema = z.object({
 
 export type EventEnvelope = z.infer<typeof EventEnvelopeSchema>;
 
+export const PollOptionTypeSchema = z.enum(["TEXT", "BOOK"]);
+
 export const PollOptionCreateSchema = z.object({
-  text: z.string().min(1).max(200),
+  type: PollOptionTypeSchema.default("TEXT"),
+  text: z.string().max(200).optional().default(""),
   imageUrl: MediaUrlSchema.optional(),
+  bookId: z.string().optional(),
 });
 
 export const PollCreateSchema = z.object({
@@ -190,7 +194,8 @@ export const PollCreateSchema = z.object({
   multiChoice: z.boolean().optional().default(false),
   publicVotes: z.boolean().optional().default(false),
   options: z.array(PollOptionCreateSchema).min(2).max(10),
-  clubBookId: z.string().min(1).max(64),
+  clubBookId: z.string().min(1).max(64).optional(),
+  city: CitySchema.default("FORTALEZA"),
 });
 
 export const PollVoteSchema = z.object({

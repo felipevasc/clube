@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Avatar from "./Avatar";
 import BookChip from "./BookChip";
@@ -7,6 +7,7 @@ import { clubColorHex } from "../lib/clubColors";
 import FullScreenFeed from "./FullScreenFeed";
 import { LuTrash2 } from "react-icons/lu";
 import ConfirmModal from "./ConfirmModal";
+import EmojiPickerButton from "./EmojiPickerButton";
 
 type ReactionType = "like" | "love" | "laugh" | "wow" | "sad" | "clap";
 
@@ -102,6 +103,7 @@ export default function FeedList({
   const [currentUser, setCurrentUser] = useState<{ id: string; isAdmin: boolean } | null>(null);
   const [menuFor, setMenuFor] = useState<string>("");
   const [confirmDeleteId, setConfirmDeleteId] = useState<string>("");
+  const commentInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     api<{ user: { id: string; isAdmin: boolean } }>("/me")
@@ -157,6 +159,28 @@ export default function FeedList({
       alive = false;
     };
   }, [detailId]);
+
+  const insertCommentEmoji = (emoji: string) => {
+    const el = commentInputRef.current;
+    if (!el) {
+      setCommentText(prev => prev + emoji);
+      return;
+    }
+
+    const start = el.selectionStart || 0;
+    const end = el.selectionEnd || 0;
+    const text = commentText;
+    const before = text.substring(0, start);
+    const after = text.substring(end);
+
+    const newText = before + emoji + after;
+    setCommentText(newText);
+
+    setTimeout(() => {
+      el.focus();
+      el.setSelectionRange(start + emoji.length, start + emoji.length);
+    }, 0);
+  };
 
   const react = async (postId: string, type: ReactionType) => {
     setPickerFor("");
@@ -387,7 +411,7 @@ export default function FeedList({
           <div className="fixed inset-0 z-50 flex flex-col justify-end sm:justify-center items-center">
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setDetailId("")} />
 
-            <div className="relative w-full max-w-lg bg-white sm:rounded-3xl shadow-2xl h-[90dvh] sm:h-[80vh] flex flex-col animate-in slide-in-from-bottom-10">
+            <div className="relative w-full max-w-lg bg-white sm:rounded-3xl shadow-2xl h-[90dvh] sm:h-[80vh] flex flex-col !overflow-visible animate-in slide-in-from-bottom-10">
               {/* Modal Header */}
               <div className="px-4 py-3 border-b border-neutral-100 flex items-center justify-between">
                 <div className="w-8" /> {/* Spacer */}
@@ -448,19 +472,27 @@ export default function FeedList({
               {/* Input Area */}
               <div className="p-3 border-t border-neutral-100 bg-white items-center flex gap-2">
                 <Avatar user={{ id: "me", name: "Eu" }} size={32} />
-                <input
-                  value={commentText}
-                  onChange={e => setCommentText(e.target.value)}
-                  placeholder="Adicione um comentário..."
-                  className="flex-1 bg-transparent text-sm outline-none px-2"
-                  onKeyDown={e => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault();
-                      // Send comment
-                    }
-                  }}
-                />
+                <div className="flex-1 flex items-center bg-neutral-100 rounded-2xl px-3 py-1">
+                  <input
+                    ref={commentInputRef}
+                    value={commentText}
+                    onChange={e => setCommentText(e.target.value)}
+                    placeholder="Adicione um comentário..."
+                    className="flex-1 bg-transparent text-sm outline-none py-2"
+                    onKeyDown={e => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        if (commentText.trim()) {
+                          // Trigger same logic as the button
+                          (document.getElementById('publish-comment-btn') as HTMLButtonElement)?.click();
+                        }
+                      }
+                    }}
+                  />
+                  <EmojiPickerButton onEmojiSelect={insertCommentEmoji} align="right" />
+                </div>
                 <button
+                  id="publish-comment-btn"
                   disabled={!commentText.trim()}
                   onClick={async () => {
                     if (!detail || !commentText.trim()) return;
@@ -474,7 +506,7 @@ export default function FeedList({
                     setDetail(out.post);
                     refresh(); // update comments count in feed
                   }}
-                  className="text-sun-600 font-bold text-sm disabled:opacity-50 hover:text-sun-700"
+                  className="text-sun-600 font-bold text-sm disabled:opacity-50 hover:text-sun-700 px-1"
                 >
                   Publicar
                 </button>

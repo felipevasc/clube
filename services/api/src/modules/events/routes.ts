@@ -36,6 +36,7 @@ const ClubEventCreateSchema = z.object({
     addressCity: z.string().optional(),
     addressState: z.string().optional(),
     addressZip: z.string().optional(),
+    clubBookId: z.string().optional(),
 });
 
 const ClubEventPhotoCreateSchema = z.object({
@@ -75,6 +76,9 @@ export function registerRoutes(app: Express) {
                 photos: {
                     where: { type: "LOCATION" },
                     take: 1
+                },
+                clubBook: {
+                    select: { id: true, title: true, coverUrl: true }
                 },
                 _count: {
                     select: { photos: true }
@@ -157,7 +161,17 @@ export function registerRoutes(app: Express) {
                     // For now we just return userIds and frontend will resolve them or we fetch them
                 },
                 photos: {
-                    orderBy: { createdAt: 'desc' }
+                    orderBy: { createdAt: 'desc' },
+                    include: {
+                        user: {
+                            select: { name: true, avatarUrl: true }
+                        }
+                    }
+                },
+                clubBook: {
+                    include: {
+                        book: { select: { synopsis: true, author: true } }
+                    }
                 }
             }
         });
@@ -173,7 +187,8 @@ export function registerRoutes(app: Express) {
                 ...event,
                 myStatus,
                 canEdit
-            }
+            },
+            currentUserId: username
         });
     });
 
@@ -212,6 +227,30 @@ export function registerRoutes(app: Express) {
                     url: input.url,
                     caption: input.caption
                 }
+            });
+
+            // Delete Event Photo
+            app.delete("/events/:id/photos/:photoId", async (req, res) => {
+                const username = getUsername(req);
+                if (!username) return res.status(401).json({ error: "missing x-username" });
+                const { id, photoId } = req.params;
+
+                const photo = await prisma.clubEventPhoto.findUnique({ where: { id: photoId } });
+                if (!photo) return res.status(404).json({ error: "photo not found" });
+
+                const event = await prisma.clubEvent.findUnique({ where: { id } });
+                if (!event) return res.status(404).json({ error: "event not found" });
+
+                const isAdmin = await assertAdmin(username);
+                const isEventCreator = event.createdById === username;
+                const isPhotoOwner = photo.userId === username;
+
+                if (!isAdmin && !isEventCreator && !isPhotoOwner) {
+                    return res.status(403).json({ error: "forbidden" });
+                }
+
+                await prisma.clubEventPhoto.delete({ where: { id: photoId } });
+                res.status(204).send();
             });
 
             res.status(201).json({ photo });

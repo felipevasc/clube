@@ -275,6 +275,9 @@ export default function UserManagement() {
                     onUpdated={updated => {
                         setUsers(users.map(u => u.id === updated.id ? updated : u));
                     }}
+                    onDeleted={id => {
+                        setUsers(users.filter(u => u.id !== id));
+                    }}
                 />
             )}
         </div>

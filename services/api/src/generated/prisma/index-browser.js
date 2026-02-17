@@ -126,6 +126,7 @@ exports.Prisma.UserScalarFieldEnum = {
   coverUrl: 'coverUrl',
   isAdmin: 'isAdmin',
   passwordHash: 'passwordHash',
+  passwordResetCode: 'passwordResetCode',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -302,6 +303,7 @@ exports.Prisma.CommentScalarFieldEnum = {
 exports.Prisma.PollScalarFieldEnum = {
   id: 'id',
   clubBookId: 'clubBookId',
+  city: 'city',
   userId: 'userId',
   question: 'question',
   description: 'description',
@@ -314,8 +316,10 @@ exports.Prisma.PollScalarFieldEnum = {
 exports.Prisma.PollOptionScalarFieldEnum = {
   id: 'id',
   pollId: 'pollId',
+  type: 'type',
   text: 'text',
   imageUrl: 'imageUrl',
+  bookId: 'bookId',
   index: 'index'
 };
 
@@ -343,6 +347,7 @@ exports.Prisma.ClubEventScalarFieldEnum = {
   longitude: 'longitude',
   startAt: 'startAt',
   endAt: 'endAt',
+  clubBookId: 'clubBookId',
   createdById: 'createdById',
   createdAt: 'createdAt'
 };

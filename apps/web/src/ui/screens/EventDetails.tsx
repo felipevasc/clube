@@ -4,11 +4,12 @@ import { api } from "../../lib/api";
 import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { LuArrowLeft, LuCalendarDays, LuMapPin, LuClock, LuCheck, LuX, LuCamera, LuLoader, LuUsers, LuChevronLeft, LuChevronRight, LuPencilLine } from "react-icons/lu";
+import { LuArrowLeft, LuCalendarDays, LuMapPin, LuClock, LuCheck, LuX, LuCamera, LuLoader, LuUsers, LuChevronLeft, LuChevronRight, LuPencilLine, LuAlignLeft, LuTrash2 } from "react-icons/lu";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { ImageUpload } from "../components/ImageUpload";
 import EventEditModal from "./EventEditModal";
+import ConfirmModal from "../components/ConfirmModal";
 
 // Fix for Leaflet icons
 import icon from "leaflet/dist/images/marker-icon.png";
@@ -36,10 +37,16 @@ type EventPhoto = {
     caption?: string;
     userId: string;
     type: 'LOCATION' | 'GALLERY';
+    createdAt: string;
+    user?: {
+        name: string;
+        avatarUrl: string;
+    }
 };
 
 type ClubEventDetail = {
     id: string;
+    // ... other fields
     title: string;
     description: string;
     city: string;
@@ -54,12 +61,20 @@ type ClubEventDetail = {
     longitude?: number;
     startAt: string;
     endAt?: string;
-    // coverUrl removed
     createdById: string;
     myStatus: string | null;
     participants: Participant[];
     photos: EventPhoto[];
     canEdit?: boolean;
+    clubBook?: {
+        id: string;
+        title: string;
+        coverUrl: string;
+        book: {
+            author: string;
+            synopsis: string;
+        }
+    };
 };
 
 function MapAdjuster({ routeCoords, eventLocation }: { routeCoords: [number, number][], eventLocation: [number, number] }) {
@@ -81,6 +96,7 @@ export default function EventDetails() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [event, setEvent] = useState<ClubEventDetail | null>(null);
+    const [currentUserId, setCurrentUserId] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
     const [rsvpLoading, setRsvpLoading] = useState(false);
     const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
@@ -95,15 +111,19 @@ export default function EventDetails() {
     const [routeCoords, setRouteCoords] = useState<[number, number][]>([]);
 
     // Lightbox State
-    const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
+    const [selectedPhoto, setSelectedPhoto] = useState<EventPhoto | null>(null);
+    const [photoToDelete, setPhotoToDelete] = useState<string | null>(null);
     const [routeLoading, setRouteLoading] = useState(false);
     const [showRouteInput, setShowRouteInput] = useState(false);
     const [routeStats, setRouteStats] = useState<{ distance: number; duration: number } | null>(null);
     const [showEditModal, setShowEditModal] = useState(false);
 
     const fetchEvent = () => {
-        api<{ event: ClubEventDetail }>(`/events/${id}`)
-            .then((res) => setEvent(res.event))
+        api<{ event: ClubEventDetail, currentUserId: string }>(`/events/${id}`)
+            .then((res) => {
+                setEvent(res.event);
+                setCurrentUserId(res.currentUserId);
+            })
             .catch((err) => {
                 console.error(err);
                 if (err.status === 404) navigate("/encontros");
@@ -131,20 +151,46 @@ export default function EventDetails() {
         }
     };
 
-    const handlePhotoUpload = async (url: string) => {
-        if (!url || !event) return;
+    const handlePhotoUpload = async (urls: string | string[]) => {
+        if (!urls || !event) return;
         setUploading(true);
+
+        const urlList = Array.isArray(urls) ? urls : [urls];
+        if (urlList.length === 0) return;
+
         try {
-            await api(`/events/${event.id}/photos`, {
-                method: "POST",
-                body: JSON.stringify({ url: url, type: "GALLERY" }), // Explicitly GALLERY
-            });
+            await Promise.all(urlList.map(url =>
+                api(`/events/${event.id}/photos`, {
+                    method: "POST",
+                    body: JSON.stringify({ url: url, type: "GALLERY" }),
+                })
+            ));
+
             setShowUpload(false);
             fetchEvent();
         } catch (error) {
             console.error(error);
         } finally {
             setUploading(false);
+        }
+    };
+
+    const handlePhotoDeleteClick = (photoId: string) => {
+        setPhotoToDelete(photoId);
+    };
+
+    const confirmPhotoDelete = async () => {
+        if (!event || !photoToDelete) return;
+        try {
+            await api(`/events/${event.id}/photos/${photoToDelete}`, {
+                method: "DELETE",
+            });
+            setPhotoToDelete(null);
+            setSelectedPhoto(null);
+            fetchEvent();
+        } catch (error) {
+            console.error("Failed to delete photo", error);
+            alert("Erro ao excluir foto.");
         }
     };
 
@@ -232,7 +278,7 @@ export default function EventDetails() {
                 {locationPhotos.length > 0 ? (
                     <div className="relative w-full h-full group">
                         <button
-                            onClick={() => setSelectedPhoto(locationPhotos[currentPhotoIndex]?.url)}
+                            onClick={() => setSelectedPhoto(locationPhotos[currentPhotoIndex])}
                             className="w-full h-full cursor-zoom-in group/img relative"
                         >
                             <img
@@ -483,6 +529,31 @@ export default function EventDetails() {
                 )}
 
 
+                {/* Associated Book */}
+                {event.clubBook && (
+                    <div className="space-y-2">
+                        <h3 className="font-black text-neutral-900">Livro do Mês</h3>
+                        <div className="flex items-start gap-4 p-4 bg-white rounded-xl border border-black/5 shadow-sm">
+                            <div className="w-16 h-24 bg-neutral-100 rounded-lg overflow-hidden shrink-0 shadow-md">
+                                {event.clubBook.coverUrl ? (
+                                    <img src={event.clubBook.coverUrl} alt={event.clubBook.title} className="w-full h-full object-cover" />
+                                ) : (
+                                    <div className="w-full h-full flex items-center justify-center text-neutral-300">
+                                        <LuAlignLeft />
+                                    </div>
+                                )}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <h4 className="font-bold text-neutral-900 leading-tight">{event.clubBook.title}</h4>
+                                <p className="text-sm text-neutral-500 mt-1">{event.clubBook.book?.author}</p>
+                                {event.clubBook.book?.synopsis && (
+                                    <p className="text-xs text-neutral-400 mt-2 line-clamp-2">{event.clubBook.book.synopsis}</p>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 {/* Participants */}
                 <div className="space-y-2">
                     <div className="flex items-center justify-between">
@@ -520,8 +591,10 @@ export default function EventDetails() {
                         <div className="mb-4 p-4 bg-neutral-50 rounded-xl border border-neutral-200">
                             <h4 className="text-sm font-bold text-neutral-900 mb-2">Adicionar foto à galeria</h4>
                             <ImageUpload
-                                onChange={handlePhotoUpload}
-                                label="Escolher foto"
+                                onChange={(url) => handlePhotoUpload([url])}
+                                onUploads={handlePhotoUpload}
+                                label="Escolher fotos"
+                                multiple={true}
                             />
                         </div>
                     )}
@@ -530,7 +603,7 @@ export default function EventDetails() {
                         {galleryPhotos.map(photo => (
                             <button
                                 key={photo.id}
-                                onClick={() => setSelectedPhoto(photo.url)}
+                                onClick={() => setSelectedPhoto(photo)}
                                 className="aspect-square bg-neutral-100 rounded-lg overflow-hidden relative group w-full"
                             >
                                 <img src={photo.url} alt="Galeria" className="w-full h-full object-cover" />
@@ -549,23 +622,72 @@ export default function EventDetails() {
             {/* Lightbox Overlay */}
             {selectedPhoto && (
                 <div
-                    className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200"
+                    className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-sm flex flex-col items-center justify-center animate-in fade-in duration-200"
                     onClick={() => setSelectedPhoto(null)}
                 >
-                    <button
-                        onClick={() => setSelectedPhoto(null)}
-                        className="absolute top-4 right-4 text-white hover:text-red-500 bg-white/10 p-2 rounded-full backdrop-blur-md transition-all"
-                    >
-                        <LuX className="w-6 h-6" />
-                    </button>
+                    <div className="absolute top-4 right-4 flex items-center gap-4 z-50">
+                        {/* Delete Button */}
+                        {(event.canEdit || selectedPhoto.userId === currentUserId) && (
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handlePhotoDeleteClick(selectedPhoto.id);
+                                }}
+                                className="text-white/70 hover:text-red-500 bg-white/10 p-2.5 rounded-full backdrop-blur-md transition-all hover:bg-white/20"
+                                title="Excluir foto"
+                            >
+                                <LuTrash2 className="w-5 h-5" />
+                            </button>
+                        )}
+
+                        <button
+                            onClick={() => setSelectedPhoto(null)}
+                            className="text-white hover:text-neutral-300 bg-white/10 p-2.5 rounded-full backdrop-blur-md transition-all hover:bg-white/20"
+                        >
+                            <LuX className="w-6 h-6" />
+                        </button>
+                    </div>
+
                     <img
-                        src={selectedPhoto}
+                        src={selectedPhoto.url}
                         alt="Full screen"
-                        className="max-w-full max-h-full object-contain rounded-lg shadow-2xl animate-in zoom-in-95 duration-200"
+                        className="max-w-full max-h-[85vh] object-contain rounded-sm shadow-2xl animate-in zoom-in-95 duration-200"
                         onClick={(e) => e.stopPropagation()}
                     />
+
+                    {/* Photo Info */}
+                    <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 via-black/40 to-transparent text-white">
+                        <div className="max-w-4xl mx-auto flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-neutral-700 overflow-hidden border border-white/20 shrink-0">
+                                {selectedPhoto.user?.avatarUrl ? (
+                                    <img src={selectedPhoto.user.avatarUrl} alt={selectedPhoto.user.name} className="w-full h-full object-cover" />
+                                ) : (
+                                    <div className="w-full h-full flex items-center justify-center text-xs font-bold bg-neutral-600">
+                                        {selectedPhoto.user?.name?.slice(0, 2).toUpperCase() || "??"}
+                                    </div>
+                                )}
+                            </div>
+                            <div>
+                                <div className="font-bold text-sm">{selectedPhoto.user?.name || "Usuário Desconhecido"}</div>
+                                <div className="text-xs text-white/60">
+                                    Adicionada em {format(new Date(selectedPhoto.createdAt), "dd 'de' MMMM 'às' HH:mm", { locale: ptBR })}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             )}
+
+            {/* Event Edit Modal */}
+            <ConfirmModal
+                isOpen={!!photoToDelete}
+                title="Excluir foto"
+                message="Tem certeza que deseja excluir esta foto? Esta ação não pode ser desfeita."
+                confirmLabel="Excluir"
+                isDestructive
+                onConfirm={confirmPhotoDelete}
+                onCancel={() => setPhotoToDelete(null)}
+            />
 
             {showEditModal && (
                 <EventEditModal
